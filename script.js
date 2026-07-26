@@ -21,14 +21,25 @@ const supabaseClient =
 
 
 // ==========================================
+// WHATSAPP ADMIN
+// ==========================================
+
+const ADMIN_WHATSAPP = {
+
+    admin1: "639651392132",
+
+    admin2: "6285719431469"
+
+};
+
+
+// ==========================================
 // DATA PRODUK
 // ==========================================
 
 const products = {
 
     pulsa: [
-
-        // TELKOMSEL
 
         {
             name: "Telkomsel 10.000",
@@ -73,8 +84,6 @@ const products = {
         },
 
 
-        // INDOSAT
-
         {
             name: "Indosat 10.000",
             price: 15000,
@@ -118,8 +127,6 @@ const products = {
         },
 
 
-        // AXIS
-
         {
             name: "AXIS 10.000",
             price: 15000,
@@ -162,8 +169,6 @@ const products = {
             icon: "📱"
         },
 
-
-        // TRI
 
         {
             name: "Tri 10.000",
@@ -293,7 +298,7 @@ let selectedProduct = null;
 
 
 // ==========================================
-// AMBIL ELEMENT HTML
+// ELEMENT HTML
 // ==========================================
 
 const productGrid =
@@ -395,17 +400,6 @@ function calculateAdmin(nominal) {
 
 function renderProducts() {
 
-    if (!productGrid) {
-
-        console.error(
-            "Element #productGrid tidak ditemukan."
-        );
-
-        return;
-
-    }
-
-
     const searchValue =
 
         searchInput
@@ -439,21 +433,17 @@ function renderProducts() {
     productGrid.innerHTML = "";
 
 
-    if (categoryTitle) {
+    categoryTitle.textContent =
 
-        categoryTitle.textContent =
+        currentCategory === "pulsa"
 
-            currentCategory === "pulsa"
+            ? "Pulsa"
 
-                ? "Pulsa"
+            : currentCategory === "ewallet"
 
-                : currentCategory === "ewallet"
+                ? "E-Wallet"
 
-                    ? "E-Wallet"
-
-                    : "Token PLN";
-
-    }
+                : "Token PLN";
 
 
     if (
@@ -462,24 +452,16 @@ function renderProducts() {
 
     ) {
 
-        if (emptyState) {
-
-            emptyState.style.display =
-                "block";
-
-        }
+        emptyState.style.display =
+            "block";
 
         return;
 
     }
 
 
-    if (emptyState) {
-
-        emptyState.style.display =
-            "none";
-
-    }
+    emptyState.style.display =
+        "none";
 
 
     filteredProducts.forEach(
@@ -532,9 +514,7 @@ function renderProducts() {
                             ? "Nominal Bebas"
 
                             : formatRupiah(
-
                                 product.price
-
                             )
 
                     }
@@ -652,34 +632,24 @@ document
 
 
                     currentCategory =
-
                         card.dataset.category;
 
 
                     renderProducts();
 
 
-                    const produkSection =
+                    document
 
-                        document.getElementById(
+                        .getElementById(
                             "produk"
-                        );
+                        )
 
-
-                    if (
-
-                        produkSection
-
-                    ) {
-
-                        produkSection.scrollIntoView({
+                        .scrollIntoView({
 
                             behavior:
                                 "smooth"
 
                         });
-
-                    }
 
                 }
 
@@ -691,7 +661,7 @@ document
 
 
 // ==========================================
-// SEARCH
+// PENCARIAN
 // ==========================================
 
 if (searchInput) {
@@ -761,11 +731,11 @@ function openOrderModal(product) {
 
 
 // ==========================================
-// INPUT NOMINAL EWALLET
+// NOMINAL BEBAS EWALLET
 // ==========================================
 
 function addCustomNominalInput(
-    isCustom
+    custom
 ) {
 
     const oldBox =
@@ -782,7 +752,7 @@ function addCustomNominalInput(
     }
 
 
-    if (!isCustom) {
+    if (!custom) {
 
         return;
 
@@ -839,7 +809,7 @@ function addCustomNominalInput(
 
         >
 
-            Masukkan nominal.
+            Masukkan nominal untuk menghitung harga jual.
 
         </div>
 
@@ -892,15 +862,7 @@ function updateCustomPrice() {
         );
 
 
-    if (
-
-        !input
-
-        ||
-
-        !info
-
-    ) {
+    if (!input) {
 
         return;
 
@@ -945,7 +907,7 @@ function updateCustomPrice() {
         <br>
 
 
-        Admin:
+        Biaya Admin:
 
         <strong>
 
@@ -1016,13 +978,12 @@ if (paymentMethod) {
 
                     💵
 
-                    Bayar cash kepada
-
                     <strong>
 
-                        Ibu Usih / Ira
+                        Bayar Cash kepada Ibu Usih / Ira
 
                     </strong>
+
 
                     <br><br>
 
@@ -1060,7 +1021,7 @@ if (paymentMethod) {
 
                     <br>
 
-                    Biaya admin:
+                    Biaya admin hutang:
 
                     <strong>
 
@@ -1186,6 +1147,381 @@ async function uploadFile(
 
 
 // ==========================================
+// MEMBUAT PESAN WHATSAPP
+// ==========================================
+
+function createWhatsAppMessage(
+
+    orderData,
+
+    orderNumber
+
+) {
+
+    const paymentText =
+
+        orderData.payment_method === "cash"
+
+            ? "Cash"
+
+            : "Hutang";
+
+
+    return `🔔 PESANAN BARU HOLOCELL
+
+
+🆔 Order:
+
+${orderNumber}
+
+
+👤 Pemesan:
+
+${orderData.customer_name}
+
+
+📦 Produk:
+
+${orderData.product_name}
+
+
+📱 Nomor Tujuan:
+
+${orderData.target_number}
+
+
+💰 Nominal:
+
+${formatRupiah(
+        orderData.nominal
+    )}
+
+
+💵 Harga Produk:
+
+${formatRupiah(
+        orderData.product_price
+    )}
+
+
+🧾 Biaya Admin:
+
+${formatRupiah(
+        orderData.admin_fee
+    )}
+
+
+💳 Metode Pembayaran:
+
+${paymentText}
+
+
+💰 Total:
+
+${formatRupiah(
+        orderData.total_price
+    )}
+
+
+📋 Status:
+
+Menunggu Verifikasi
+
+
+Mohon segera diproses.`;
+
+}
+
+
+// ==========================================
+// PILIH WHATSAPP ADMIN
+// ==========================================
+
+function chooseWhatsAppAdmin(
+
+    message
+
+) {
+
+    const oldChoice =
+
+        document.getElementById(
+            "whatsappChoice"
+        );
+
+
+    if (oldChoice) {
+
+        oldChoice.remove();
+
+    }
+
+
+    const choice =
+
+        document.createElement(
+            "div"
+        );
+
+
+    choice.id =
+        "whatsappChoice";
+
+
+    choice.innerHTML = `
+
+        <div
+
+            style="
+
+                position:fixed;
+
+                inset:0;
+
+                background:rgba(0,0,0,.55);
+
+                display:flex;
+
+                align-items:center;
+
+                justify-content:center;
+
+                z-index:99999;
+
+            "
+
+        >
+
+            <div
+
+                style="
+
+                    background:white;
+
+                    padding:25px;
+
+                    border-radius:16px;
+
+                    width:90%;
+
+                    max-width:400px;
+
+                    text-align:center;
+
+                    box-shadow:0 10px 30px rgba(0,0,0,.25);
+
+                "
+
+            >
+
+                <h3>
+
+                    📱 Pilih WhatsApp Admin
+
+                </h3>
+
+
+                <p>
+
+                    Kirim detail pesanan ke:
+
+                </p>
+
+
+                <button
+
+                    id="sendAdmin1"
+
+                    style="
+
+                        width:100%;
+
+                        padding:13px;
+
+                        margin:6px 0;
+
+                        border:0;
+
+                        border-radius:8px;
+
+                        cursor:pointer;
+
+                    "
+
+                >
+
+                    📱 WhatsApp Admin 1
+
+                </button>
+
+
+                <button
+
+                    id="sendAdmin2"
+
+                    style="
+
+                        width:100%;
+
+                        padding:13px;
+
+                        margin:6px 0;
+
+                        border:0;
+
+                        border-radius:8px;
+
+                        cursor:pointer;
+
+                    "
+
+                >
+
+                    📱 WhatsApp Admin 2
+
+                </button>
+
+
+                <button
+
+                    id="cancelWhatsApp"
+
+                    style="
+
+                        width:100%;
+
+                        padding:10px;
+
+                        margin-top:8px;
+
+                        border:0;
+
+                        background:#eee;
+
+                        border-radius:8px;
+
+                        cursor:pointer;
+
+                    "
+
+                >
+
+                    Tutup
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        choice
+    );
+
+
+    function openWhatsApp(number) {
+
+        const url =
+
+            "https://wa.me/"
+
+            +
+
+            number
+
+            +
+
+            "?text="
+
+            +
+
+            encodeURIComponent(
+                message
+            );
+
+
+        window.open(
+            url,
+            "_blank"
+        );
+
+
+        choice.remove();
+
+    }
+
+
+    document
+
+        .getElementById(
+            "sendAdmin1"
+        )
+
+        .addEventListener(
+
+            "click",
+
+            () => {
+
+                openWhatsApp(
+
+                    ADMIN_WHATSAPP.admin1
+
+                );
+
+            }
+
+        );
+
+
+    document
+
+        .getElementById(
+            "sendAdmin2"
+        )
+
+        .addEventListener(
+
+            "click",
+
+            () => {
+
+                openWhatsApp(
+
+                    ADMIN_WHATSAPP.admin2
+
+                );
+
+            }
+
+        );
+
+
+    document
+
+        .getElementById(
+            "cancelWhatsApp"
+        )
+
+        .addEventListener(
+
+            "click",
+
+            () => {
+
+                choice.remove();
+
+            }
+
+        );
+
+}
+
+
+// ==========================================
 // KIRIM PESANAN
 // ==========================================
 
@@ -1289,8 +1625,6 @@ if (orderForm) {
             let debtFee = 0;
 
 
-            // NOMINAL EWALLET
-
             if (
 
                 selectedProduct.custom
@@ -1307,7 +1641,6 @@ if (orderForm) {
 
 
                 nominal =
-
                     Number(
                         customInput.value
                     );
@@ -1329,7 +1662,7 @@ if (orderForm) {
 
                     alert(
 
-                        "Nominal harus Rp1.000 sampai Rp1.000.000."
+                        "Nominal harus antara Rp1.000 sampai Rp1.000.000."
 
                     );
 
@@ -1351,8 +1684,6 @@ if (orderForm) {
 
             }
 
-
-            // HUTANG
 
             if (
 
@@ -1380,8 +1711,6 @@ if (orderForm) {
 
             try {
 
-                // CASH
-
                 if (
 
                     method === "cash"
@@ -1396,7 +1725,7 @@ if (orderForm) {
 
                         alert(
 
-                            "Upload bukti pembayaran terlebih dahulu."
+                            "Silakan upload bukti pembayaran."
 
                         );
 
@@ -1420,8 +1749,6 @@ if (orderForm) {
                 }
 
 
-                // HUTANG
-
                 if (
 
                     method === "debt"
@@ -1436,7 +1763,7 @@ if (orderForm) {
 
                         alert(
 
-                            "Upload selfie terlebih dahulu."
+                            "Silakan upload foto selfie."
 
                         );
 
@@ -1542,15 +1869,6 @@ if (orderForm) {
                 };
 
 
-                console.log(
-
-                    "DATA PESANAN:",
-
-                    orderData
-
-                );
-
-
                 const result =
 
                     await supabaseClient
@@ -1565,15 +1883,6 @@ if (orderForm) {
 
 
                 if (result.error) {
-
-                    console.error(
-
-                        "ERROR ORDERS:",
-
-                        result.error
-
-                    );
-
 
                     throw new Error(
 
@@ -1591,6 +1900,24 @@ if (orderForm) {
                 );
 
 
+                const whatsappMessage =
+
+                    createWhatsAppMessage(
+
+                        orderData,
+
+                        orderNumber
+
+                    );
+
+
+                chooseWhatsAppAdmin(
+
+                    whatsappMessage
+
+                );
+
+
                 closeOrderModal();
 
             }
@@ -1599,11 +1926,7 @@ if (orderForm) {
             catch (error) {
 
                 console.error(
-
-                    "ERROR FINAL:",
-
                     error
-
                 );
 
 
@@ -1793,7 +2116,7 @@ if (menuBtn) {
 
 
 // ==========================================
-// JALANKAN WEBSITE
+// MULAI
 // ==========================================
 
 renderProducts();
