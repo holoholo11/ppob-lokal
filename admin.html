@@ -225,31 +225,12 @@
         >
 
         <select id="statusFilter">
-
-            <option value="all">
-                Semua Status
-            </option>
-
-            <option value="menunggu_verifikasi">
-                Menunggu Verifikasi
-            </option>
-
-            <option value="hutang_aktif">
-                Hutang Aktif
-            </option>
-
-            <option value="diproses">
-                Diproses
-            </option>
-
-            <option value="lunas">
-                Lunas
-            </option>
-
-            <option value="ditolak">
-                Ditolak
-            </option>
-
+            <option value="all">Semua Status</option>
+            <option value="menunggu_verifikasi">Menunggu Verifikasi</option>
+            <option value="hutang_aktif">Hutang Aktif</option>
+            <option value="diproses">Diproses</option>
+            <option value="lunas">Lunas</option>
+            <option value="ditolak">Ditolak</option>
         </select>
 
         <button
@@ -307,14 +288,10 @@ function rupiah(value) {
 function dateFormat(value) {
 
     if (!value) {
-
         return "-";
-
     }
 
-    return new Date(value).toLocaleString(
-        "id-ID"
-    );
+    return new Date(value).toLocaleString("id-ID");
 
 }
 
@@ -322,9 +299,7 @@ function dateFormat(value) {
 function showError(message) {
 
     const box =
-        document.getElementById(
-            "errorBox"
-        );
+        document.getElementById("errorBox");
 
     box.style.display = "block";
 
@@ -336,9 +311,7 @@ function showError(message) {
 function hideError() {
 
     document
-        .getElementById(
-            "errorBox"
-        )
+        .getElementById("errorBox")
         .style.display = "none";
 
 }
@@ -349,28 +322,19 @@ async function loadOrders() {
     hideError();
 
     const container =
-        document.getElementById(
-            "ordersContainer"
-        );
+        document.getElementById("ordersContainer");
 
     container.innerHTML = `
-
         <div class="empty">
-
             Memuat pesanan...
-
         </div>
-
     `;
 
 
     const result =
         await supabaseClient
-
             .from("orders")
-
             .select("*")
-
             .order(
                 "created_at",
                 {
@@ -381,9 +345,7 @@ async function loadOrders() {
 
     if (result.error) {
 
-        console.error(
-            result.error
-        );
+        console.error(result.error);
 
         showError(
             "Gagal mengambil data pesanan: "
@@ -392,13 +354,9 @@ async function loadOrders() {
         );
 
         container.innerHTML = `
-
             <div class="empty">
-
                 Gagal memuat pesanan.
-
             </div>
-
         `;
 
         return;
@@ -420,17 +378,13 @@ async function loadOrders() {
 function updateStats() {
 
     document
-        .getElementById(
-            "totalOrders"
-        )
+        .getElementById("totalOrders")
         .textContent =
         orders.length;
 
 
     document
-        .getElementById(
-            "waitingOrders"
-        )
+        .getElementById("waitingOrders")
         .textContent =
 
         orders.filter(
@@ -441,9 +395,7 @@ function updateStats() {
 
 
     document
-        .getElementById(
-            "debtOrders"
-        )
+        .getElementById("debtOrders")
         .textContent =
 
         orders.filter(
@@ -454,9 +406,7 @@ function updateStats() {
 
 
     document
-        .getElementById(
-            "paidOrders"
-        )
+        .getElementById("paidOrders")
         .textContent =
 
         orders.filter(
@@ -495,74 +445,59 @@ function renderOrders() {
 
 
     const filtered =
-        orders.filter(
-            order => {
+        orders.filter(order => {
+
+            const text = (
+
+                String(
+                    order.order_number
+                    || ""
+                )
+
+                +
+
+                String(
+                    order.customer_name
+                    || ""
+                )
+
+                +
+
+                String(
+                    order.target_number
+                    || ""
+                )
+
+                +
+
+                String(
+                    order.product_name
+                    || ""
+                )
+
+            ).toLowerCase();
 
 
-                const text =
-
-                    (
-
-                        String(
-                            order.order_number
-                            || ""
-                        )
-
-                        +
-
-                        String(
-                            order.customer_name
-                            || ""
-                        )
-
-                        +
-
-                        String(
-                            order.target_number
-                            || ""
-                        )
-
-                        +
-
-                        String(
-                            order.product_name
-                            || ""
-                        )
-
-                    )
-
-                    .toLowerCase();
+            const matchSearch =
+                text.includes(search);
 
 
-                const matchSearch =
-                    text.includes(
-                        search
-                    );
+            const matchStatus =
+
+                status === "all"
+
+                ||
+
+                order.status === status;
 
 
-                const matchStatus =
+            return (
+                matchSearch
+                &&
+                matchStatus
+            );
 
-                    status === "all"
-
-                    ||
-
-                    order.status ===
-                    status;
-
-
-                return (
-
-                    matchSearch
-
-                    &&
-
-                    matchStatus
-
-                );
-
-            }
-
-        );
+        });
 
 
     if (
@@ -570,13 +505,9 @@ function renderOrders() {
     ) {
 
         container.innerHTML = `
-
             <div class="empty">
-
                 Tidak ada pesanan.
-
             </div>
-
         `;
 
         return;
@@ -589,9 +520,7 @@ function renderOrders() {
         filtered
             .map(
                 order =>
-                    orderHTML(
-                        order
-                    )
+                    orderHTML(order)
             )
             .join("");
 
@@ -612,7 +541,7 @@ function orderHTML(order) {
             <button
                 class="file"
                 onclick="openFile(
-                    '${order.payment_proof_url}',
+                    '${escapeAttribute(order.payment_proof_url)}',
                     'payment-proofs'
                 )"
             >
@@ -635,7 +564,7 @@ function orderHTML(order) {
             <button
                 class="file"
                 onclick="openFile(
-                    '${order.selfie_url}',
+                    '${escapeAttribute(order.selfie_url)}',
                     'debt-selfies'
                 )"
             >
@@ -843,11 +772,200 @@ function orderHTML(order) {
 }
 
 
+/* ==========================================
+   MEMBERSIHKAN PATH FILE
+========================================== */
+
+function cleanFilePath(path, bucket) {
+
+    if (!path) {
+        return null;
+    }
+
+
+    let cleanPath =
+        String(path).trim();
+
+
+    cleanPath =
+        cleanPath.replace(
+            /^https?:\/\/.*\/storage\/v1\/object\/(public|sign|authenticated)\//,
+            ""
+        );
+
+
+    cleanPath =
+        cleanPath.replace(
+            new RegExp(
+                "^" + bucket + "/"
+            ),
+            ""
+        );
+
+
+    cleanPath =
+        cleanPath.replace(
+            /^\/+/,
+            ""
+        );
+
+
+    return cleanPath;
+
+}
+
+
+/* ==========================================
+   BUKA FILE STORAGE
+========================================== */
+
+async function openFile(path, bucket) {
+
+    if (!path) {
+
+        alert(
+            "File tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+
+    const cleanPath =
+        cleanFilePath(
+            path,
+            bucket
+        );
+
+
+    console.log(
+        "Bucket:",
+        bucket
+    );
+
+
+    console.log(
+        "Path:",
+        cleanPath
+    );
+
+
+    const result =
+
+        await supabaseClient
+
+            .storage
+
+            .from(bucket)
+
+            .createSignedUrl(
+                cleanPath,
+                3600
+            );
+
+
+    if (
+        result.error
+    ) {
+
+        console.error(
+            result.error
+        );
+
+
+        alert(
+
+            "File tidak dapat dibuka.\n\n"
+
+            +
+
+            "Bucket: "
+
+            +
+
+            bucket
+
+            +
+
+            "\n\nPath: "
+
+            +
+
+            cleanPath
+
+            +
+
+            "\n\nError: "
+
+            +
+
+            result.error.message
+
+        );
+
+
+        return;
+
+    }
+
+
+    if (
+
+        !result.data
+
+        ||
+
+        !result.data.signedUrl
+
+    ) {
+
+        alert(
+            "URL file tidak berhasil dibuat."
+        );
+
+        return;
+
+    }
+
+
+    window.open(
+        result.data.signedUrl,
+        "_blank"
+    );
+
+}
+
+
+/* ==========================================
+   ESCAPE ATTRIBUTE
+========================================== */
+
+function escapeAttribute(value) {
+
+    return String(value)
+
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+
+        .replace(
+            /'/g,
+            "\\'"
+        );
+
+}
+
+
+/* ==========================================
+   SETUJUI PESANAN
+========================================== */
+
 async function approveOrder(
     id,
     paymentMethod
 ) {
-
 
     const newStatus =
 
@@ -877,7 +995,9 @@ async function approveOrder(
             );
 
 
-    if (result.error) {
+    if (
+        result.error
+    ) {
 
         alert(
             result.error.message
@@ -898,10 +1018,11 @@ async function approveOrder(
 }
 
 
-async function rejectOrder(
-    id
-) {
+/* ==========================================
+   TOLAK PESANAN
+========================================== */
 
+async function rejectOrder(id) {
 
     const result =
 
@@ -922,7 +1043,9 @@ async function rejectOrder(
             );
 
 
-    if (result.error) {
+    if (
+        result.error
+    ) {
 
         alert(
             result.error.message
@@ -943,10 +1066,11 @@ async function rejectOrder(
 }
 
 
-async function markPaid(
-    id
-) {
+/* ==========================================
+   TANDAI LUNAS
+========================================== */
 
+async function markPaid(id) {
 
     const result =
 
@@ -970,7 +1094,9 @@ async function markPaid(
             );
 
 
-    if (result.error) {
+    if (
+        result.error
+    ) {
 
         alert(
             result.error.message
@@ -991,64 +1117,41 @@ async function markPaid(
 }
 
 
-async function openFile(
-    path,
-    bucket
-) {
-
-
-    const result =
-
-        await supabaseClient
-
-            .storage
-
-            .from(bucket)
-
-            .createSignedUrl(
-                path,
-                3600
-            );
-
-
-    if (result.error) {
-
-        alert(
-            result.error.message
-        );
-
-        return;
-
-    }
-
-
-    window.open(
-        result.data.signedUrl,
-        "_blank"
-    );
-
-}
-
+/* ==========================================
+   EVENT SEARCH
+========================================== */
 
 document
+
     .getElementById(
         "searchInput"
     )
+
     .addEventListener(
         "input",
         renderOrders
     );
 
 
+/* ==========================================
+   EVENT FILTER
+========================================== */
+
 document
+
     .getElementById(
         "statusFilter"
     )
+
     .addEventListener(
         "change",
         renderOrders
     );
 
+
+/* ==========================================
+   MULAI
+========================================== */
 
 loadOrders();
 
