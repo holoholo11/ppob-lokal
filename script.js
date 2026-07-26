@@ -135,11 +135,14 @@ let selectedProduct = null;
 const productGrid =
     document.getElementById("productGrid");
 
+
 const emptyState =
     document.getElementById("emptyState");
 
+
 const searchInput =
     document.getElementById("searchInput");
+
 
 const categoryTitle =
     document.getElementById("categoryTitle");
@@ -158,15 +161,19 @@ const categoryNames = {
 
 function formatRupiah(number) {
 
-    return new Intl.NumberFormat("id-ID", {
+    return new Intl.NumberFormat(
+        "id-ID",
+        {
 
-        style: "currency",
+            style: "currency",
 
-        currency: "IDR",
+            currency: "IDR",
 
-        minimumFractionDigits: 0
+            minimumFractionDigits: 0
 
-    }).format(number);
+        }
+
+    ).format(number);
 
 }
 
@@ -197,31 +204,36 @@ function calculateAdmin(nominal) {
 
     }
 
-    return null;
+    return 0;
 
 }
 
 
 function renderProducts() {
 
+
     const searchValue =
+
         searchInput.value
-        .toLowerCase()
-        .trim();
+            .toLowerCase()
+            .trim();
 
 
     const filteredProducts =
-        products[currentCategory].filter(product =>
 
-            product.name
-                .toLowerCase()
-                .includes(searchValue)
+        products[currentCategory].filter(
 
-            ||
+            product =>
 
-            product.code
-                .toLowerCase()
-                .includes(searchValue)
+                product.name
+                    .toLowerCase()
+                    .includes(searchValue)
+
+                ||
+
+                product.code
+                    .toLowerCase()
+                    .includes(searchValue)
 
         );
 
@@ -230,128 +242,169 @@ function renderProducts() {
 
 
     categoryTitle.textContent =
+
         categoryNames[currentCategory];
 
 
-    if (filteredProducts.length === 0) {
+    if (
 
-        emptyState.style.display = "block";
+        filteredProducts.length === 0
+
+    ) {
+
+
+        emptyState.style.display =
+            "block";
+
 
         return;
 
     }
 
 
-    emptyState.style.display = "none";
+    emptyState.style.display =
+        "none";
 
 
-    filteredProducts.forEach(product => {
+    filteredProducts.forEach(
 
-        const card =
-            document.createElement("div");
-
-
-        card.className =
-            "product-card";
+        product => {
 
 
-        let priceDisplay = "";
+            const card =
+                document.createElement(
+                    "div"
+                );
 
 
-        if (product.custom) {
+            card.className =
+                "product-card";
 
-            priceDisplay =
-                "Nominal Bebas";
 
-        } else {
+            const priceDisplay =
 
-            priceDisplay =
-                formatRupiah(product.price);
+                product.custom
+
+                    ? "Nominal Bebas"
+
+                    : formatRupiah(
+                        product.price
+                    );
+
+
+            card.innerHTML = `
+
+
+                <div class="product-top">
+
+
+                    <div class="product-icon">
+
+                        ${product.icon}
+
+                    </div>
+
+
+                    <span class="available">
+
+                        ● Tersedia
+
+                    </span>
+
+
+                </div>
+
+
+                <h3>
+
+                    ${product.name}
+
+                </h3>
+
+
+                <div class="product-price">
+
+                    ${priceDisplay}
+
+                </div>
+
+
+                <div class="product-meta">
+
+
+                    <div class="product-code">
+
+                        Kode:
+
+                        <strong>
+
+                            ${product.code}
+
+                        </strong>
+
+                    </div>
+
+
+                    <button
+
+                        class="order-btn"
+
+                        type="button"
+
+                    >
+
+                        Pesan
+
+                    </button>
+
+
+                </div>
+
+
+            `;
+
+
+            const orderButton =
+
+                card.querySelector(
+                    ".order-btn"
+                );
+
+
+            orderButton.addEventListener(
+
+                "click",
+
+                () => {
+
+
+                    openOrderModal(
+
+                        product.name,
+
+                        product.price,
+
+                        product.code,
+
+                        product.icon,
+
+                        product.custom
+
+                    );
+
+                }
+
+            );
+
+
+            productGrid.appendChild(
+                card
+            );
+
 
         }
 
-
-        card.innerHTML = `
-
-            <div class="product-top">
-
-                <div class="product-icon">
-
-                    ${product.icon}
-
-                </div>
-
-
-                <span class="available">
-
-                    ● Tersedia
-
-                </span>
-
-            </div>
-
-
-            <h3>
-
-                ${product.name}
-
-            </h3>
-
-
-            <div class="product-price">
-
-                ${priceDisplay}
-
-            </div>
-
-
-            <div class="product-meta">
-
-                <div class="product-code">
-
-                    Kode:
-
-                    <strong>
-
-                        ${product.code}
-
-                    </strong>
-
-                </div>
-
-
-                <button
-
-                    class="order-btn"
-
-                    onclick="openOrderModal(
-
-                        '${product.name}',
-
-                        ${product.price},
-
-                        '${product.code}',
-
-                        '${product.icon}',
-
-                        ${product.custom}
-
-                    )"
-
-                >
-
-                    Pesan
-
-                </button>
-
-            </div>
-
-        `;
-
-
-        productGrid.appendChild(card);
-
-    });
+    );
 
 }
 
@@ -359,53 +412,69 @@ function renderProducts() {
 const categoryCards =
 
     document.querySelectorAll(
+
         ".category-card"
+
     );
 
 
-categoryCards.forEach(card => {
+categoryCards.forEach(
 
-    card.addEventListener(
-
-        "click",
-
-        () => {
+    card => {
 
 
-            categoryCards.forEach(item => {
+        card.addEventListener(
 
-                item.classList.remove(
+            "click",
+
+            () => {
+
+
+                categoryCards.forEach(
+
+                    item => {
+
+                        item.classList.remove(
+                            "active"
+                        );
+
+                    }
+
+                );
+
+
+                card.classList.add(
                     "active"
                 );
 
-            });
+
+                currentCategory =
+
+                    card.dataset.category;
 
 
-            card.classList.add(
-                "active"
-            );
+                renderProducts();
 
 
-            currentCategory =
-                card.dataset.category;
+                document
+                    .getElementById(
+                        "produk"
+                    )
+                    .scrollIntoView({
+
+                        behavior:
+                            "smooth"
+
+                    });
 
 
-            renderProducts();
+            }
 
+        );
 
-            document
-                .getElementById("produk")
-                .scrollIntoView({
+    }
 
-                    behavior: "smooth"
-
-                });
-
-        }
-
-    );
-
-});
+);
 
 
 searchInput.addEventListener(
@@ -435,6 +504,48 @@ const orderForm =
 
     document.getElementById(
         "orderForm"
+    );
+
+
+const paymentMethod =
+
+    document.getElementById(
+        "paymentMethod"
+    );
+
+
+const paymentInfo =
+
+    document.getElementById(
+        "paymentInfo"
+    );
+
+
+const cashUploadBox =
+
+    document.getElementById(
+        "cashUploadBox"
+    );
+
+
+const debtUploadBox =
+
+    document.getElementById(
+        "debtUploadBox"
+    );
+
+
+const paymentProof =
+
+    document.getElementById(
+        "paymentProof"
+    );
+
+
+const selfieProof =
+
+    document.getElementById(
+        "selfieProof"
     );
 
 
@@ -468,39 +579,45 @@ function openOrderModal(
     };
 
 
-    document
-        .getElementById(
-            "modalProductName"
-        )
-        .textContent = name;
+    document.getElementById(
+
+        "modalProductName"
+
+    ).textContent = name;
 
 
-    document
-        .getElementById(
-            "modalProductPrice"
-        )
-        .textContent = custom
+    document.getElementById(
+
+        "modalProductPrice"
+
+    ).textContent =
+
+        custom
 
             ? "Nominal Bebas"
 
-            : formatRupiah(price);
+            : formatRupiah(
+                price
+            );
 
 
-    document
-        .getElementById(
-            "modalProductCode"
-        )
-        .textContent = code;
+    document.getElementById(
+
+        "modalProductCode"
+
+    ).textContent = code;
 
 
-    document
-        .getElementById(
-            "modalIcon"
-        )
-        .textContent = icon;
+    document.getElementById(
+
+        "modalIcon"
+
+    ).textContent = icon;
 
 
-    addCustomNominalInput(custom);
+    addCustomNominalInput(
+        custom
+    );
 
 
     modalOverlay.classList.add(
@@ -510,18 +627,23 @@ function openOrderModal(
 }
 
 
-function addCustomNominalInput(custom) {
+function addCustomNominalInput(
 
-    const existingInput =
+    custom
+
+) {
+
+
+    const oldBox =
 
         document.getElementById(
             "customNominalBox"
         );
 
 
-    if (existingInput) {
+    if (oldBox) {
 
-        existingInput.remove();
+        oldBox.remove();
 
     }
 
@@ -535,11 +657,7 @@ function addCustomNominalInput(custom) {
 
     const paymentLabel =
 
-        document
-            .getElementById(
-                "paymentMethod"
-            )
-            .parentElement;
+        paymentMethod.parentElement;
 
 
     const nominalBox =
@@ -555,7 +673,9 @@ function addCustomNominalInput(custom) {
 
     nominalBox.innerHTML = `
 
+
         <label>
+
 
             Nominal E-Wallet
 
@@ -576,6 +696,7 @@ function addCustomNominalInput(custom) {
 
             >
 
+
         </label>
 
 
@@ -587,9 +708,11 @@ function addCustomNominalInput(custom) {
 
         >
 
-            Masukkan nominal untuk menghitung harga jual.
+            Masukkan nominal untuk
+            menghitung harga jual.
 
         </div>
+
 
     `;
 
@@ -623,21 +746,22 @@ function addCustomNominalInput(custom) {
 
 function updateCustomPrice() {
 
-    const nominalInput =
+
+    const input =
 
         document.getElementById(
             "customNominal"
         );
 
 
-    const priceInfo =
+    const info =
 
         document.getElementById(
             "customPriceInfo"
         );
 
 
-    if (!nominalInput) {
+    if (!input) {
 
         return;
 
@@ -647,13 +771,14 @@ function updateCustomPrice() {
     const nominal =
 
         Number(
-            nominalInput.value
+            input.value
         );
 
 
     if (!nominal) {
 
-        priceInfo.innerHTML =
+
+        info.innerHTML =
 
             "Masukkan nominal untuk menghitung harga jual.";
 
@@ -664,7 +789,8 @@ function updateCustomPrice() {
 
     if (nominal < 1000) {
 
-        priceInfo.innerHTML =
+
+        info.innerHTML =
 
             "Minimal nominal adalah Rp1.000.";
 
@@ -675,7 +801,8 @@ function updateCustomPrice() {
 
     if (nominal > 1000000) {
 
-        priceInfo.innerHTML =
+
+        info.innerHTML =
 
             "Maksimal nominal adalah Rp1.000.000.";
 
@@ -696,42 +823,193 @@ function updateCustomPrice() {
         nominal + admin;
 
 
-    priceInfo.innerHTML = `
+    info.innerHTML = `
+
 
         Nominal E-Wallet:
 
         <strong>
 
-            ${formatRupiah(nominal)}
+            ${formatRupiah(
+                nominal
+            )}
 
         </strong>
 
+
         <br>
+
 
         Biaya Admin:
 
         <strong>
 
-            ${formatRupiah(admin)}
+            ${formatRupiah(
+                admin
+            )}
 
         </strong>
 
+
         <br>
+
 
         Total Bayar:
 
         <strong>
 
-            ${formatRupiah(total)}
+            ${formatRupiah(
+                total
+            )}
 
         </strong>
+
 
     `;
 
 }
 
 
+paymentMethod.addEventListener(
+
+    "change",
+
+    () => {
+
+
+        cashUploadBox.style.display =
+            "none";
+
+
+        debtUploadBox.style.display =
+            "none";
+
+
+        paymentProof.required =
+            false;
+
+
+        selfieProof.required =
+            false;
+
+
+        if (
+
+            paymentMethod.value ===
+            "cash"
+
+        ) {
+
+
+            cashUploadBox.style.display =
+                "block";
+
+
+            paymentProof.required =
+                true;
+
+
+            paymentInfo.innerHTML = `
+
+
+                💵 <strong>
+                Bayar Cash
+                </strong>
+
+
+                <br>
+
+
+                Silakan lakukan pembayaran
+                kepada
+
+
+                <strong>
+                Ibu Usih atau Ira
+                </strong>
+
+
+                <br><br>
+
+
+                Setelah pembayaran dilakukan,
+                upload bukti pembayaran.
+
+            `;
+
+        }
+
+
+        if (
+
+            paymentMethod.value ===
+            "debt"
+
+        ) {
+
+
+            debtUploadBox.style.display =
+                "block";
+
+
+            selfieProof.required =
+                true;
+
+
+            paymentInfo.innerHTML = `
+
+
+                🧾 <strong>
+                Bayar Nanti / Hutang
+                </strong>
+
+
+                <br>
+
+
+                Biaya admin tambahan:
+
+                <strong>
+                Rp5.000
+                </strong>
+
+
+                <br>
+
+
+                Wajib upload foto selfie.
+
+
+                <br>
+
+
+                Jatuh tempo:
+
+                <strong>
+                1×24 jam
+                </strong>
+
+
+                <br>
+
+
+                Keterlambatan:
+
+                <strong>
+                Rp2.000 per hari
+                </strong>
+
+            `;
+
+        }
+
+    }
+
+);
+
+
 function closeOrderModal() {
+
 
     modalOverlay.classList.remove(
         "active"
@@ -741,25 +1019,37 @@ function closeOrderModal() {
     orderForm.reset();
 
 
-    const customInput =
+    cashUploadBox.style.display =
+        "none";
+
+
+    debtUploadBox.style.display =
+        "none";
+
+
+    paymentProof.required =
+        false;
+
+
+    selfieProof.required =
+        false;
+
+
+    const customBox =
 
         document.getElementById(
             "customNominalBox"
         );
 
 
-    if (customInput) {
+    if (customBox) {
 
-        customInput.remove();
+        customBox.remove();
 
     }
 
 
-    document
-        .getElementById(
-            "paymentInfo"
-        )
-        .innerHTML =
+    paymentInfo.innerHTML =
 
         "Pilih metode pembayaran untuk melihat informasi.";
 
@@ -779,7 +1069,7 @@ modalOverlay.addEventListener(
 
     "click",
 
-    (event) => {
+    event => {
 
 
         if (
@@ -789,88 +1079,8 @@ modalOverlay.addEventListener(
 
         ) {
 
+
             closeOrderModal();
-
-        }
-
-    }
-
-);
-
-
-const paymentMethod =
-
-    document.getElementById(
-        "paymentMethod"
-    );
-
-
-const paymentInfo =
-
-    document.getElementById(
-        "paymentInfo"
-    );
-
-
-paymentMethod.addEventListener(
-
-    "change",
-
-    () => {
-
-
-        if (
-
-            paymentMethod.value ===
-            "cash"
-
-        ) {
-
-
-            paymentInfo.innerHTML = `
-
-                💵 <strong>Bayar Cash</strong><br>
-
-                Silakan lakukan pembayaran kepada
-
-                <strong>Ibu Usih atau Ira</strong>.
-
-                Setelah pembayaran dilakukan,
-
-                bukti pembayaran akan dikirim.
-
-            `;
-
-        }
-
-
-        if (
-
-            paymentMethod.value ===
-            "debt"
-
-        ) {
-
-
-            paymentInfo.innerHTML = `
-
-                🧾 <strong>Bayar Nanti / Hutang</strong><br>
-
-                Biaya admin tambahan:
-
-                <strong>Rp5.000</strong>.<br>
-
-                Wajib melakukan verifikasi selfie.<br>
-
-                Jatuh tempo:
-
-                <strong>1×24 jam</strong>.<br>
-
-                Keterlambatan:
-
-                <strong>Rp2.000 per hari</strong>.
-
-            `;
 
         }
 
@@ -883,7 +1093,7 @@ orderForm.addEventListener(
 
     "submit",
 
-    (event) => {
+    event => {
 
 
         event.preventDefault();
@@ -891,20 +1101,20 @@ orderForm.addEventListener(
 
         const customerName =
 
-            document
-                .getElementById(
-                    "customerName"
-                )
-                .value;
+            document.getElementById(
+
+                "customerName"
+
+            ).value;
 
 
         const targetNumber =
 
-            document
-                .getElementById(
-                    "targetNumber"
-                )
-                .value;
+            document.getElementById(
+
+                "targetNumber"
+
+            ).value;
 
 
         const method =
@@ -927,16 +1137,19 @@ orderForm.addEventListener(
         ) {
 
 
+            const customInput =
+
+                document.getElementById(
+
+                    "customNominal"
+
+                );
+
+
             nominal =
 
                 Number(
-
-                    document
-                        .getElementById(
-                            "customNominal"
-                        )
-                        .value
-
+                    customInput.value
                 );
 
 
@@ -976,26 +1189,13 @@ orderForm.addEventListener(
         }
 
 
-        if (!selectedProduct.custom) {
-
-            nominal =
-                selectedProduct.price;
-
-        }
-
-
-        let debtAdmin = 0;
-
-
-        if (
+        const debtAdmin =
 
             method === "debt"
 
-        ) {
+                ? 5000
 
-            debtAdmin = 5000;
-
-        }
+                : 0;
 
 
         const total =
@@ -1007,78 +1207,106 @@ orderForm.addEventListener(
                 : selectedProduct.price + debtAdmin;
 
 
+        const selectedFile =
+
+            method === "cash"
+
+                ? paymentProof.files[0]
+
+                : selfieProof.files[0];
+
+
+        if (!selectedFile) {
+
+
+            alert(
+
+                method === "cash"
+
+                    ? "Silakan upload bukti pembayaran."
+
+                    : "Silakan upload foto selfie."
+
+            );
+
+
+            return;
+
+        }
+
+
         const paymentText =
 
             method === "cash"
 
-                ? "Bayar Cash kepada Ibu Usih / Ira"
+                ? "Cash kepada Ibu Usih / Ira"
 
-                : "Bayar Nanti / Hutang";
-
-
-        const message = `
-
-Halo HOLOCELL 👋
+                : "Hutang / Bayar Nanti";
 
 
-Saya ingin memesan:
+        const orderData = {
 
 
-Produk:
-
-${selectedProduct.name}
-
-
-Kode:
-
-${selectedProduct.code}
+            product:
+                selectedProduct.name,
 
 
-Nominal:
-
-${formatRupiah(nominal)}
-
-
-Biaya Admin:
-
-${formatRupiah(admin)}
+            code:
+                selectedProduct.code,
 
 
-Biaya Admin Hutang:
-
-${formatRupiah(debtAdmin)}
-
-
-Total Bayar:
-
-${formatRupiah(total)}
+            nominal:
+                nominal,
 
 
-Nama Pemesan:
-
-${customerName}
-
-
-Nomor Tujuan / ID:
-
-${targetNumber}
+            admin:
+                admin,
 
 
-Metode Pembayaran:
+            debtAdmin:
+                debtAdmin,
 
-${paymentText}
 
-`;
+            total:
+                total,
+
+
+            customerName:
+                customerName,
+
+
+            targetNumber:
+                targetNumber,
+
+
+            paymentMethod:
+                paymentText,
+
+
+            uploadedFile:
+                selectedFile.name,
+
+
+            orderDate:
+                new Date().toLocaleString(
+                    "id-ID"
+                )
+
+
+        };
+
+
+        console.log(
+            "DATA PESANAN:",
+            orderData
+        );
 
 
         alert(
 
-            "Pesanan berhasil dibuat untuk tahap awal. Sistem upload bukti pembayaran dan dashboard admin akan kita tambahkan pada tahap berikutnya."
+            "Pesanan berhasil dibuat! Bukti pembayaran/selfie sudah dipilih."
 
         );
-
-
-        console.log(message);
 
 
         closeOrderModal();
@@ -1157,6 +1385,7 @@ menuBtn.addEventListener(
 
 
             nav.style.boxShadow =
+
                 "0 10px 30px rgba(0,0,0,0.1)";
 
         }
