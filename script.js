@@ -21,59 +21,197 @@ const supabaseClient =
 
 const products = {
 
+    // ==========================
+    // PULSA
+    // ==========================
+
     pulsa: [
+
+        // TELKOMSEL
 
         {
             name: "Telkomsel 10.000",
             price: 15000,
-            code: "S10",
+            code: "TSEL10",
             icon: "📱"
         },
 
         {
             name: "Telkomsel 15.000",
             price: 20000,
-            code: "S15",
+            code: "TSEL15",
             icon: "📱"
         },
 
         {
             name: "Telkomsel 20.000",
             price: 25000,
-            code: "S20",
+            code: "TSEL20",
             icon: "📱"
         },
 
         {
             name: "Telkomsel 25.000",
             price: 30000,
-            code: "S25",
-            icon: "📱"
-        },
-
-        {
-            name: "Telkomsel 30.000",
-            price: 35000,
-            code: "S30",
+            code: "TSEL25",
             icon: "📱"
         },
 
         {
             name: "Telkomsel 50.000",
             price: 55000,
-            code: "S50",
+            code: "TSEL50",
             icon: "📱"
         },
 
         {
             name: "Telkomsel 100.000",
             price: 105000,
-            code: "S100",
+            code: "TSEL100",
+            icon: "📱"
+        },
+
+
+        // INDOSAT
+
+        {
+            name: "Indosat 10.000",
+            price: 15000,
+            code: "ISAT10",
+            icon: "📱"
+        },
+
+        {
+            name: "Indosat 15.000",
+            price: 20000,
+            code: "ISAT15",
+            icon: "📱"
+        },
+
+        {
+            name: "Indosat 20.000",
+            price: 25000,
+            code: "ISAT20",
+            icon: "📱"
+        },
+
+        {
+            name: "Indosat 25.000",
+            price: 30000,
+            code: "ISAT25",
+            icon: "📱"
+        },
+
+        {
+            name: "Indosat 50.000",
+            price: 55000,
+            code: "ISAT50",
+            icon: "📱"
+        },
+
+        {
+            name: "Indosat 100.000",
+            price: 105000,
+            code: "ISAT100",
+            icon: "📱"
+        },
+
+
+        // AXIS
+
+        {
+            name: "AXIS 10.000",
+            price: 15000,
+            code: "AXIS10",
+            icon: "📱"
+        },
+
+        {
+            name: "AXIS 15.000",
+            price: 20000,
+            code: "AXIS15",
+            icon: "📱"
+        },
+
+        {
+            name: "AXIS 20.000",
+            price: 25000,
+            code: "AXIS20",
+            icon: "📱"
+        },
+
+        {
+            name: "AXIS 25.000",
+            price: 30000,
+            code: "AXIS25",
+            icon: "📱"
+        },
+
+        {
+            name: "AXIS 50.000",
+            price: 55000,
+            code: "AXIS50",
+            icon: "📱"
+        },
+
+        {
+            name: "AXIS 100.000",
+            price: 105000,
+            code: "AXIS100",
+            icon: "📱"
+        },
+
+
+        // TRI
+
+        {
+            name: "Tri 10.000",
+            price: 15000,
+            code: "TRI10",
+            icon: "📱"
+        },
+
+        {
+            name: "Tri 15.000",
+            price: 20000,
+            code: "TRI15",
+            icon: "📱"
+        },
+
+        {
+            name: "Tri 20.000",
+            price: 25000,
+            code: "TRI20",
+            icon: "📱"
+        },
+
+        {
+            name: "Tri 25.000",
+            price: 30000,
+            code: "TRI25",
+            icon: "📱"
+        },
+
+        {
+            name: "Tri 50.000",
+            price: 55000,
+            code: "TRI50",
+            icon: "📱"
+        },
+
+        {
+            name: "Tri 100.000",
+            price: 105000,
+            code: "TRI100",
             icon: "📱"
         }
 
     ],
 
+
+    // ==========================
+    // E-WALLET
+    // ==========================
 
     ewallet: [
 
@@ -120,6 +258,10 @@ const products = {
     ],
 
 
+    // ==========================
+    // TOKEN PLN
+    // ==========================
+
     pln: [
 
         {
@@ -162,24 +304,16 @@ let selectedProduct = null;
 // ==========================================
 
 const productGrid =
-    document.getElementById(
-        "productGrid"
-    );
+    document.getElementById("productGrid");
 
 const emptyState =
-    document.getElementById(
-        "emptyState"
-    );
+    document.getElementById("emptyState");
 
 const searchInput =
-    document.getElementById(
-        "searchInput"
-    );
+    document.getElementById("searchInput");
 
 const categoryTitle =
-    document.getElementById(
-        "categoryTitle"
-    );
+    document.getElementById("categoryTitle");
 
 
 // ==========================================
@@ -191,15 +325,10 @@ function formatRupiah(number) {
     return new Intl.NumberFormat(
         "id-ID",
         {
-
             style: "currency",
-
             currency: "IDR",
-
             minimumFractionDigits: 0
-
         }
-
     ).format(number);
 
 }
@@ -212,27 +341,19 @@ function formatRupiah(number) {
 function calculateAdmin(nominal) {
 
     if (nominal <= 100000) {
-
         return 5000;
-
     }
 
     if (nominal <= 300000) {
-
         return 7000;
-
     }
 
     if (nominal <= 500000) {
-
         return 10000;
-
     }
 
     if (nominal <= 1000000) {
-
         return 15000;
-
     }
 
     return 0;
@@ -247,27 +368,21 @@ function calculateAdmin(nominal) {
 function renderProducts() {
 
     const searchValue =
-
-        searchInput.value
-            .toLowerCase()
-            .trim();
+        searchInput.value.toLowerCase().trim();
 
 
     const filteredProducts =
+        products[currentCategory].filter(product =>
 
-        products[currentCategory].filter(
+            product.name
+                .toLowerCase()
+                .includes(searchValue)
 
-            product =>
+            ||
 
-                product.name
-                    .toLowerCase()
-                    .includes(searchValue)
-
-                ||
-
-                product.code
-                    .toLowerCase()
-                    .includes(searchValue)
+            product.code
+                .toLowerCase()
+                .includes(searchValue)
 
         );
 
@@ -278,163 +393,136 @@ function renderProducts() {
     categoryTitle.textContent =
 
         currentCategory === "pulsa"
-
             ? "Pulsa"
 
             : currentCategory === "ewallet"
-
                 ? "E-Wallet"
 
                 : "Token PLN";
 
 
-    if (
+    if (filteredProducts.length === 0) {
 
-        filteredProducts.length === 0
-
-    ) {
-
-        emptyState.style.display =
-            "block";
+        emptyState.style.display = "block";
 
         return;
 
     }
 
 
-    emptyState.style.display =
-        "none";
+    emptyState.style.display = "none";
 
 
-    filteredProducts.forEach(
+    filteredProducts.forEach(product => {
 
-        product => {
-
-
-            const card =
-                document.createElement(
-                    "div"
-                );
+        const card =
+            document.createElement("div");
 
 
-            card.className =
-                "product-card";
+        card.className =
+            "product-card";
 
 
-            const priceDisplay =
+        const priceDisplay =
 
-                product.custom
+            product.custom
 
-                    ? "Nominal Bebas"
+                ? "Nominal Bebas"
 
-                    : formatRupiah(
-                        product.price
-                    );
+                : formatRupiah(product.price);
 
 
-            card.innerHTML = `
+        card.innerHTML = `
 
-                <div class="product-top">
+            <div class="product-top">
 
-                    <div class="product-icon">
+                <div class="product-icon">
 
-                        ${product.icon}
+                    ${product.icon}
 
-                    </div>
+                </div>
 
-                    <span class="available">
+                <span class="available">
 
-                        ● Tersedia
+                    ● Tersedia
 
-                    </span>
+                </span>
+
+            </div>
+
+
+            <h3>
+
+                ${product.name}
+
+            </h3>
+
+
+            <div class="product-price">
+
+                ${priceDisplay}
+
+            </div>
+
+
+            <div class="product-meta">
+
+                <div class="product-code">
+
+                    Kode:
+
+                    <strong>
+
+                        ${product.code}
+
+                    </strong>
 
                 </div>
 
 
-                <h3>
+                <button
 
-                    ${product.name}
+                    class="order-btn"
 
-                </h3>
+                    type="button"
 
+                >
 
-                <div class="product-price">
+                    Pesan
 
-                    ${priceDisplay}
+                </button>
 
-                </div>
+            </div>
 
-
-                <div class="product-meta">
-
-                    <div class="product-code">
-
-                        Kode:
-
-                        <strong>
-
-                            ${product.code}
-
-                        </strong>
-
-                    </div>
+        `;
 
 
-                    <button
+        card
 
-                        class="order-btn"
+            .querySelector(".order-btn")
 
-                        type="button"
+            .addEventListener("click", () => {
 
-                    >
+                openOrderModal(
 
-                        Pesan
+                    product.name,
 
-                    </button>
+                    product.price,
 
-                </div>
+                    product.code,
 
-            `;
+                    product.icon,
 
-
-            card
-
-                .querySelector(
-                    ".order-btn"
-                )
-
-                .addEventListener(
-
-                    "click",
-
-                    () => {
-
-                        openOrderModal(
-
-                            product.name,
-
-                            product.price,
-
-                            product.code,
-
-                            product.icon,
-
-                            product.custom
-
-                        );
-
-                    }
+                    product.custom
 
                 );
 
+            });
 
-            productGrid.appendChild(
-                card
-            );
 
-        }
+        productGrid.appendChild(card);
 
-    );
+    });
 
 }
 
@@ -445,74 +533,46 @@ function renderProducts() {
 
 document
 
-    .querySelectorAll(
-        ".category-card"
-    )
+    .querySelectorAll(".category-card")
 
-    .forEach(
+    .forEach(card => {
 
-        card => {
+        card.addEventListener("click", () => {
 
+            document
 
-            card.addEventListener(
+                .querySelectorAll(".category-card")
 
-                "click",
+                .forEach(item => {
 
-                () => {
+                    item.classList.remove("active");
 
-
-                    document
-
-                        .querySelectorAll(
-                            ".category-card"
-                        )
-
-                        .forEach(
-
-                            item => {
-
-                                item.classList.remove(
-                                    "active"
-                                );
-
-                            }
-
-                        );
+                });
 
 
-                    card.classList.add(
-                        "active"
-                    );
+            card.classList.add("active");
 
 
-                    currentCategory =
-
-                        card.dataset.category;
-
-
-                    renderProducts();
+            currentCategory =
+                card.dataset.category;
 
 
-                    document
+            renderProducts();
 
-                        .getElementById(
-                            "produk"
-                        )
 
-                        .scrollIntoView({
+            document
 
-                            behavior:
-                                "smooth"
+                .getElementById("produk")
 
-                        });
+                .scrollIntoView({
 
-                }
+                    behavior: "smooth"
 
-            );
+                });
 
-        }
+        });
 
-    );
+    });
 
 
 // ==========================================
@@ -533,58 +593,31 @@ searchInput.addEventListener(
 // ==========================================
 
 const modalOverlay =
-
-    document.getElementById(
-        "modalOverlay"
-    );
+    document.getElementById("modalOverlay");
 
 const closeModal =
-
-    document.getElementById(
-        "closeModal"
-    );
+    document.getElementById("closeModal");
 
 const orderForm =
-
-    document.getElementById(
-        "orderForm"
-    );
+    document.getElementById("orderForm");
 
 const paymentMethod =
-
-    document.getElementById(
-        "paymentMethod"
-    );
+    document.getElementById("paymentMethod");
 
 const paymentInfo =
-
-    document.getElementById(
-        "paymentInfo"
-    );
+    document.getElementById("paymentInfo");
 
 const cashUploadBox =
-
-    document.getElementById(
-        "cashUploadBox"
-    );
+    document.getElementById("cashUploadBox");
 
 const debtUploadBox =
-
-    document.getElementById(
-        "debtUploadBox"
-    );
+    document.getElementById("debtUploadBox");
 
 const paymentProof =
-
-    document.getElementById(
-        "paymentProof"
-    );
+    document.getElementById("paymentProof");
 
 const selfieProof =
-
-    document.getElementById(
-        "selfieProof"
-    );
+    document.getElementById("selfieProof");
 
 
 // ==========================================
@@ -605,7 +638,6 @@ function openOrderModal(
 
 ) {
 
-
     selectedProduct = {
 
         name,
@@ -622,49 +654,35 @@ function openOrderModal(
 
 
     document.getElementById(
-
         "modalProductName"
-
     ).textContent = name;
 
 
     document.getElementById(
-
         "modalProductPrice"
-
     ).textContent =
 
         custom
 
             ? "Nominal Bebas"
 
-            : formatRupiah(
-                price
-            );
+            : formatRupiah(price);
 
 
     document.getElementById(
-
         "modalProductCode"
-
     ).textContent = code;
 
 
     document.getElementById(
-
         "modalIcon"
-
     ).textContent = icon;
 
 
-    addCustomNominalInput(
-        custom
-    );
+    addCustomNominalInput(custom);
 
 
-    modalOverlay.classList.add(
-        "active"
-    );
+    modalOverlay.classList.add("active");
 
 }
 
@@ -673,15 +691,9 @@ function openOrderModal(
 // NOMINAL BEBAS EWALLET
 // ==========================================
 
-function addCustomNominalInput(
-
-    custom
-
-) {
-
+function addCustomNominalInput(custom) {
 
     const oldBox =
-
         document.getElementById(
             "customNominalBox"
         );
@@ -702,15 +714,11 @@ function addCustomNominalInput(
 
 
     const paymentLabel =
-
         paymentMethod.parentElement;
 
 
     const nominalBox =
-
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     nominalBox.id =
@@ -722,6 +730,7 @@ function addCustomNominalInput(
         <label>
 
             Nominal E-Wallet
+
 
             <input
 
@@ -768,9 +777,7 @@ function addCustomNominalInput(
 
     document
 
-        .getElementById(
-            "customNominal"
-        )
+        .getElementById("customNominal")
 
         .addEventListener(
 
@@ -789,16 +796,13 @@ function addCustomNominalInput(
 
 function updateCustomPrice() {
 
-
     const input =
-
         document.getElementById(
             "customNominal"
         );
 
 
     const info =
-
         document.getElementById(
             "customPriceInfo"
         );
@@ -812,16 +816,12 @@ function updateCustomPrice() {
 
 
     const nominal =
-
-        Number(
-            input.value
-        );
+        Number(input.value);
 
 
     if (!nominal) {
 
         info.innerHTML =
-
             "Masukkan nominal untuk menghitung harga jual.";
 
         return;
@@ -830,14 +830,10 @@ function updateCustomPrice() {
 
 
     const admin =
-
-        calculateAdmin(
-            nominal
-        );
+        calculateAdmin(nominal);
 
 
     const total =
-
         nominal + admin;
 
 
@@ -847,9 +843,7 @@ function updateCustomPrice() {
 
         <strong>
 
-            ${formatRupiah(
-                nominal
-            )}
+            ${formatRupiah(nominal)}
 
         </strong>
 
@@ -861,9 +855,7 @@ function updateCustomPrice() {
 
         <strong>
 
-            ${formatRupiah(
-                admin
-            )}
+            ${formatRupiah(admin)}
 
         </strong>
 
@@ -875,9 +867,7 @@ function updateCustomPrice() {
 
         <strong>
 
-            ${formatRupiah(
-                total
-            )}
+            ${formatRupiah(total)}
 
         </strong>
 
@@ -896,37 +886,20 @@ paymentMethod.addEventListener(
 
     () => {
 
+        cashUploadBox.style.display = "none";
 
-        cashUploadBox.style.display =
-            "none";
+        debtUploadBox.style.display = "none";
 
+        paymentProof.required = false;
 
-        debtUploadBox.style.display =
-            "none";
-
-
-        paymentProof.required =
-            false;
+        selfieProof.required = false;
 
 
-        selfieProof.required =
-            false;
+        if (paymentMethod.value === "cash") {
 
+            cashUploadBox.style.display = "block";
 
-        if (
-
-            paymentMethod.value ===
-            "cash"
-
-        ) {
-
-
-            cashUploadBox.style.display =
-                "block";
-
-
-            paymentProof.required =
-                true;
+            paymentProof.required = true;
 
 
             paymentInfo.innerHTML = `
@@ -947,20 +920,11 @@ paymentMethod.addEventListener(
         }
 
 
-        if (
+        if (paymentMethod.value === "debt") {
 
-            paymentMethod.value ===
-            "debt"
+            debtUploadBox.style.display = "block";
 
-        ) {
-
-
-            debtUploadBox.style.display =
-                "block";
-
-
-            selfieProof.required =
-                true;
+            selfieProof.required = true;
 
 
             paymentInfo.innerHTML = `
@@ -1014,7 +978,7 @@ paymentMethod.addEventListener(
 
 
 // ==========================================
-// UPLOAD FILE KE SUPABASE STORAGE
+// UPLOAD FILE
 // ==========================================
 
 async function uploadFile(
@@ -1027,7 +991,6 @@ async function uploadFile(
 
 ) {
 
-
     if (!file) {
 
         return null;
@@ -1035,20 +998,13 @@ async function uploadFile(
     }
 
 
-    const fileExtension =
-
-        file.name
-
-            .split(
-                "."
-            )
-
-            .pop();
+    const extension =
+        file.name.split(".").pop();
 
 
     const fileName =
 
-        `${folder}/${Date.now()}-${crypto.randomUUID()}.${fileExtension}`;
+        `${folder}/${Date.now()}-${crypto.randomUUID()}.${extension}`;
 
 
     const {
@@ -1073,11 +1029,9 @@ async function uploadFile(
 
                 {
 
-                    cacheControl:
-                        "3600",
+                    cacheControl: "3600",
 
-                    upsert:
-                        false
+                    upsert: false
 
                 }
 
@@ -1097,7 +1051,7 @@ async function uploadFile(
 
 
 // ==========================================
-// KIRIM PESANAN KE SUPABASE
+// KIRIM PESANAN
 // ==========================================
 
 orderForm.addEventListener(
@@ -1106,15 +1060,12 @@ orderForm.addEventListener(
 
     async event => {
 
-
         event.preventDefault();
 
 
         if (!selectedProduct) {
 
-            alert(
-                "Produk belum dipilih."
-            );
+            alert("Produk belum dipilih.");
 
             return;
 
@@ -1125,9 +1076,7 @@ orderForm.addEventListener(
 
             document
 
-                .getElementById(
-                    "customerName"
-                )
+                .getElementById("customerName")
 
                 .value
 
@@ -1138,9 +1087,7 @@ orderForm.addEventListener(
 
             document
 
-                .getElementById(
-                    "targetNumber"
-                )
+                .getElementById("targetNumber")
 
                 .value
 
@@ -1148,17 +1095,14 @@ orderForm.addEventListener(
 
 
         const method =
-
             paymentMethod.value;
 
 
         let nominal =
-
             selectedProduct.price;
 
 
         let productPrice =
-
             selectedProduct.price;
 
 
@@ -1168,14 +1112,9 @@ orderForm.addEventListener(
         let debtFee = 0;
 
 
-        // NOMINAL EWALLET
+        // EWALLET NOMINAL BEBAS
 
-        if (
-
-            selectedProduct.custom
-
-        ) {
-
+        if (selectedProduct.custom) {
 
             const customInput =
 
@@ -1187,10 +1126,7 @@ orderForm.addEventListener(
 
 
             nominal =
-
-                Number(
-                    customInput.value
-                );
+                Number(customInput.value);
 
 
             if (
@@ -1207,7 +1143,6 @@ orderForm.addEventListener(
 
             ) {
 
-
                 alert(
 
                     "Nominal harus antara Rp1.000 sampai Rp1.000.000."
@@ -1220,26 +1155,18 @@ orderForm.addEventListener(
 
 
             adminFee =
-
-                calculateAdmin(
-                    nominal
-                );
+                calculateAdmin(nominal);
 
 
             productPrice =
-
                 nominal + adminFee;
 
         }
 
 
-        // TAMBAHAN HUTANG
+        // ADMIN HUTANG
 
-        if (
-
-            method === "debt"
-
-        ) {
+        if (method === "debt") {
 
             debtFee = 5000;
 
@@ -1247,38 +1174,21 @@ orderForm.addEventListener(
 
 
         const totalPrice =
-
             productPrice + debtFee;
 
 
-        let paymentProofPath =
+        let paymentProofPath = null;
 
-            null;
-
-
-        let selfiePath =
-
-            null;
+        let selfiePath = null;
 
 
         try {
 
+            // CASH
 
-            // UPLOAD BUKTI CASH
+            if (method === "cash") {
 
-            if (
-
-                method === "cash"
-
-            ) {
-
-
-                if (
-
-                    !paymentProof.files[0]
-
-                ) {
-
+                if (!paymentProof.files[0]) {
 
                     alert(
 
@@ -1306,21 +1216,11 @@ orderForm.addEventListener(
             }
 
 
-            // UPLOAD SELFIE HUTANG
+            // HUTANG
 
-            if (
+            if (method === "debt") {
 
-                method === "debt"
-
-            ) {
-
-
-                if (
-
-                    !selfieProof.files[0]
-
-                ) {
-
+                if (!selfieProof.files[0]) {
 
                     alert(
 
@@ -1348,8 +1248,6 @@ orderForm.addEventListener(
             }
 
 
-            // STATUS
-
             const status =
 
                 method === "debt"
@@ -1358,8 +1256,6 @@ orderForm.addEventListener(
 
                     : "menunggu_verifikasi";
 
-
-            // JATUH TEMPO 24 JAM
 
             const dueDate =
 
@@ -1378,16 +1274,10 @@ orderForm.addEventListener(
                     : null;
 
 
-            // NOMOR ORDER
-
             const orderNumber =
 
-                "HC-" +
+                "HC-" + Date.now();
 
-                Date.now();
-
-
-            // INSERT DATABASE
 
             const {
 
@@ -1399,9 +1289,7 @@ orderForm.addEventListener(
 
                 await supabaseClient
 
-                    .from(
-                        "orders"
-                    )
+                    .from("orders")
 
                     .insert({
 
@@ -1480,10 +1368,7 @@ orderForm.addEventListener(
 
         } catch (error) {
 
-
-            console.error(
-                error
-            );
+            console.error(error);
 
 
             alert(
@@ -1509,37 +1394,25 @@ orderForm.addEventListener(
 
 function closeOrderModal() {
 
-
-    modalOverlay.classList.remove(
-        "active"
-    );
+    modalOverlay.classList.remove("active");
 
 
     orderForm.reset();
 
 
-    cashUploadBox.style.display =
-        "none";
+    cashUploadBox.style.display = "none";
 
+    debtUploadBox.style.display = "none";
 
-    debtUploadBox.style.display =
-        "none";
+    paymentProof.required = false;
 
-
-    paymentProof.required =
-        false;
-
-
-    selfieProof.required =
-        false;
+    selfieProof.required = false;
 
 
     const customBox =
 
         document.getElementById(
-
             "customNominalBox"
-
         );
 
 
@@ -1572,14 +1445,7 @@ modalOverlay.addEventListener(
 
     event => {
 
-
-        if (
-
-            event.target ===
-            modalOverlay
-
-        ) {
-
+        if (event.target === modalOverlay) {
 
             closeOrderModal();
 
@@ -1595,14 +1461,10 @@ modalOverlay.addEventListener(
 // ==========================================
 
 const menuBtn =
-
-    document.getElementById(
-        "menuBtn"
-    );
+    document.getElementById("menuBtn");
 
 
 if (menuBtn) {
-
 
     menuBtn.addEventListener(
 
@@ -1610,12 +1472,8 @@ if (menuBtn) {
 
         () => {
 
-
             const nav =
-
-                document.querySelector(
-                    ".nav"
-                );
+                document.querySelector(".nav");
 
 
             nav.classList.toggle(
@@ -1630,7 +1488,7 @@ if (menuBtn) {
 
 
 // ==========================================
-// MULAI WEBSITE
+// MULAI
 // ==========================================
 
 renderProducts();
