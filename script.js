@@ -57,140 +57,43 @@ const products = {
     ewallet: [
 
         {
-            name: "DANA 10.000",
-            price: 15000,
-            code: "D10",
-            icon: "💳"
+            name: "DANA",
+            price: 0,
+            code: "DANA",
+            icon: "💳",
+            custom: true
         },
 
         {
-            name: "DANA 50.000",
-            price: 55000,
-            code: "D50",
-            icon: "💳"
+            name: "OVO",
+            price: 0,
+            code: "OVO",
+            icon: "💳",
+            custom: true
         },
 
         {
-            name: "DANA 100.000",
-            price: 105000,
-            code: "D100",
-            icon: "💳"
+            name: "GoPay",
+            price: 0,
+            code: "GOPAY",
+            icon: "💳",
+            custom: true
         },
 
         {
-            name: "DANA 200.000",
-            price: 207000,
-            code: "D200",
-            icon: "💳"
+            name: "LinkAja",
+            price: 0,
+            code: "LINKAJA",
+            icon: "💳",
+            custom: true
         },
 
         {
-            name: "DANA 300.000",
-            price: 307000,
-            code: "D300",
-            icon: "💳"
-        },
-
-        {
-            name: "DANA 500.000",
-            price: 510000,
-            code: "D500",
-            icon: "💳"
-        },
-
-        {
-            name: "DANA 1.000.000",
-            price: 1015000,
-            code: "D1000",
-            icon: "💳"
-        },
-
-
-        {
-            name: "OVO 10.000",
-            price: 15000,
-            code: "O10",
-            icon: "💳"
-        },
-
-        {
-            name: "OVO 50.000",
-            price: 55000,
-            code: "O50",
-            icon: "💳"
-        },
-
-        {
-            name: "OVO 100.000",
-            price: 105000,
-            code: "O100",
-            icon: "💳"
-        },
-
-
-        {
-            name: "GoPay 10.000",
-            price: 15000,
-            code: "G10",
-            icon: "💳"
-        },
-
-        {
-            name: "GoPay 50.000",
-            price: 55000,
-            code: "G50",
-            icon: "💳"
-        },
-
-        {
-            name: "GoPay 100.000",
-            price: 105000,
-            code: "G100",
-            icon: "💳"
-        },
-
-
-        {
-            name: "LinkAja 10.000",
-            price: 15000,
-            code: "L10",
-            icon: "💳"
-        },
-
-        {
-            name: "LinkAja 50.000",
-            price: 55000,
-            code: "L50",
-            icon: "💳"
-        },
-
-        {
-            name: "LinkAja 100.000",
-            price: 105000,
-            code: "L100",
-            icon: "💳"
-        },
-
-
-        {
-            name: "ShopeePay 10.000",
-            price: 15000,
-            code: "SP10",
-            icon: "💳"
-        },
-
-        {
-            name: "ShopeePay 50.000",
-            price: 55000,
-            code: "SP50",
-            icon: "💳"
-        },
-
-        {
-            name: "ShopeePay 100.000",
-            price: 105000,
-            code: "SP100",
-            icon: "💳"
+            name: "ShopeePay",
+            price: 0,
+            code: "SHOPEEPAY",
+            icon: "💳",
+            custom: true
         }
 
     ],
@@ -268,6 +171,37 @@ function formatRupiah(number) {
 }
 
 
+function calculateAdmin(nominal) {
+
+    if (nominal <= 100000) {
+
+        return 5000;
+
+    }
+
+    if (nominal <= 300000) {
+
+        return 7000;
+
+    }
+
+    if (nominal <= 500000) {
+
+        return 10000;
+
+    }
+
+    if (nominal <= 1000000) {
+
+        return 15000;
+
+    }
+
+    return null;
+
+}
+
+
 function renderProducts() {
 
     const searchValue =
@@ -321,6 +255,22 @@ function renderProducts() {
             "product-card";
 
 
+        let priceDisplay = "";
+
+
+        if (product.custom) {
+
+            priceDisplay =
+                "Nominal Bebas";
+
+        } else {
+
+            priceDisplay =
+                formatRupiah(product.price);
+
+        }
+
+
         card.innerHTML = `
 
             <div class="product-top">
@@ -350,7 +300,7 @@ function renderProducts() {
 
             <div class="product-price">
 
-                ${formatRupiah(product.price)}
+                ${priceDisplay}
 
             </div>
 
@@ -382,7 +332,9 @@ function renderProducts() {
 
                         '${product.code}',
 
-                        '${product.icon}'
+                        '${product.icon}',
+
+                        ${product.custom}
 
                     )"
 
@@ -414,7 +366,9 @@ const categoryCards =
 categoryCards.forEach(card => {
 
     card.addEventListener(
+
         "click",
+
         () => {
 
 
@@ -492,7 +446,9 @@ function openOrderModal(
 
     code,
 
-    icon
+    icon,
+
+    custom
 
 ) {
 
@@ -505,7 +461,9 @@ function openOrderModal(
 
         code,
 
-        icon
+        icon,
+
+        custom
 
     };
 
@@ -521,8 +479,11 @@ function openOrderModal(
         .getElementById(
             "modalProductPrice"
         )
-        .textContent =
-        formatRupiah(price);
+        .textContent = custom
+
+            ? "Nominal Bebas"
+
+            : formatRupiah(price);
 
 
     document
@@ -539,9 +500,233 @@ function openOrderModal(
         .textContent = icon;
 
 
+    addCustomNominalInput(custom);
+
+
     modalOverlay.classList.add(
         "active"
     );
+
+}
+
+
+function addCustomNominalInput(custom) {
+
+    const existingInput =
+
+        document.getElementById(
+            "customNominalBox"
+        );
+
+
+    if (existingInput) {
+
+        existingInput.remove();
+
+    }
+
+
+    if (!custom) {
+
+        return;
+
+    }
+
+
+    const paymentLabel =
+
+        document
+            .getElementById(
+                "paymentMethod"
+            )
+            .parentElement;
+
+
+    const nominalBox =
+
+        document.createElement(
+            "div"
+        );
+
+
+    nominalBox.id =
+        "customNominalBox";
+
+
+    nominalBox.innerHTML = `
+
+        <label>
+
+            Nominal E-Wallet
+
+
+            <input
+
+                type="number"
+
+                id="customNominal"
+
+                placeholder="Contoh: 37000"
+
+                min="1000"
+
+                max="1000000"
+
+                required
+
+            >
+
+        </label>
+
+
+        <div
+
+            id="customPriceInfo"
+
+            class="payment-info"
+
+        >
+
+            Masukkan nominal untuk menghitung harga jual.
+
+        </div>
+
+    `;
+
+
+    paymentLabel.parentNode.insertBefore(
+
+        nominalBox,
+
+        paymentLabel
+
+    );
+
+
+    const customNominal =
+
+        document.getElementById(
+            "customNominal"
+        );
+
+
+    customNominal.addEventListener(
+
+        "input",
+
+        updateCustomPrice
+
+    );
+
+}
+
+
+function updateCustomPrice() {
+
+    const nominalInput =
+
+        document.getElementById(
+            "customNominal"
+        );
+
+
+    const priceInfo =
+
+        document.getElementById(
+            "customPriceInfo"
+        );
+
+
+    if (!nominalInput) {
+
+        return;
+
+    }
+
+
+    const nominal =
+
+        Number(
+            nominalInput.value
+        );
+
+
+    if (!nominal) {
+
+        priceInfo.innerHTML =
+
+            "Masukkan nominal untuk menghitung harga jual.";
+
+        return;
+
+    }
+
+
+    if (nominal < 1000) {
+
+        priceInfo.innerHTML =
+
+            "Minimal nominal adalah Rp1.000.";
+
+        return;
+
+    }
+
+
+    if (nominal > 1000000) {
+
+        priceInfo.innerHTML =
+
+            "Maksimal nominal adalah Rp1.000.000.";
+
+        return;
+
+    }
+
+
+    const admin =
+
+        calculateAdmin(
+            nominal
+        );
+
+
+    const total =
+
+        nominal + admin;
+
+
+    priceInfo.innerHTML = `
+
+        Nominal E-Wallet:
+
+        <strong>
+
+            ${formatRupiah(nominal)}
+
+        </strong>
+
+        <br>
+
+        Biaya Admin:
+
+        <strong>
+
+            ${formatRupiah(admin)}
+
+        </strong>
+
+        <br>
+
+        Total Bayar:
+
+        <strong>
+
+            ${formatRupiah(total)}
+
+        </strong>
+
+    `;
 
 }
 
@@ -554,6 +739,20 @@ function closeOrderModal() {
 
 
     orderForm.reset();
+
+
+    const customInput =
+
+        document.getElementById(
+            "customNominalBox"
+        );
+
+
+    if (customInput) {
+
+        customInput.remove();
+
+    }
 
 
     document
@@ -713,14 +912,102 @@ orderForm.addEventListener(
             paymentMethod.value;
 
 
-        if (!selectedProduct) {
+        let nominal =
 
-            return;
+            selectedProduct.price;
+
+
+        let admin = 0;
+
+
+        if (
+
+            selectedProduct.custom
+
+        ) {
+
+
+            nominal =
+
+                Number(
+
+                    document
+                        .getElementById(
+                            "customNominal"
+                        )
+                        .value
+
+                );
+
+
+            admin =
+
+                calculateAdmin(
+                    nominal
+                );
+
+
+            if (
+
+                !nominal
+
+                ||
+
+                nominal < 1000
+
+                ||
+
+                nominal > 1000000
+
+            ) {
+
+
+                alert(
+
+                    "Masukkan nominal antara Rp1.000 sampai Rp1.000.000."
+
+                );
+
+
+                return;
+
+            }
 
         }
 
 
-        let paymentText =
+        if (!selectedProduct.custom) {
+
+            nominal =
+                selectedProduct.price;
+
+        }
+
+
+        let debtAdmin = 0;
+
+
+        if (
+
+            method === "debt"
+
+        ) {
+
+            debtAdmin = 5000;
+
+        }
+
+
+        const total =
+
+            selectedProduct.custom
+
+                ? nominal + admin + debtAdmin
+
+                : selectedProduct.price + debtAdmin;
+
+
+        const paymentText =
 
             method === "cash"
 
@@ -747,11 +1034,24 @@ Kode:
 ${selectedProduct.code}
 
 
-Harga:
+Nominal:
 
-${formatRupiah(
-    selectedProduct.price
-)}
+${formatRupiah(nominal)}
+
+
+Biaya Admin:
+
+${formatRupiah(admin)}
+
+
+Biaya Admin Hutang:
+
+${formatRupiah(debtAdmin)}
+
+
+Total Bayar:
+
+${formatRupiah(total)}
 
 
 Nama Pemesan:
