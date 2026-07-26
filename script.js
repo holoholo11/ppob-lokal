@@ -1,3 +1,24 @@
+// ==========================================
+// KONFIGURASI SUPABASE
+// ==========================================
+
+const SUPABASE_URL =
+    "https://wlitjnrhtusqndpicerk.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_NMY1WdcdPq6_GgrDv2nxEw_PIYsCyaF";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+// ==========================================
+// DATA PRODUK
+// ==========================================
+
 const products = {
 
     pulsa: [
@@ -127,37 +148,43 @@ const products = {
 };
 
 
+// ==========================================
+// VARIABEL
+// ==========================================
+
 let currentCategory = "pulsa";
 
 let selectedProduct = null;
 
 
-const productGrid =
-    document.getElementById("productGrid");
+// ==========================================
+// ELEMENT HTML
+// ==========================================
 
+const productGrid =
+    document.getElementById(
+        "productGrid"
+    );
 
 const emptyState =
-    document.getElementById("emptyState");
-
+    document.getElementById(
+        "emptyState"
+    );
 
 const searchInput =
-    document.getElementById("searchInput");
-
+    document.getElementById(
+        "searchInput"
+    );
 
 const categoryTitle =
-    document.getElementById("categoryTitle");
+    document.getElementById(
+        "categoryTitle"
+    );
 
 
-const categoryNames = {
-
-    pulsa: "Pulsa",
-
-    ewallet: "E-Wallet",
-
-    pln: "Token PLN"
-
-};
-
+// ==========================================
+// FORMAT RUPIAH
+// ==========================================
 
 function formatRupiah(number) {
 
@@ -177,6 +204,10 @@ function formatRupiah(number) {
 
 }
 
+
+// ==========================================
+// HITUNG ADMIN EWALLET
+// ==========================================
 
 function calculateAdmin(nominal) {
 
@@ -209,8 +240,11 @@ function calculateAdmin(nominal) {
 }
 
 
-function renderProducts() {
+// ==========================================
+// TAMPILKAN PRODUK
+// ==========================================
 
+function renderProducts() {
 
     const searchValue =
 
@@ -243,7 +277,15 @@ function renderProducts() {
 
     categoryTitle.textContent =
 
-        categoryNames[currentCategory];
+        currentCategory === "pulsa"
+
+            ? "Pulsa"
+
+            : currentCategory === "ewallet"
+
+                ? "E-Wallet"
+
+                : "Token PLN";
 
 
     if (
@@ -252,10 +294,8 @@ function renderProducts() {
 
     ) {
 
-
         emptyState.style.display =
             "block";
-
 
         return;
 
@@ -294,9 +334,7 @@ function renderProducts() {
 
             card.innerHTML = `
 
-
                 <div class="product-top">
-
 
                     <div class="product-icon">
 
@@ -304,13 +342,11 @@ function renderProducts() {
 
                     </div>
 
-
                     <span class="available">
 
                         ● Tersedia
 
                     </span>
-
 
                 </div>
 
@@ -330,7 +366,6 @@ function renderProducts() {
 
 
                 <div class="product-meta">
-
 
                     <div class="product-code">
 
@@ -357,50 +392,45 @@ function renderProducts() {
 
                     </button>
 
-
                 </div>
-
 
             `;
 
 
-            const orderButton =
+            card
 
-                card.querySelector(
+                .querySelector(
                     ".order-btn"
+                )
+
+                .addEventListener(
+
+                    "click",
+
+                    () => {
+
+                        openOrderModal(
+
+                            product.name,
+
+                            product.price,
+
+                            product.code,
+
+                            product.icon,
+
+                            product.custom
+
+                        );
+
+                    }
+
                 );
-
-
-            orderButton.addEventListener(
-
-                "click",
-
-                () => {
-
-
-                    openOrderModal(
-
-                        product.name,
-
-                        product.price,
-
-                        product.code,
-
-                        product.icon,
-
-                        product.custom
-
-                    );
-
-                }
-
-            );
 
 
             productGrid.appendChild(
                 card
             );
-
 
         }
 
@@ -409,73 +439,85 @@ function renderProducts() {
 }
 
 
-const categoryCards =
+// ==========================================
+// KATEGORI
+// ==========================================
 
-    document.querySelectorAll(
+document
 
+    .querySelectorAll(
         ".category-card"
+    )
+
+    .forEach(
+
+        card => {
+
+
+            card.addEventListener(
+
+                "click",
+
+                () => {
+
+
+                    document
+
+                        .querySelectorAll(
+                            ".category-card"
+                        )
+
+                        .forEach(
+
+                            item => {
+
+                                item.classList.remove(
+                                    "active"
+                                );
+
+                            }
+
+                        );
+
+
+                    card.classList.add(
+                        "active"
+                    );
+
+
+                    currentCategory =
+
+                        card.dataset.category;
+
+
+                    renderProducts();
+
+
+                    document
+
+                        .getElementById(
+                            "produk"
+                        )
+
+                        .scrollIntoView({
+
+                            behavior:
+                                "smooth"
+
+                        });
+
+                }
+
+            );
+
+        }
 
     );
 
 
-categoryCards.forEach(
-
-    card => {
-
-
-        card.addEventListener(
-
-            "click",
-
-            () => {
-
-
-                categoryCards.forEach(
-
-                    item => {
-
-                        item.classList.remove(
-                            "active"
-                        );
-
-                    }
-
-                );
-
-
-                card.classList.add(
-                    "active"
-                );
-
-
-                currentCategory =
-
-                    card.dataset.category;
-
-
-                renderProducts();
-
-
-                document
-                    .getElementById(
-                        "produk"
-                    )
-                    .scrollIntoView({
-
-                        behavior:
-                            "smooth"
-
-                    });
-
-
-            }
-
-        );
-
-    }
-
-);
-
+// ==========================================
+// PENCARIAN
+// ==========================================
 
 searchInput.addEventListener(
 
@@ -486,12 +528,15 @@ searchInput.addEventListener(
 );
 
 
+// ==========================================
+// MODAL
+// ==========================================
+
 const modalOverlay =
 
     document.getElementById(
         "modalOverlay"
     );
-
 
 const closeModal =
 
@@ -499,13 +544,11 @@ const closeModal =
         "closeModal"
     );
 
-
 const orderForm =
 
     document.getElementById(
         "orderForm"
     );
-
 
 const paymentMethod =
 
@@ -513,13 +556,11 @@ const paymentMethod =
         "paymentMethod"
     );
 
-
 const paymentInfo =
 
     document.getElementById(
         "paymentInfo"
     );
-
 
 const cashUploadBox =
 
@@ -527,13 +568,11 @@ const cashUploadBox =
         "cashUploadBox"
     );
 
-
 const debtUploadBox =
 
     document.getElementById(
         "debtUploadBox"
     );
-
 
 const paymentProof =
 
@@ -541,13 +580,16 @@ const paymentProof =
         "paymentProof"
     );
 
-
 const selfieProof =
 
     document.getElementById(
         "selfieProof"
     );
 
+
+// ==========================================
+// BUKA MODAL
+// ==========================================
 
 function openOrderModal(
 
@@ -627,6 +669,10 @@ function openOrderModal(
 }
 
 
+// ==========================================
+// NOMINAL BEBAS EWALLET
+// ==========================================
+
 function addCustomNominalInput(
 
     custom
@@ -673,12 +719,9 @@ function addCustomNominalInput(
 
     nominalBox.innerHTML = `
 
-
         <label>
 
-
             Nominal E-Wallet
-
 
             <input
 
@@ -696,7 +739,6 @@ function addCustomNominalInput(
 
             >
 
-
         </label>
 
 
@@ -708,11 +750,9 @@ function addCustomNominalInput(
 
         >
 
-            Masukkan nominal untuk
-            menghitung harga jual.
+            Masukkan nominal untuk menghitung harga jual.
 
         </div>
-
 
     `;
 
@@ -726,23 +766,26 @@ function addCustomNominalInput(
     );
 
 
-    const customNominal =
+    document
 
-        document.getElementById(
+        .getElementById(
             "customNominal"
+        )
+
+        .addEventListener(
+
+            "input",
+
+            updateCustomPrice
+
         );
-
-
-    customNominal.addEventListener(
-
-        "input",
-
-        updateCustomPrice
-
-    );
 
 }
 
+
+// ==========================================
+// UPDATE HARGA EWALLET
+// ==========================================
 
 function updateCustomPrice() {
 
@@ -777,34 +820,9 @@ function updateCustomPrice() {
 
     if (!nominal) {
 
-
         info.innerHTML =
 
             "Masukkan nominal untuk menghitung harga jual.";
-
-        return;
-
-    }
-
-
-    if (nominal < 1000) {
-
-
-        info.innerHTML =
-
-            "Minimal nominal adalah Rp1.000.";
-
-        return;
-
-    }
-
-
-    if (nominal > 1000000) {
-
-
-        info.innerHTML =
-
-            "Maksimal nominal adalah Rp1.000.000.";
 
         return;
 
@@ -825,8 +843,7 @@ function updateCustomPrice() {
 
     info.innerHTML = `
 
-
-        Nominal E-Wallet:
+        Nominal:
 
         <strong>
 
@@ -854,7 +871,7 @@ function updateCustomPrice() {
         <br>
 
 
-        Total Bayar:
+        Total:
 
         <strong>
 
@@ -864,11 +881,14 @@ function updateCustomPrice() {
 
         </strong>
 
-
     `;
 
 }
 
+
+// ==========================================
+// METODE PEMBAYARAN
+// ==========================================
 
 paymentMethod.addEventListener(
 
@@ -911,29 +931,16 @@ paymentMethod.addEventListener(
 
             paymentInfo.innerHTML = `
 
-
                 💵 <strong>
-                Bayar Cash
-                </strong>
 
+                    Bayar Cash kepada Ibu Usih / Ira
 
-                <br>
-
-
-                Silakan lakukan pembayaran
-                kepada
-
-
-                <strong>
-                Ibu Usih atau Ira
                 </strong>
 
 
                 <br><br>
 
-
-                Setelah pembayaran dilakukan,
-                upload bukti pembayaran.
+                Upload bukti pembayaran.
 
             `;
 
@@ -958,45 +965,43 @@ paymentMethod.addEventListener(
 
             paymentInfo.innerHTML = `
 
-
                 🧾 <strong>
-                Bayar Nanti / Hutang
+
+                    Sistem Hutang
+
                 </strong>
 
 
                 <br>
 
-
-                Biaya admin tambahan:
+                Biaya admin hutang:
 
                 <strong>
-                Rp5.000
+
+                    Rp5.000
+
                 </strong>
 
 
                 <br>
-
-
-                Wajib upload foto selfie.
-
-
-                <br>
-
 
                 Jatuh tempo:
 
                 <strong>
-                1×24 jam
+
+                    1 × 24 jam
+
                 </strong>
 
 
                 <br>
 
-
-                Keterlambatan:
+                Denda:
 
                 <strong>
-                Rp2.000 per hari
+
+                    Rp2.000 per hari keterlambatan
+
                 </strong>
 
             `;
@@ -1007,6 +1012,500 @@ paymentMethod.addEventListener(
 
 );
 
+
+// ==========================================
+// UPLOAD FILE KE SUPABASE STORAGE
+// ==========================================
+
+async function uploadFile(
+
+    file,
+
+    bucket,
+
+    folder
+
+) {
+
+
+    if (!file) {
+
+        return null;
+
+    }
+
+
+    const fileExtension =
+
+        file.name
+
+            .split(
+                "."
+            )
+
+            .pop();
+
+
+    const fileName =
+
+        `${folder}/${Date.now()}-${crypto.randomUUID()}.${fileExtension}`;
+
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+        await supabaseClient
+
+            .storage
+
+            .from(bucket)
+
+            .upload(
+
+                fileName,
+
+                file,
+
+                {
+
+                    cacheControl:
+                        "3600",
+
+                    upsert:
+                        false
+
+                }
+
+            );
+
+
+    if (error) {
+
+        throw error;
+
+    }
+
+
+    return data.path;
+
+}
+
+
+// ==========================================
+// KIRIM PESANAN KE SUPABASE
+// ==========================================
+
+orderForm.addEventListener(
+
+    "submit",
+
+    async event => {
+
+
+        event.preventDefault();
+
+
+        if (!selectedProduct) {
+
+            alert(
+                "Produk belum dipilih."
+            );
+
+            return;
+
+        }
+
+
+        const customerName =
+
+            document
+
+                .getElementById(
+                    "customerName"
+                )
+
+                .value
+
+                .trim();
+
+
+        const targetNumber =
+
+            document
+
+                .getElementById(
+                    "targetNumber"
+                )
+
+                .value
+
+                .trim();
+
+
+        const method =
+
+            paymentMethod.value;
+
+
+        let nominal =
+
+            selectedProduct.price;
+
+
+        let productPrice =
+
+            selectedProduct.price;
+
+
+        let adminFee = 0;
+
+
+        let debtFee = 0;
+
+
+        // NOMINAL EWALLET
+
+        if (
+
+            selectedProduct.custom
+
+        ) {
+
+
+            const customInput =
+
+                document
+
+                    .getElementById(
+                        "customNominal"
+                    );
+
+
+            nominal =
+
+                Number(
+                    customInput.value
+                );
+
+
+            if (
+
+                !nominal
+
+                ||
+
+                nominal < 1000
+
+                ||
+
+                nominal > 1000000
+
+            ) {
+
+
+                alert(
+
+                    "Nominal harus antara Rp1.000 sampai Rp1.000.000."
+
+                );
+
+                return;
+
+            }
+
+
+            adminFee =
+
+                calculateAdmin(
+                    nominal
+                );
+
+
+            productPrice =
+
+                nominal + adminFee;
+
+        }
+
+
+        // TAMBAHAN HUTANG
+
+        if (
+
+            method === "debt"
+
+        ) {
+
+            debtFee = 5000;
+
+        }
+
+
+        const totalPrice =
+
+            productPrice + debtFee;
+
+
+        let paymentProofPath =
+
+            null;
+
+
+        let selfiePath =
+
+            null;
+
+
+        try {
+
+
+            // UPLOAD BUKTI CASH
+
+            if (
+
+                method === "cash"
+
+            ) {
+
+
+                if (
+
+                    !paymentProof.files[0]
+
+                ) {
+
+
+                    alert(
+
+                        "Silakan upload bukti pembayaran."
+
+                    );
+
+                    return;
+
+                }
+
+
+                paymentProofPath =
+
+                    await uploadFile(
+
+                        paymentProof.files[0],
+
+                        "payment-proofs",
+
+                        "payments"
+
+                    );
+
+            }
+
+
+            // UPLOAD SELFIE HUTANG
+
+            if (
+
+                method === "debt"
+
+            ) {
+
+
+                if (
+
+                    !selfieProof.files[0]
+
+                ) {
+
+
+                    alert(
+
+                        "Silakan upload foto selfie."
+
+                    );
+
+                    return;
+
+                }
+
+
+                selfiePath =
+
+                    await uploadFile(
+
+                        selfieProof.files[0],
+
+                        "debt-selfies",
+
+                        "selfies"
+
+                    );
+
+            }
+
+
+            // STATUS
+
+            const status =
+
+                method === "debt"
+
+                    ? "menunggu_verifikasi"
+
+                    : "menunggu_verifikasi";
+
+
+            // JATUH TEMPO 24 JAM
+
+            const dueDate =
+
+                method === "debt"
+
+                    ? new Date(
+
+                        Date.now()
+
+                        +
+
+                        24 * 60 * 60 * 1000
+
+                    ).toISOString()
+
+                    : null;
+
+
+            // NOMOR ORDER
+
+            const orderNumber =
+
+                "HC-" +
+
+                Date.now();
+
+
+            // INSERT DATABASE
+
+            const {
+
+                data,
+
+                error
+
+            } =
+
+                await supabaseClient
+
+                    .from(
+                        "orders"
+                    )
+
+                    .insert({
+
+                        order_number:
+                            orderNumber,
+
+                        customer_name:
+                            customerName,
+
+                        target_number:
+                            targetNumber,
+
+                        product_name:
+                            selectedProduct.name,
+
+                        product_code:
+                            selectedProduct.code,
+
+                        category:
+                            currentCategory,
+
+                        nominal:
+                            nominal,
+
+                        product_price:
+                            productPrice,
+
+                        admin_fee:
+                            adminFee,
+
+                        debt_fee:
+                            debtFee,
+
+                        late_fee:
+                            0,
+
+                        total_price:
+                            totalPrice,
+
+                        payment_method:
+                            method,
+
+                        status:
+                            status,
+
+                        payment_proof_url:
+                            paymentProofPath,
+
+                        selfie_url:
+                            selfiePath,
+
+                        due_date:
+                            dueDate
+
+                    })
+
+                    .select();
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            alert(
+
+                "Pesanan berhasil dikirim dan tersimpan!"
+
+            );
+
+
+            closeOrderModal();
+
+
+        } catch (error) {
+
+
+            console.error(
+                error
+            );
+
+
+            alert(
+
+                "Terjadi kesalahan: "
+
+                +
+
+                error.message
+
+            );
+
+        }
+
+    }
+
+);
+
+
+// ==========================================
+// TUTUP MODAL
+// ==========================================
 
 function closeOrderModal() {
 
@@ -1038,7 +1537,9 @@ function closeOrderModal() {
     const customBox =
 
         document.getElementById(
+
             "customNominalBox"
+
         );
 
 
@@ -1089,232 +1590,9 @@ modalOverlay.addEventListener(
 );
 
 
-orderForm.addEventListener(
-
-    "submit",
-
-    event => {
-
-
-        event.preventDefault();
-
-
-        const customerName =
-
-            document.getElementById(
-
-                "customerName"
-
-            ).value;
-
-
-        const targetNumber =
-
-            document.getElementById(
-
-                "targetNumber"
-
-            ).value;
-
-
-        const method =
-
-            paymentMethod.value;
-
-
-        let nominal =
-
-            selectedProduct.price;
-
-
-        let admin = 0;
-
-
-        if (
-
-            selectedProduct.custom
-
-        ) {
-
-
-            const customInput =
-
-                document.getElementById(
-
-                    "customNominal"
-
-                );
-
-
-            nominal =
-
-                Number(
-                    customInput.value
-                );
-
-
-            admin =
-
-                calculateAdmin(
-                    nominal
-                );
-
-
-            if (
-
-                !nominal
-
-                ||
-
-                nominal < 1000
-
-                ||
-
-                nominal > 1000000
-
-            ) {
-
-
-                alert(
-
-                    "Masukkan nominal antara Rp1.000 sampai Rp1.000.000."
-
-                );
-
-
-                return;
-
-            }
-
-        }
-
-
-        const debtAdmin =
-
-            method === "debt"
-
-                ? 5000
-
-                : 0;
-
-
-        const total =
-
-            selectedProduct.custom
-
-                ? nominal + admin + debtAdmin
-
-                : selectedProduct.price + debtAdmin;
-
-
-        const selectedFile =
-
-            method === "cash"
-
-                ? paymentProof.files[0]
-
-                : selfieProof.files[0];
-
-
-        if (!selectedFile) {
-
-
-            alert(
-
-                method === "cash"
-
-                    ? "Silakan upload bukti pembayaran."
-
-                    : "Silakan upload foto selfie."
-
-            );
-
-
-            return;
-
-        }
-
-
-        const paymentText =
-
-            method === "cash"
-
-                ? "Cash kepada Ibu Usih / Ira"
-
-                : "Hutang / Bayar Nanti";
-
-
-        const orderData = {
-
-
-            product:
-                selectedProduct.name,
-
-
-            code:
-                selectedProduct.code,
-
-
-            nominal:
-                nominal,
-
-
-            admin:
-                admin,
-
-
-            debtAdmin:
-                debtAdmin,
-
-
-            total:
-                total,
-
-
-            customerName:
-                customerName,
-
-
-            targetNumber:
-                targetNumber,
-
-
-            paymentMethod:
-                paymentText,
-
-
-            uploadedFile:
-                selectedFile.name,
-
-
-            orderDate:
-                new Date().toLocaleString(
-                    "id-ID"
-                )
-
-
-        };
-
-
-        console.log(
-            "DATA PESANAN:",
-            orderData
-        );
-
-
-        alert(
-
-            "Pesanan berhasil dibuat! Bukti pembayaran/selfie sudah dipilih."
-
-        );
-
-
-        closeOrderModal();
-
-    }
-
-);
-
+// ==========================================
+// MENU MOBILE
+// ==========================================
 
 const menuBtn =
 
@@ -1323,76 +1601,36 @@ const menuBtn =
     );
 
 
-menuBtn.addEventListener(
-
-    "click",
-
-    () => {
+if (menuBtn) {
 
 
-        const nav =
+    menuBtn.addEventListener(
 
-            document.querySelector(
-                ".nav"
+        "click",
+
+        () => {
+
+
+            const nav =
+
+                document.querySelector(
+                    ".nav"
+                );
+
+
+            nav.classList.toggle(
+                "mobile-open"
             );
-
-
-        if (
-
-            nav.style.display ===
-            "flex"
-
-        ) {
-
-
-            nav.style.display =
-                "none";
-
-
-        } else {
-
-
-            nav.style.display =
-                "flex";
-
-
-            nav.style.position =
-                "absolute";
-
-
-            nav.style.top =
-                "74px";
-
-
-            nav.style.right =
-                "20px";
-
-
-            nav.style.background =
-                "white";
-
-
-            nav.style.padding =
-                "20px";
-
-
-            nav.style.borderRadius =
-                "12px";
-
-
-            nav.style.flexDirection =
-                "column";
-
-
-            nav.style.boxShadow =
-
-                "0 10px 30px rgba(0,0,0,0.1)";
 
         }
 
-    }
+    );
 
-);
+}
 
+
+// ==========================================
+// MULAI WEBSITE
+// ==========================================
 
 renderProducts();
