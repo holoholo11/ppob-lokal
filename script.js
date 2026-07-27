@@ -1,9 +1,4 @@
 // ==========================================
-// HOLOCELL - SCRIPT FINAL PPOB
-// ==========================================
-
-
-// ==========================================
 // KONFIGURASI SUPABASE
 // ==========================================
 
@@ -32,14 +27,10 @@ const WHATSAPP_ADMIN_2 =
 
 
 // ==========================================
-// DATA PRODUK
+// DATA SEMUA PRODUK
 // ==========================================
 
 const products = {
-
-    // ==============================
-    // PULSA
-    // ==============================
 
     pulsa: [
 
@@ -217,10 +208,6 @@ const products = {
     ],
 
 
-    // ==============================
-    // E-WALLET
-    // ==============================
-
     ewallet: [
 
         {
@@ -266,10 +253,6 @@ const products = {
     ],
 
 
-    // ==============================
-    // TOKEN PLN
-    // ==============================
-
     pln: [
 
         {
@@ -299,7 +282,112 @@ const products = {
 
 
 // ==========================================
-// VARIABEL GLOBAL
+// PRODUK POPULER
+// ==========================================
+
+const popularProducts = [
+
+    {
+        name: "Telkomsel 10.000",
+        price: 15000,
+        code: "TSEL10",
+        icon: "📱",
+        category: "pulsa"
+    },
+
+    {
+        name: "Indosat 10.000",
+        price: 15000,
+        code: "ISAT10",
+        icon: "📱",
+        category: "pulsa"
+    },
+
+    {
+        name: "AXIS 10.000",
+        price: 15000,
+        code: "AXIS10",
+        icon: "📱",
+        category: "pulsa"
+    },
+
+    {
+        name: "Telkomsel 20.000",
+        price: 25000,
+        code: "TSEL20",
+        icon: "📱",
+        category: "pulsa"
+    },
+
+    {
+        name: "Indosat 20.000",
+        price: 25000,
+        code: "ISAT20",
+        icon: "📱",
+        category: "pulsa"
+    },
+
+    {
+        name: "Telkomsel 50.000",
+        price: 55000,
+        code: "TSEL50",
+        icon: "📱",
+        category: "pulsa"
+    },
+
+    {
+        name: "Indosat 50.000",
+        price: 55000,
+        code: "ISAT50",
+        icon: "📱",
+        category: "pulsa"
+    },
+
+    {
+        name: "DANA 50.000",
+        price: 55000,
+        code: "DANA50",
+        icon: "💳",
+        category: "ewallet"
+    },
+
+    {
+        name: "DANA 100.000",
+        price: 105000,
+        code: "DANA100",
+        icon: "💳",
+        category: "ewallet"
+    },
+
+    {
+        name: "GoPay 50.000",
+        price: 55000,
+        code: "GOPAY50",
+        icon: "💳",
+        category: "ewallet"
+    },
+
+    {
+        name: "ShopeePay 50.000",
+        price: 55000,
+        code: "SHOPEEPAY50",
+        icon: "💳",
+        category: "ewallet"
+    },
+
+    {
+        name: "Token PLN 20.000",
+        price: 25000,
+        code: "PLN20",
+        icon: "⚡",
+        category: "pln"
+    }
+
+];
+
+
+// ==========================================
+// VARIABEL
 // ==========================================
 
 let currentCategory =
@@ -326,6 +414,11 @@ const emptyState =
 const searchInput =
     document.getElementById(
         "searchInput"
+    );
+
+const categoryTitle =
+    document.getElementById(
+        "categoryTitle"
     );
 
 const modalOverlay =
@@ -393,7 +486,7 @@ function formatRupiah(number) {
 
 
 // ==========================================
-// HITUNG BIAYA ADMIN EWALLET
+// HITUNG ADMIN EWALLET
 // ==========================================
 
 function calculateAdmin(nominal) {
@@ -428,46 +521,140 @@ function calculateAdmin(nominal) {
 
 
 // ==========================================
-// NAMA KATEGORI
+// BUAT CARD PRODUK
 // ==========================================
 
-function getCategoryName(category) {
+function createProductCard(product) {
 
-    if (category === "pulsa") {
+    const card =
+        document.createElement(
+            "div"
+        );
 
-        return "Pulsa";
 
-    }
+    card.className =
+        "product-card";
 
-    if (category === "ewallet") {
 
-        return "E-Wallet";
+    const priceDisplay =
 
-    }
+        product.custom
 
-    if (category === "pln") {
+            ? "Nominal Bebas"
 
-        return "Token PLN";
+            : formatRupiah(
+                product.price
+            );
 
-    }
 
-    return "Produk";
+    card.innerHTML = `
+
+        <div class="product-top">
+
+            <div class="product-icon">
+
+                ${product.icon}
+
+            </div>
+
+            <span class="available">
+
+                ● Tersedia
+
+            </span>
+
+        </div>
+
+
+        <h3>
+
+            ${product.name}
+
+        </h3>
+
+
+        <div class="product-price">
+
+            ${priceDisplay}
+
+        </div>
+
+
+        <div class="product-meta">
+
+            <div class="product-code">
+
+                Kode:
+
+                <strong>
+
+                    ${product.code}
+
+                </strong>
+
+            </div>
+
+
+            <button
+
+                class="order-btn"
+
+                type="button"
+
+            >
+
+                Pesan
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    card
+
+        .querySelector(
+            ".order-btn"
+        )
+
+        .addEventListener(
+
+            "click",
+
+            () => {
+
+                openOrderModal(
+
+                    product.name,
+
+                    product.price,
+
+                    product.code,
+
+                    product.icon,
+
+                    product.custom || false
+
+                );
+
+            }
+
+        );
+
+
+    return card;
 
 }
 
 
 // ==========================================
-// RENDER PRODUK
+// RENDER PRODUK KATEGORI
 // ==========================================
 
 function renderProducts() {
 
-
-    if (!productGrid) {
-
-        return;
-
-    }
+    if (!productGrid) return;
 
 
     const searchValue =
@@ -481,15 +668,10 @@ function renderProducts() {
             : "";
 
 
-    const categoryProducts =
-        products[currentCategory] || [];
-
-
     const filteredProducts =
 
-        categoryProducts.filter(
-
-            product =>
+        products[currentCategory]
+            .filter(product =>
 
                 product.name
                     .toLowerCase()
@@ -501,10 +683,11 @@ function renderProducts() {
                     .toLowerCase()
                     .includes(searchValue)
 
-        );
+            );
 
 
-    productGrid.innerHTML = "";
+    productGrid.innerHTML =
+        "";
 
 
     if (
@@ -537,128 +720,12 @@ function renderProducts() {
 
         product => {
 
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "product-card";
-
-
-            const priceDisplay =
-
-                product.custom
-
-                    ? "Nominal Bebas"
-
-                    : formatRupiah(
-                        product.price
-                    );
-
-
-            card.innerHTML = `
-
-                <div class="product-top">
-
-                    <div class="product-icon">
-
-                        ${product.icon}
-
-                    </div>
-
-                    <span class="available">
-
-                        ● Tersedia
-
-                    </span>
-
-                </div>
-
-
-                <h3>
-
-                    ${product.name}
-
-                </h3>
-
-
-                <div class="product-price">
-
-                    ${priceDisplay}
-
-                </div>
-
-
-                <div class="product-meta">
-
-                    <div class="product-code">
-
-                        Kode:
-
-                        <strong>
-
-                            ${product.code}
-
-                        </strong>
-
-                    </div>
-
-
-                    <button
-
-                        class="order-btn"
-
-                        type="button"
-
-                    >
-
-                        Pesan
-
-                    </button>
-
-                </div>
-
-            `;
-
-
-            const orderButton =
-
-                card.querySelector(
-                    ".order-btn"
-                );
-
-
-            orderButton.addEventListener(
-
-                "click",
-
-                function () {
-
-
-                    openOrderModal(
-
-                        product.name,
-
-                        product.price,
-
-                        product.code,
-
-                        product.icon,
-
-                        product.custom
-
-                    );
-
-                }
-
-            );
-
-
             productGrid.appendChild(
-                card
+
+                createProductCard(
+                    product
+                )
+
             );
 
         }
@@ -669,51 +736,29 @@ function renderProducts() {
 
 
 // ==========================================
-// KATEGORI AKTIF
+// KATEGORI PRODUK
 // ==========================================
 
 document
 
     .querySelectorAll(
-
-        ".service-card[data-category]"
-
+        ".service-card:not(.coming-soon)"
     )
 
     .forEach(
 
         card => {
 
-
             card.addEventListener(
 
                 "click",
 
-                function () {
-
-
-                    const category =
-
-                        card.dataset.category;
-
-
-                    if (
-
-                        !products[category]
-
-                    ) {
-
-                        return;
-
-                    }
-
+                () => {
 
                     document
 
                         .querySelectorAll(
-
                             ".service-card"
-
                         )
 
                         .forEach(
@@ -736,7 +781,7 @@ document
 
 
                     currentCategory =
-                        category;
+                        card.dataset.category;
 
 
                     if (searchInput) {
@@ -750,16 +795,15 @@ document
                     renderProducts();
 
 
-                    const productSection =
-
+                    const produk =
                         document.getElementById(
                             "produk"
                         );
 
 
-                    if (productSection) {
+                    if (produk) {
 
-                        productSection.scrollIntoView({
+                        produk.scrollIntoView({
 
                             behavior:
                                 "smooth"
@@ -778,7 +822,7 @@ document
 
 
 // ==========================================
-// SEARCH
+// PENCARIAN
 // ==========================================
 
 if (searchInput) {
@@ -787,11 +831,7 @@ if (searchInput) {
 
         "input",
 
-        function () {
-
-            renderProducts();
-
-        }
+        renderProducts
 
     );
 
@@ -799,7 +839,7 @@ if (searchInput) {
 
 
 // ==========================================
-// BUKA MODAL ORDER
+// BUKA MODAL
 // ==========================================
 
 function openOrderModal(
@@ -815,7 +855,6 @@ function openOrderModal(
     custom
 
 ) {
-
 
     selectedProduct = {
 
@@ -836,7 +875,8 @@ function openOrderModal(
 
         "modalProductName"
 
-    ).textContent = name;
+    ).textContent =
+        name;
 
 
     document.getElementById(
@@ -856,14 +896,16 @@ function openOrderModal(
 
         "modalProductCode"
 
-    ).textContent = code;
+    ).textContent =
+        code;
 
 
     document.getElementById(
 
         "modalIcon"
 
-    ).textContent = icon;
+    ).textContent =
+        icon;
 
 
     addCustomNominalInput(
@@ -879,28 +921,23 @@ function openOrderModal(
 
 
 // ==========================================
-// INPUT NOMINAL E-WALLET
+// NOMINAL BEBAS EWALLET
 // ==========================================
 
 function addCustomNominalInput(
-
     custom
-
 ) {
-
 
     const oldBox =
 
         document.getElementById(
-
             "customNominalBox"
-
         );
 
 
     if (oldBox) {
 
-        oldBox.innerHTML = "";
+        oldBox.remove();
 
     }
 
@@ -912,15 +949,11 @@ function addCustomNominalInput(
     }
 
 
-    const paymentGroup =
-
-        paymentMethod.closest(
-            ".form-group"
-        );
+    const paymentLabel =
+        paymentMethod.parentElement;
 
 
     const nominalBox =
-
         document.createElement(
             "div"
         );
@@ -928,10 +961,6 @@ function addCustomNominalInput(
 
     nominalBox.id =
         "customNominalBox";
-
-
-    nominalBox.className =
-        "form-group";
 
 
     nominalBox.innerHTML = `
@@ -947,7 +976,7 @@ function addCustomNominalInput(
 
                 id="customNominal"
 
-                placeholder="Contoh: 37000"
+                placeholder="Contoh: 50000"
 
                 min="1000"
 
@@ -956,6 +985,7 @@ function addCustomNominalInput(
                 required
 
             >
+
 
         </label>
 
@@ -975,11 +1005,11 @@ function addCustomNominalInput(
     `;
 
 
-    paymentGroup.parentNode.insertBefore(
+    paymentLabel.parentNode.insertBefore(
 
         nominalBox,
 
-        paymentGroup
+        paymentLabel
 
     );
 
@@ -1007,22 +1037,15 @@ function addCustomNominalInput(
 
 function updateCustomPrice() {
 
-
     const input =
-
         document.getElementById(
-
             "customNominal"
-
         );
 
 
     const info =
-
         document.getElementById(
-
             "customPriceInfo"
-
         );
 
 
@@ -1034,13 +1057,14 @@ function updateCustomPrice() {
 
 
     const nominal =
-        Number(input.value);
+        Number(
+            input.value
+        );
 
 
     if (!nominal) {
 
         info.innerHTML =
-
             "Masukkan nominal untuk menghitung harga jual.";
 
         return;
@@ -1049,7 +1073,9 @@ function updateCustomPrice() {
 
 
     const admin =
-        calculateAdmin(nominal);
+        calculateAdmin(
+            nominal
+        );
 
 
     const total =
@@ -1066,7 +1092,9 @@ function updateCustomPrice() {
 
         </strong>
 
+
         <br>
+
 
         Biaya Admin:
 
@@ -1076,7 +1104,9 @@ function updateCustomPrice() {
 
         </strong>
 
+
         <br>
+
 
         Total:
 
@@ -1099,8 +1129,7 @@ paymentMethod.addEventListener(
 
     "change",
 
-    function () {
-
+    () => {
 
         cashUploadBox.style.display =
             "none";
@@ -1125,7 +1154,6 @@ paymentMethod.addEventListener(
 
         ) {
 
-
             cashUploadBox.style.display =
                 "block";
 
@@ -1141,6 +1169,7 @@ paymentMethod.addEventListener(
                     Bayar Cash kepada Ibu Usih / Ira
 
                 </strong>
+
 
                 <br><br>
 
@@ -1158,7 +1187,6 @@ paymentMethod.addEventListener(
 
         ) {
 
-
             debtUploadBox.style.display =
                 "block";
 
@@ -1175,6 +1203,7 @@ paymentMethod.addEventListener(
 
                 </strong>
 
+
                 <br>
 
                 Biaya admin hutang:
@@ -1185,6 +1214,7 @@ paymentMethod.addEventListener(
 
                 </strong>
 
+
                 <br>
 
                 Jatuh tempo:
@@ -1194,6 +1224,7 @@ paymentMethod.addEventListener(
                     1 × 24 jam
 
                 </strong>
+
 
                 <br>
 
@@ -1228,7 +1259,6 @@ async function uploadFile(
 
 ) {
 
-
     if (!file) {
 
         return null;
@@ -1239,11 +1269,8 @@ async function uploadFile(
     const extension =
 
         file.name
-
             .split(".")
-
             .pop()
-
             .toLowerCase();
 
 
@@ -1320,7 +1347,6 @@ function createWhatsAppMessage(
 
 ) {
 
-
     return `📦 PESANAN BARU HOLOCELL
 
 ━━━━━━━━━━━━━━━━━━
@@ -1365,7 +1391,7 @@ Silakan cek pesanan di Dashboard Admin HOLOCELL.`;
 
 
 // ==========================================
-// PILIH ADMIN WHATSAPP
+// PILIH WHATSAPP ADMIN
 // ==========================================
 
 function showWhatsAppChoice(
@@ -1374,13 +1400,9 @@ function showWhatsAppChoice(
 
 ) {
 
-
     const oldModal =
-
         document.getElementById(
-
             "whatsappChoiceModal"
-
         );
 
 
@@ -1392,7 +1414,6 @@ function showWhatsAppChoice(
 
 
     const modal =
-
         document.createElement(
             "div"
         );
@@ -1572,8 +1593,9 @@ function showWhatsAppChoice(
     );
 
 
-    function openWhatsApp(number) {
-
+    function openWhatsApp(
+        number
+    ) {
 
         const url =
 
@@ -1595,8 +1617,11 @@ function showWhatsAppChoice(
 
 
         window.open(
+
             url,
+
             "_blank"
+
         );
 
     }
@@ -1612,10 +1637,12 @@ function showWhatsAppChoice(
 
             "click",
 
-            function () {
+            () => {
 
                 openWhatsApp(
+
                     WHATSAPP_ADMIN_1
+
                 );
 
             }
@@ -1633,10 +1660,12 @@ function showWhatsAppChoice(
 
             "click",
 
-            function () {
+            () => {
 
                 openWhatsApp(
+
                     WHATSAPP_ADMIN_2
+
                 );
 
             }
@@ -1654,7 +1683,7 @@ function showWhatsAppChoice(
 
             "click",
 
-            function () {
+            () => {
 
                 modal.remove();
 
@@ -1673,8 +1702,7 @@ orderForm.addEventListener(
 
     "submit",
 
-    async function (event) {
-
+    async event => {
 
         event.preventDefault();
 
@@ -1715,6 +1743,7 @@ orderForm.addEventListener(
 
 
         const method =
+
             paymentMethod.value;
 
 
@@ -1759,10 +1788,12 @@ orderForm.addEventListener(
             selectedProduct.price;
 
 
-        let adminFee = 0;
+        let adminFee =
+            0;
 
 
-        let debtFee = 0;
+        let debtFee =
+            0;
 
 
         if (
@@ -1771,16 +1802,20 @@ orderForm.addEventListener(
 
         ) {
 
-
             const customInput =
 
-                document.getElementById(
-                    "customNominal"
-                );
+                document
+
+                    .getElementById(
+                        "customNominal"
+                    );
 
 
             nominal =
-                Number(customInput.value);
+
+                Number(
+                    customInput.value
+                );
 
 
             if (
@@ -1809,10 +1844,14 @@ orderForm.addEventListener(
 
 
             adminFee =
-                calculateAdmin(nominal);
+
+                calculateAdmin(
+                    nominal
+                );
 
 
             productPrice =
+
                 nominal + adminFee;
 
         }
@@ -1824,12 +1863,14 @@ orderForm.addEventListener(
 
         ) {
 
-            debtFee = 5000;
+            debtFee =
+                5000;
 
         }
 
 
         const totalPrice =
+
             productPrice + debtFee;
 
 
@@ -1843,13 +1884,11 @@ orderForm.addEventListener(
 
         try {
 
-
             if (
 
                 method === "cash"
 
             ) {
-
 
                 if (
 
@@ -1889,7 +1928,6 @@ orderForm.addEventListener(
 
             ) {
 
-
                 if (
 
                     !selfieProof.files[0]
@@ -1923,6 +1961,7 @@ orderForm.addEventListener(
 
 
             const orderNumber =
+
                 "HC-" + Date.now();
 
 
@@ -2059,10 +2098,15 @@ orderForm.addEventListener(
         }
 
 
-        catch (error) {
+        catch (
 
+            error
 
-            console.error(error);
+        ) {
+
+            console.error(
+                error
+            );
 
 
             alert(
@@ -2087,7 +2131,6 @@ orderForm.addEventListener(
 // ==========================================
 
 function closeOrderModal() {
-
 
     modalOverlay.classList.remove(
         "active"
@@ -2124,7 +2167,7 @@ function closeOrderModal() {
 
     if (customBox) {
 
-        customBox.innerHTML = "";
+        customBox.remove();
 
     }
 
@@ -2149,8 +2192,7 @@ modalOverlay.addEventListener(
 
     "click",
 
-    function (event) {
-
+    event => {
 
         if (
 
@@ -2175,21 +2217,17 @@ modalOverlay.addEventListener(
 const menuBtn =
 
     document.getElementById(
-
         "menuBtn"
-
     );
 
 
 if (menuBtn) {
 
-
     menuBtn.addEventListener(
 
         "click",
 
-        function () {
-
+        () => {
 
             const nav =
 
@@ -2214,7 +2252,88 @@ if (menuBtn) {
 
 
 // ==========================================
-// MULAI WEBSITE
+// MULAI
 // ==========================================
 
-renderProducts();
+// Saat halaman pertama dibuka,
+// tampilkan produk populer campuran.
+
+function renderPopularProducts() {
+
+    if (!productGrid) return;
+
+
+    const searchValue =
+
+        searchInput
+
+            ? searchInput.value
+                .toLowerCase()
+                .trim()
+
+            : "";
+
+
+    const filteredProducts =
+
+        popularProducts.filter(
+
+            product =>
+
+                product.name
+                    .toLowerCase()
+                    .includes(searchValue)
+
+                ||
+
+                product.code
+                    .toLowerCase()
+                    .includes(searchValue)
+
+        );
+
+
+    productGrid.innerHTML =
+        "";
+
+
+    if (
+
+        filteredProducts.length === 0
+
+    ) {
+
+        emptyState.style.display =
+            "block";
+
+        return;
+
+    }
+
+
+    emptyState.style.display =
+        "none";
+
+
+    filteredProducts.forEach(
+
+        product => {
+
+            productGrid.appendChild(
+
+                createProductCard(
+
+                    product
+
+                )
+
+            );
+
+        }
+
+    );
+
+}
+
+
+renderPopularProducts();
