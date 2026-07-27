@@ -1014,27 +1014,45 @@ let cleanPath =
 String(path).trim();
 
 
-/* Jika URL lengkap Supabase */
+/* URL SUPABASE LENGKAP */
+
+if (
+cleanPath.includes(
+"/storage/v1/object/"
+)
+) {
+
+cleanPath =
+cleanPath.split(
+"/storage/v1/object/"
+)[1];
 
 cleanPath =
 cleanPath.replace(
-/^https?:\/\/.*\/storage\/v1\/object\/(public|sign|authenticated)\//,
+/^(public|sign|authenticated)\//,
 ""
 );
 
+}
 
-/* Hapus nama bucket jika ikut tersimpan */
+
+/* HAPUS NAMA BUCKET */
+
+if (
+cleanPath.startsWith(
+bucket + "/"
+)
+) {
 
 cleanPath =
-cleanPath.replace(
-new RegExp(
-"^" + bucket + "/"
-),
-""
+cleanPath.substring(
+bucket.length + 1
 );
 
+}
 
-/* Hapus slash di awal */
+
+/* HAPUS SLASH */
 
 cleanPath =
 cleanPath.replace(
@@ -1092,10 +1110,41 @@ if (result.error) {
 
 alert(
 
-"File tidak dapat dibuka:\n\n"
+"File tidak dapat dibuka.\n\n"
+
 +
+
+"Bucket: "
+
++
+
+bucket
+
++
+
+"\n\n"
+
++
+
+"Path: "
+
++
+
+cleanPath
+
++
+
+"\n\n"
+
++
+
 result.error.message
 
+);
+
+console.error(
+"File error:",
+result.error
 );
 
 return;
@@ -1343,7 +1392,7 @@ renderOrders
 loadOrders();
 
 
-/* AUTO REFRESH 30 DETIK */
+/* AUTO REFRESH */
 
 setInterval(
 loadOrders,
