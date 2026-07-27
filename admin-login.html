@@ -5,7 +5,10 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
 <title>Login Admin - HOLOCELL</title>
 
@@ -155,11 +158,20 @@ Login Dashboard Admin
 
 </div>
 
-<div id="errorBox" class="error"></div>
+<div
+id="errorBox"
+class="error"
+></div>
 
-<form id="loginForm">
+<form
+id="loginForm"
+>
 
-<label>Password Admin</label>
+<label>
+
+Password Admin
+
+</label>
 
 <input
 
@@ -173,7 +185,9 @@ required
 
 >
 
-<button type="submit">
+<button
+type="submit"
+>
 
 🔐 Login Admin
 
@@ -185,41 +199,91 @@ required
 
 <script>
 
-/* =========================
+/* ==========================================
    PASSWORD ADMIN
-========================= */
+========================================== */
 
-const ADMIN_PASSWORD = "GANTI_PASSWORD_ANDA";
+const ADMIN_PASSWORD = "@Lebak123";
 
 
-/* =========================
-   LOGIN
-========================= */
+/* ==========================================
+   CEK JIKA SUDAH LOGIN
+========================================== */
+
+if (
+
+sessionStorage.getItem(
+
+"holocell_admin_login"
+
+)
+
+===
+
+"true"
+
+) {
+
+window.location.href = "admin.html";
+
+}
+
+
+/* ==========================================
+   PROSES LOGIN
+========================================== */
 
 document
 
-.getElementById("loginForm")
+.getElementById(
 
-.addEventListener("submit", function(event) {
+"loginForm"
+
+)
+
+.addEventListener(
+
+"submit",
+
+function(event) {
 
 event.preventDefault();
+
 
 const password =
 
 document
 
-.getElementById("password")
+.getElementById(
+
+"password"
+
+)
 
 .value;
+
 
 const errorBox =
 
 document
 
-.getElementById("errorBox");
+.getElementById(
+
+"errorBox"
+
+);
 
 
-if (password === ADMIN_PASSWORD) {
+if (
+
+password
+
+===
+
+ADMIN_PASSWORD
+
+) {
+
 
 sessionStorage.setItem(
 
@@ -229,21 +293,32 @@ sessionStorage.setItem(
 
 );
 
-window.location.href = "admin.html";
+
+window.location.href =
+
+"admin.html";
+
 
 }
 
 else {
 
-errorBox.style.display = "block";
+
+errorBox.style.display =
+
+"block";
+
 
 errorBox.textContent =
 
 "Password admin salah.";
 
+
 }
 
-});
+}
+
+);
 
 </script>
 
