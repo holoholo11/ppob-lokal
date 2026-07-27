@@ -450,8 +450,7 @@
 
             id="searchInput"
 
-            placeholder=
-            "Cari nama / nomor / order..."
+            placeholder="Cari nama / nomor / order..."
 
         >
 
@@ -460,45 +459,45 @@
             id="statusFilter"
         >
 
-            <option
-                value="all"
-            >
+            <option value="all">
+
                 Semua Status
+
             </option>
 
 
-            <option
-                value="menunggu_verifikasi"
-            >
+            <option value="menunggu_verifikasi">
+
                 Menunggu Verifikasi
+
             </option>
 
 
-            <option
-                value="hutang_aktif"
-            >
+            <option value="hutang_aktif">
+
                 Hutang Aktif
+
             </option>
 
 
-            <option
-                value="diproses"
-            >
+            <option value="diproses">
+
                 Diproses
+
             </option>
 
 
-            <option
-                value="lunas"
-            >
+            <option value="lunas">
+
                 Lunas
+
             </option>
 
 
-            <option
-                value="ditolak"
-            >
+            <option value="ditolak">
+
                 Ditolak
+
             </option>
 
 
@@ -518,13 +517,9 @@
     </section>
 
 
-    <section
-        id="ordersContainer"
-    >
+    <section id="ordersContainer">
 
-        <div
-            class="empty"
-        >
+        <div class="empty">
 
             Memuat pesanan...
 
@@ -537,11 +532,6 @@
 
 
 <script>
-
-
-// ==========================================
-// KONFIGURASI SUPABASE
-// ==========================================
 
 
 const SUPABASE_URL =
@@ -568,10 +558,7 @@ const supabaseClient =
 let orders = [];
 
 
-// ==========================================
 // FORMAT RUPIAH
-// ==========================================
-
 
 function rupiah(value) {
 
@@ -594,51 +581,24 @@ function rupiah(value) {
 }
 
 
-// ==========================================
 // FORMAT TANGGAL
-// ==========================================
-
 
 function dateFormat(value) {
 
-    if (!value) {
+    if (!value) return "-";
 
-        return "-";
-
-    }
-
-
-    return new Date(
-
-        value
-
-    ).toLocaleString(
-
-        "id-ID"
-
-    );
+    return new Date(value).toLocaleString("id-ID");
 
 }
 
 
-// ==========================================
 // ERROR
-// ==========================================
-
 
 function showError(message) {
 
-    const box =
-
-        document.getElementById(
-
-            "errorBox"
-
-        );
-
+    const box = document.getElementById("errorBox");
 
     box.style.display = "block";
-
 
     box.textContent = message;
 
@@ -647,26 +607,14 @@ function showError(message) {
 
 function hideError() {
 
-    document
-
-        .getElementById(
-
-            "errorBox"
-
-        )
-
-        .style.display = "none";
+    document.getElementById("errorBox").style.display = "none";
 
 }
 
 
-// ==========================================
-// LOAD ORDERS
-// ==========================================
-
+// LOAD PESANAN
 
 async function loadOrders() {
-
 
     hideError();
 
@@ -714,17 +662,9 @@ async function loadOrders() {
 
     if (result.error) {
 
-
-        console.error(
-
-            result.error
-
-        );
-
-
         showError(
 
-            "Gagal mengambil data pesanan: "
+            "Gagal mengambil pesanan: "
 
             +
 
@@ -732,140 +672,83 @@ async function loadOrders() {
 
         );
 
-
-        container.innerHTML = `
-
-            <div class="empty">
-
-                Gagal memuat pesanan.
-
-            </div>
-
-        `;
-
-
         return;
 
     }
 
 
-    orders =
-
-        result.data || [];
+    orders = result.data || [];
 
 
     updateStats();
-
 
     renderOrders();
 
 }
 
 
-// ==========================================
 // STATISTIK
-// ==========================================
-
 
 function updateStats() {
 
 
-    document
+    document.getElementById(
 
-        .getElementById(
+        "totalOrders"
 
-            "totalOrders"
-
-        )
-
-        .textContent =
-
-        orders.length;
+    ).textContent = orders.length;
 
 
-    document
+    document.getElementById(
 
-        .getElementById(
+        "waitingOrders"
 
-            "waitingOrders"
+    ).textContent = orders.filter(
 
-        )
+        order =>
 
-        .textContent =
+            order.status ===
 
+            "menunggu_verifikasi"
 
-        orders.filter(
-
-            order =>
-
-                order.status ===
-
-                "menunggu_verifikasi"
-
-        ).length;
+    ).length;
 
 
-    document
+    document.getElementById(
 
-        .getElementById(
+        "debtOrders"
 
-            "debtOrders"
+    ).textContent = orders.filter(
 
-        )
+        order =>
 
-        .textContent =
+            order.status ===
 
+            "hutang_aktif"
 
-        orders.filter(
-
-            order =>
-
-                order.status ===
-
-                "hutang_aktif"
-
-        ).length;
+    ).length;
 
 
-    document
+    document.getElementById(
 
-        .getElementById(
+        "paidOrders"
 
-            "paidOrders"
+    ).textContent = orders.filter(
 
-        )
+        order =>
 
-        .textContent =
+            order.status ===
 
+            "lunas"
 
-        orders.filter(
-
-            order =>
-
-                order.status ===
-
-                "lunas"
-
-        ).length;
+    ).length;
 
 }
 
 
-// ==========================================
 // RENDER PESANAN
-// ==========================================
-
 
 function renderOrders() {
-
-
-    const container =
-
-        document.getElementById(
-
-            "ordersContainer"
-
-        );
 
 
     const search =
@@ -898,102 +781,57 @@ function renderOrders() {
             .value;
 
 
-    const filtered =
-
-        orders.filter(
-
-            order => {
+    const filtered = orders.filter(order => {
 
 
-                const text =
+        const text = (
 
-                    (
+            String(order.order_number || "")
 
-                        String(
+            +
 
-                            order.order_number
+            String(order.customer_name || "")
 
-                            || ""
+            +
 
-                        )
+            String(order.target_number || "")
 
-                        +
+            +
 
-                        String(
+            String(order.product_name || "")
 
-                            order.customer_name
-
-                            || ""
-
-                        )
-
-                        +
-
-                        String(
-
-                            order.target_number
-
-                            || ""
-
-                        )
-
-                        +
-
-                        String(
-
-                            order.product_name
-
-                            || ""
-
-                        )
-
-                    )
-
-                    .toLowerCase();
+        ).toLowerCase();
 
 
-                const matchSearch =
+        const matchSearch =
 
-                    text.includes(
-
-                        search
-
-                    );
+            text.includes(search);
 
 
-                const matchStatus =
+        const matchStatus =
+
+            status === "all"
+
+            ||
+
+            order.status === status;
 
 
-                    status === "all"
+        return matchSearch && matchStatus;
 
-                    ||
-
-                    order.status ===
-
-                    status;
+    });
 
 
-                return (
+    const container =
 
-                    matchSearch
+        document.getElementById(
 
-                    &&
-
-                    matchStatus
-
-                );
-
-            }
+            "ordersContainer"
 
         );
 
 
-    if (
-
-        filtered.length === 0
-
-    ) {
-
+    if (filtered.length === 0) {
 
         container.innerHTML = `
 
@@ -1005,7 +843,6 @@ function renderOrders() {
 
         `;
 
-
         return;
 
     }
@@ -1015,35 +852,19 @@ function renderOrders() {
 
         filtered
 
-            .map(
-
-                order =>
-
-                    orderHTML(
-
-                        order
-
-                    )
-
-            )
+            .map(orderHTML)
 
             .join("");
 
 }
 
 
-// ==========================================
 // KARTU PESANAN
-// ==========================================
-
 
 function orderHTML(order) {
 
 
     let buttons = "";
-
-
-    // WHATSAPP ADMIN 1
 
 
     buttons += `
@@ -1069,9 +890,6 @@ function orderHTML(order) {
     `;
 
 
-    // WHATSAPP ADMIN 2
-
-
     buttons += `
 
         <button
@@ -1095,15 +913,7 @@ function orderHTML(order) {
     `;
 
 
-    // BUKTI PEMBAYARAN
-
-
-    if (
-
-        order.payment_proof_url
-
-    ) {
-
+    if (order.payment_proof_url) {
 
         buttons += `
 
@@ -1134,15 +944,7 @@ function orderHTML(order) {
     }
 
 
-    // SELFIE HUTANG
-
-
-    if (
-
-        order.selfie_url
-
-    ) {
-
+    if (order.selfie_url) {
 
         buttons += `
 
@@ -1173,9 +975,6 @@ function orderHTML(order) {
     }
 
 
-    // SETUJUI / TOLAK
-
-
     if (
 
         order.status ===
@@ -1183,7 +982,6 @@ function orderHTML(order) {
         "menunggu_verifikasi"
 
     ) {
-
 
         buttons += `
 
@@ -1227,9 +1025,6 @@ function orderHTML(order) {
     }
 
 
-    // TANDAI LUNAS
-
-
     if (
 
         order.status ===
@@ -1237,7 +1032,6 @@ function orderHTML(order) {
         "hutang_aktif"
 
     ) {
-
 
         buttons += `
 
@@ -1253,7 +1047,7 @@ function orderHTML(order) {
 
             >
 
-                💰 Tandai Lunas
+                ✅ Selesai / Lunas
 
             </button>
 
@@ -1264,36 +1058,20 @@ function orderHTML(order) {
 
     return `
 
-        <article
-
-            class="order"
-
-        >
+        <article class="order">
 
 
-            <div
-
-                class="order-top"
-
-            >
+            <div class="order-top">
 
 
-                <div
-
-                    class="order-number"
-
-                >
+                <div class="order-number">
 
                     ${order.order_number || "Tanpa Nomor"}
 
                 </div>
 
 
-                <div
-
-                    class="status"
-
-                >
+                <div class="status">
 
                     ${order.status || "-"}
 
@@ -1303,25 +1081,12 @@ function orderHTML(order) {
             </div>
 
 
-            <div
-
-                class="order-info"
-
-            >
+            <div class="order-info">
 
 
-                <div
+                <div class="info">
 
-                    class="info"
-
-                >
-
-                    <small>
-
-                        Nama Pemesan
-
-                    </small>
-
+                    <small>Nama Pemesan</small>
 
                     <strong>
 
@@ -1332,18 +1097,9 @@ function orderHTML(order) {
                 </div>
 
 
-                <div
+                <div class="info">
 
-                    class="info"
-
-                >
-
-                    <small>
-
-                        Nomor Tujuan
-
-                    </small>
-
+                    <small>Nomor Tujuan</small>
 
                     <strong>
 
@@ -1354,18 +1110,9 @@ function orderHTML(order) {
                 </div>
 
 
-                <div
+                <div class="info">
 
-                    class="info"
-
-                >
-
-                    <small>
-
-                        Produk
-
-                    </small>
-
+                    <small>Produk</small>
 
                     <strong>
 
@@ -1376,44 +1123,22 @@ function orderHTML(order) {
                 </div>
 
 
-                <div
+                <div class="info">
 
-                    class="info"
-
-                >
-
-                    <small>
-
-                        Total Harga
-
-                    </small>
-
+                    <small>Total Harga</small>
 
                     <strong>
 
-                        ${rupiah(
-
-                            order.total_price
-
-                        )}
+                        ${rupiah(order.total_price)}
 
                     </strong>
 
                 </div>
 
 
-                <div
+                <div class="info">
 
-                    class="info"
-
-                >
-
-                    <small>
-
-                        Metode Pembayaran
-
-                    </small>
-
+                    <small>Metode Pembayaran</small>
 
                     <strong>
 
@@ -1424,52 +1149,26 @@ function orderHTML(order) {
                 </div>
 
 
-                <div
+                <div class="info">
 
-                    class="info"
-
-                >
-
-                    <small>
-
-                        Waktu Pesanan
-
-                    </small>
-
+                    <small>Waktu Pesanan</small>
 
                     <strong>
 
-                        ${dateFormat(
-
-                            order.created_at
-
-                        )}
+                        ${dateFormat(order.created_at)}
 
                     </strong>
 
                 </div>
 
 
-                <div
+                <div class="info">
 
-                    class="info"
-
-                >
-
-                    <small>
-
-                        Jatuh Tempo
-
-                    </small>
-
+                    <small>Jatuh Tempo</small>
 
                     <strong>
 
-                        ${dateFormat(
-
-                            order.due_date
-
-                        )}
+                        ${dateFormat(order.due_date)}
 
                     </strong>
 
@@ -1479,11 +1178,7 @@ function orderHTML(order) {
             </div>
 
 
-            <div
-
-                class="buttons"
-
-            >
+            <div class="buttons">
 
                 ${buttons}
 
@@ -1497,10 +1192,7 @@ function orderHTML(order) {
 }
 
 
-// ==========================================
 // WHATSAPP
-// ==========================================
-
 
 function sendWhatsApp(
 
@@ -1511,38 +1203,26 @@ function sendWhatsApp(
 ) {
 
 
-    const order =
+    const order = orders.find(
 
-        orders.find(
+        item =>
 
-            item =>
+            String(item.id)
 
-                String(
+            ===
 
-                    item.id
+            String(orderId)
 
-                )
-
-                ===
-
-                String(
-
-                    orderId
-
-                )
-
-        );
+    );
 
 
     if (!order) {
-
 
         alert(
 
             "Data pesanan tidak ditemukan."
 
         );
-
 
         return;
 
@@ -1551,76 +1231,38 @@ function sendWhatsApp(
 
     const message =
 
+        `📦 *PESANAN HOLOCELL*\n\n`
 
-        `📦 *PESANAN BARU HOLOCELL*
+        +
 
-` +
+        `🧾 Order: ${order.order_number || "-"}\n`
 
+        +
 
-        `━━━━━━━━━━━━━━━
+        `👤 Nama: ${order.customer_name || "-"}\n`
 
-` +
+        +
 
+        `📱 Nomor Tujuan: ${order.target_number || "-"}\n`
 
-        `🧾 Order:
+        +
 
-${order.order_number || "-"}
+        `🛒 Produk: ${order.product_name || "-"}\n`
 
-` +
+        +
 
+        `💰 Total: ${rupiah(order.total_price)}\n`
 
-        `👤 Nama:
+        +
 
-${order.customer_name || "-"}
+        `💳 Pembayaran: ${order.payment_method || "-"}\n`
 
-` +
+        +
 
-
-        `📱 Nomor Tujuan:
-
-${order.target_number || "-"}
-
-` +
-
-
-        `🛒 Produk:
-
-${order.product_name || "-"}
-
-` +
-
-
-        `💰 Total:
-
-${rupiah(order.total_price)}
-
-` +
-
-
-        `💳 Pembayaran:
-
-${order.payment_method || "-"}
-
-` +
-
-
-        `📌 Status:
-
-${order.status || "-"}
-
-` +
-
-
-        `━━━━━━━━━━━━━━━
-
-` +
-
-
-        `Silakan cek dashboard Admin HOLOCELL.`;
+        `📌 Status: ${order.status || "-"}`;
 
 
     const url =
-
 
         "https://wa.me/"
 
@@ -1634,131 +1276,49 @@ ${order.status || "-"}
 
         +
 
-        encodeURIComponent(
-
-            message
-
-        );
+        encodeURIComponent(message);
 
 
-    window.open(
+    window.open(url, "_blank");
 
-        url,
+}
 
-        "_blank"
+
+// FILE
+
+function cleanFilePath(path, bucket) {
+
+
+    if (!path) return null;
+
+
+    let cleanPath = String(path).trim();
+
+
+    cleanPath = cleanPath.replace(
+
+        /^https?:\/\/.*\/storage\/v1\/object\/(public|sign|authenticated)\//,
+
+        ""
 
     );
 
-}
+
+    cleanPath = cleanPath.replace(
+
+        new RegExp("^" + bucket + "/"),
+
+        ""
+
+    );
 
 
-// ==========================================
-// BERSIHKAN PATH FILE
-// ==========================================
-
-
-function cleanFilePath(
-
-    path,
-
-    bucket
-
-) {
-
-
-    if (!path) {
-
-        return null;
-
-    }
-
-
-    let cleanPath =
-
-        String(
-
-            path
-
-        ).trim();
-
-
-    cleanPath =
-
-        cleanPath.replace(
-
-            /^https?:\/\/.*\/storage\/v1\/object\/(public|sign|authenticated)\//,
-
-            ""
-
-        );
-
-
-    cleanPath =
-
-        cleanPath.replace(
-
-            new RegExp(
-
-                "^"
-
-                +
-
-                bucket
-
-                +
-
-                "/"
-
-            ),
-
-            ""
-
-        );
-
-
-    cleanPath =
-
-        cleanPath.replace(
-
-            /^\/+/,
-
-            ""
-
-        );
-
-
-    return cleanPath;
+    return cleanPath.replace(/^\/+/, "");
 
 }
 
 
-// ==========================================
-// BUKA FILE
-// ==========================================
-
-
-async function openFile(
-
-    path,
-
-    bucket
-
-) {
-
-
-    if (!path) {
-
-
-        alert(
-
-            "File tidak ditemukan."
-
-        );
-
-
-        return;
-
-    }
+async function openFile(path, bucket) {
 
 
     const cleanPath =
@@ -1774,16 +1334,11 @@ async function openFile(
 
     const result =
 
-
         await supabaseClient
 
             .storage
 
-            .from(
-
-                bucket
-
-            )
+            .from(bucket)
 
             .createSignedUrl(
 
@@ -1794,23 +1349,17 @@ async function openFile(
             );
 
 
-    if (
-
-        result.error
-
-    ) {
-
+    if (result.error) {
 
         alert(
 
-            "File tidak dapat dibuka.\n\n"
+            "File tidak dapat dibuka: "
 
             +
 
             result.error.message
 
         );
-
 
         return;
 
@@ -1828,47 +1377,21 @@ async function openFile(
 }
 
 
-// ==========================================
 // ESCAPE
-// ==========================================
+
+function escapeAttribute(value) {
 
 
-function escapeAttribute(
+    return String(value)
 
-    value
+        .replace(/\\/g, "\\\\")
 
-) {
-
-
-    return String(
-
-        value
-
-    )
-
-        .replace(
-
-            /\\/g,
-
-            "\\\\"
-
-        )
-
-        .replace(
-
-            /'/g,
-
-            "\\'"
-
-        );
+        .replace(/'/g, "\\'");
 
 }
 
 
-// ==========================================
 // SETUJUI
-// ==========================================
-
 
 async function approveOrder(
 
@@ -1881,10 +1404,7 @@ async function approveOrder(
 
     const newStatus =
 
-
-        paymentMethod ===
-
-        "debt"
+        paymentMethod === "debt"
 
             ? "hutang_aktif"
 
@@ -1893,49 +1413,30 @@ async function approveOrder(
 
     const result =
 
-
         await supabaseClient
 
-            .from(
+            .from("orders")
 
-                "orders"
+            .update({
 
-            )
+                status: newStatus
 
-            .update(
+            })
 
-                {
-
-                    status:
-
-                        newStatus
-
-                }
-
-            )
-
-            .eq(
-
-                "id",
-
-                id
-
-            );
+            .eq("id", id);
 
 
-    if (
-
-        result.error
-
-    ) {
-
+    if (result.error) {
 
         alert(
+
+            "Gagal menyetujui: "
+
+            +
 
             result.error.message
 
         );
-
 
         return;
 
@@ -1944,73 +1445,51 @@ async function approveOrder(
 
     alert(
 
-        "Pesanan berhasil disetujui."
+        paymentMethod === "debt"
+
+            ? "Pesanan menjadi hutang aktif."
+
+            : "Pesanan berhasil disetujui."
 
     );
 
 
-    loadOrders();
+    await loadOrders();
 
 }
 
 
-// ==========================================
 // TOLAK
-// ==========================================
 
-
-async function rejectOrder(
-
-    id
-
-) {
+async function rejectOrder(id) {
 
 
     const result =
 
-
         await supabaseClient
 
-            .from(
+            .from("orders")
 
-                "orders"
+            .update({
 
-            )
+                status: "ditolak"
 
-            .update(
+            })
 
-                {
-
-                    status:
-
-                        "ditolak"
-
-                }
-
-            )
-
-            .eq(
-
-                "id",
-
-                id
-
-            );
+            .eq("id", id);
 
 
-    if (
-
-        result.error
-
-    ) {
-
+    if (result.error) {
 
         alert(
+
+            "Gagal menolak: "
+
+            +
 
             result.error.message
 
         );
-
 
         return;
 
@@ -2024,72 +1503,44 @@ async function rejectOrder(
     );
 
 
-    loadOrders();
+    await loadOrders();
 
 }
 
 
-// ==========================================
-// TANDAI LUNAS
-// ==========================================
+// HUTANG SELESAI / LUNAS
 
-
-async function markPaid(
-
-    id
-
-) {
+async function markPaid(id) {
 
 
     const result =
 
-
         await supabaseClient
 
-            .from(
+            .from("orders")
 
-                "orders"
+            .update({
 
-            )
+                status: "lunas",
 
-            .update(
+                late_fee: 0
 
-                {
+            })
 
-                    status:
-
-                        "lunas",
-
-                    late_fee:
-
-                        0
-
-                }
-
-            )
-
-            .eq(
-
-                "id",
-
-                id
-
-            );
+            .eq("id", id);
 
 
-    if (
-
-        result.error
-
-    ) {
-
+    if (result.error) {
 
         alert(
+
+            "Gagal menyelesaikan hutang: "
+
+            +
 
             result.error.message
 
         );
-
 
         return;
 
@@ -2098,20 +1549,17 @@ async function markPaid(
 
     alert(
 
-        "Pesanan ditandai lunas."
+        "Hutang berhasil diselesaikan."
 
     );
 
 
-    loadOrders();
+    await loadOrders();
 
 }
 
 
-// ==========================================
 // SEARCH
-// ==========================================
-
 
 document
 
@@ -2130,10 +1578,7 @@ document
     );
 
 
-// ==========================================
 // FILTER
-// ==========================================
-
 
 document
 
@@ -2152,13 +1597,12 @@ document
     );
 
 
-// ==========================================
 // MULAI
-// ==========================================
-
 
 loadOrders();
 
+
+// AUTO REFRESH
 
 setInterval(
 
