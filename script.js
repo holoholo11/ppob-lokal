@@ -287,8 +287,6 @@ const products = {
 
 const popularProducts = [
 
-    // PULSA 10.000
-
     {
         name: "Telkomsel 10.000",
         price: 15000,
@@ -322,8 +320,6 @@ const popularProducts = [
     },
 
 
-    // PULSA 20.000
-
     {
         name: "Telkomsel 20.000",
         price: 25000,
@@ -340,8 +336,6 @@ const popularProducts = [
         category: "pulsa"
     },
 
-
-    // PULSA 50.000
 
     {
         name: "Telkomsel 50.000",
@@ -360,21 +354,10 @@ const popularProducts = [
     },
 
 
-    // E-WALLET NOMINAL BEBAS
-
     {
         name: "DANA",
         price: 0,
         code: "DANA",
-        icon: "💳",
-        category: "ewallet",
-        custom: true
-    },
-
-    {
-        name: "OVO",
-        price: 0,
-        code: "OVO",
         icon: "💳",
         category: "ewallet",
         custom: true
@@ -390,15 +373,6 @@ const popularProducts = [
     },
 
     {
-        name: "LinkAja",
-        price: 0,
-        code: "LINKAJA",
-        icon: "💳",
-        category: "ewallet",
-        custom: true
-    },
-
-    {
         name: "ShopeePay",
         price: 0,
         code: "SHOPEEPAY",
@@ -407,8 +381,6 @@ const popularProducts = [
         custom: true
     },
 
-
-    // TOKEN PLN
 
     {
         name: "Token PLN 20.000",
@@ -504,13 +476,27 @@ const selfieProof =
 function formatRupiah(number) {
 
     return new Intl.NumberFormat(
+
         "id-ID",
+
         {
-            style: "currency",
-            currency: "IDR",
-            minimumFractionDigits: 0
+
+            style:
+                "currency",
+
+            currency:
+                "IDR",
+
+            minimumFractionDigits:
+                0
+
         }
-    ).format(number || 0);
+
+    ).format(
+
+        number || 0
+
+    );
 
 }
 
@@ -520,42 +506,162 @@ function formatRupiah(number) {
 // ==========================================
 
 function calculateAdmin(
+
     nominal
+
 ) {
 
     if (
+
         nominal <= 100000
-    ) {
+
+    )
 
         return 5000;
 
-    }
 
     if (
+
         nominal <= 300000
-    ) {
+
+    )
 
         return 7000;
 
-    }
 
     if (
+
         nominal <= 500000
-    ) {
+
+    )
 
         return 10000;
 
-    }
 
     if (
+
         nominal <= 1000000
-    ) {
+
+    )
 
         return 15000;
 
-    }
 
     return 0;
+
+}
+
+
+// ==========================================
+// DETEKSI TOKEN PLN
+// ==========================================
+
+function isPLNProduct(
+
+    product
+
+) {
+
+    if (!product)
+
+        return false;
+
+
+    return (
+
+        product.code === "PLN20"
+
+        ||
+
+        product.code === "PLN50"
+
+        ||
+
+        product.code === "PLN100"
+
+        ||
+
+        product.name
+
+            .toLowerCase()
+
+            .includes(
+
+                "token pln"
+
+            )
+
+    );
+
+}
+
+
+// ==========================================
+// UPDATE LABEL TARGET
+// ==========================================
+
+function updateTargetLabel() {
+
+    const targetInput =
+
+        document.getElementById(
+
+            "targetNumber"
+
+        );
+
+
+    if (!targetInput)
+
+        return;
+
+
+    const targetLabel =
+
+        document.querySelector(
+
+            'label[for="targetNumber"]'
+
+        );
+
+
+    const pln =
+
+        isPLNProduct(
+
+            selectedProduct
+
+        );
+
+
+    if (pln) {
+
+        if (targetLabel)
+
+            targetLabel.textContent =
+
+                "ID Pelanggan";
+
+
+        targetInput.placeholder =
+
+            "Masukkan ID Pelanggan";
+
+
+    } else {
+
+        if (targetLabel)
+
+            targetLabel.textContent =
+
+                "Nomor Tujuan";
+
+
+        targetInput.placeholder =
+
+            "Contoh: 085xxxxxxxxx";
+
+    }
 
 }
 
@@ -565,24 +671,35 @@ function calculateAdmin(
 // ==========================================
 
 function createProductCard(
+
     product
+
 ) {
 
     const card =
+
         document.createElement(
+
             "div"
+
         );
 
 
     card.className =
+
         "product-card";
 
 
     const priceDisplay =
+
         product.custom
+
             ? "Nominal Bebas"
+
             : formatRupiah(
+
                 product.price
+
             );
 
 
@@ -654,7 +771,9 @@ function createProductCard(
     card
 
         .querySelector(
+
             ".order-btn"
+
         )
 
         .addEventListener(
@@ -673,9 +792,7 @@ function createProductCard(
 
                     product.icon,
 
-                    product.custom || false,
-
-                    product.category || currentCategory
+                    product.custom || false
 
                 );
 
@@ -695,13 +812,9 @@ function createProductCard(
 
 function renderPopularProducts() {
 
-    if (
-        !productGrid
-    ) {
+    if (!productGrid)
 
         return;
-
-    }
 
 
     const searchValue =
@@ -709,7 +822,9 @@ function renderPopularProducts() {
         searchInput
 
             ? searchInput.value
+
                 .toLowerCase()
+
                 .trim()
 
             : "";
@@ -722,55 +837,56 @@ function renderPopularProducts() {
             product =>
 
                 product.name
+
                     .toLowerCase()
+
                     .includes(
+
                         searchValue
+
                     )
 
                 ||
 
                 product.code
+
                     .toLowerCase()
+
                     .includes(
+
                         searchValue
+
                     )
 
         );
 
 
-    productGrid.innerHTML =
-        "";
+    productGrid.innerHTML = "";
 
 
     if (
 
-        filteredProducts.length ===
-        0
+        filteredProducts.length === 0
 
     ) {
 
-        if (
-            emptyState
-        ) {
+        if (emptyState)
 
             emptyState.style.display =
+
                 "block";
 
-        }
 
         return;
 
     }
 
 
-    if (
-        emptyState
-    ) {
+    if (emptyState)
 
         emptyState.style.display =
-            "none";
 
-    }
+            "none";
 
 
     filteredProducts.forEach(
@@ -780,7 +896,9 @@ function renderPopularProducts() {
             productGrid.appendChild(
 
                 createProductCard(
+
                     product
+
                 )
 
             );
@@ -798,13 +916,9 @@ function renderPopularProducts() {
 
 function renderProducts() {
 
-    if (
-        !productGrid
-    ) {
+    if (!productGrid)
 
         return;
-
-    }
 
 
     const searchValue =
@@ -812,70 +926,80 @@ function renderProducts() {
         searchInput
 
             ? searchInput.value
+
                 .toLowerCase()
+
                 .trim()
 
             : "";
 
 
-    const filteredProducts =
+    const categoryProducts =
 
         products[
+
             currentCategory
-        ].filter(
+
+        ] || [];
+
+
+    const filteredProducts =
+
+        categoryProducts.filter(
 
             product =>
 
                 product.name
+
                     .toLowerCase()
+
                     .includes(
+
                         searchValue
+
                     )
 
                 ||
 
                 product.code
+
                     .toLowerCase()
+
                     .includes(
+
                         searchValue
+
                     )
 
         );
 
 
-    productGrid.innerHTML =
-        "";
+    productGrid.innerHTML = "";
 
 
     if (
 
-        filteredProducts.length ===
-        0
+        filteredProducts.length === 0
 
     ) {
 
-        if (
-            emptyState
-        ) {
+        if (emptyState)
 
             emptyState.style.display =
+
                 "block";
 
-        }
 
         return;
 
     }
 
 
-    if (
-        emptyState
-    ) {
+    if (emptyState)
 
         emptyState.style.display =
-            "none";
 
-    }
+            "none";
 
 
     filteredProducts.forEach(
@@ -885,7 +1009,9 @@ function renderProducts() {
             productGrid.appendChild(
 
                 createProductCard(
+
                     product
+
                 )
 
             );
@@ -904,7 +1030,9 @@ function renderProducts() {
 document
 
     .querySelectorAll(
+
         ".service-card:not(.coming-soon)"
+
     )
 
     .forEach(
@@ -917,11 +1045,12 @@ document
 
                 () => {
 
-
                     document
 
                         .querySelectorAll(
+
                             ".service-card"
+
                         )
 
                         .forEach(
@@ -929,8 +1058,11 @@ document
                             item => {
 
                                 item.classList
+
                                     .remove(
+
                                         "active"
+
                                     );
 
                             }
@@ -939,45 +1071,43 @@ document
 
 
                     card.classList.add(
+
                         "active"
+
                     );
 
 
                     currentCategory =
+
                         card.dataset.category;
 
 
-                    if (
-                        searchInput
-                    ) {
+                    if (searchInput)
 
-                        searchInput.value =
-                            "";
-
-                    }
+                        searchInput.value = "";
 
 
                     renderProducts();
 
 
                     const produk =
+
                         document.getElementById(
+
                             "produk"
+
                         );
 
 
-                    if (
-                        produk
-                    ) {
+                    if (produk)
 
                         produk.scrollIntoView({
 
                             behavior:
+
                                 "smooth"
 
                         });
-
-                    }
 
                 }
 
@@ -992,9 +1122,7 @@ document
 // SEARCH
 // ==========================================
 
-if (
-    searchInput
-) {
+if (searchInput) {
 
     searchInput.addEventListener(
 
@@ -1002,7 +1130,21 @@ if (
 
         () => {
 
-            renderProducts();
+            if (
+
+                currentCategory ===
+
+                "popular"
+
+            ) {
+
+                renderPopularProducts();
+
+            } else {
+
+                renderProducts();
+
+            }
 
         }
 
@@ -1012,74 +1154,7 @@ if (
 
 
 // ==========================================
-// LABEL TARGET DINAMIS
-// ==========================================
-
-function updateTargetField() {
-
-    const targetLabel =
-        document.querySelector(
-            'label[for="targetNumber"]'
-        );
-
-
-    const targetInput =
-        document.getElementById(
-            "targetNumber"
-        );
-
-
-    if (
-        !targetLabel ||
-        !targetInput
-    ) {
-
-        return;
-
-    }
-
-
-    const isPLN =
-
-        selectedProduct &&
-
-        selectedProduct.code &&
-
-        selectedProduct.code
-            .startsWith(
-                "PLN"
-            );
-
-
-    if (
-        isPLN
-    ) {
-
-        targetLabel.textContent =
-            "ID Pelanggan PLN";
-
-
-        targetInput.placeholder =
-            "Contoh: 12345678901";
-
-
-    } else {
-
-
-        targetLabel.textContent =
-            "Nomor Tujuan";
-
-
-        targetInput.placeholder =
-            "Contoh: 085xxxxxxxxx";
-
-    }
-
-}
-
-
-// ==========================================
-// BUKA MODAL PESANAN
+// MODAL PESANAN
 // ==========================================
 
 function openOrderModal(
@@ -1092,12 +1167,9 @@ function openOrderModal(
 
     icon,
 
-    custom,
-
-    category
+    custom
 
 ) {
-
 
     selectedProduct = {
 
@@ -1109,9 +1181,7 @@ function openOrderModal(
 
         icon,
 
-        custom,
-
-        category
+        custom
 
     };
 
@@ -1121,6 +1191,7 @@ function openOrderModal(
         "modalProductName"
 
     ).textContent =
+
         name;
 
 
@@ -1135,7 +1206,9 @@ function openOrderModal(
             ? "Nominal Bebas"
 
             : formatRupiah(
+
                 price
+
             );
 
 
@@ -1144,6 +1217,7 @@ function openOrderModal(
         "modalProductCode"
 
     ).textContent =
+
         code;
 
 
@@ -1152,19 +1226,34 @@ function openOrderModal(
         "modalIcon"
 
     ).textContent =
+
         icon;
 
 
     addCustomNominalInput(
+
         custom
+
     );
 
 
-    updateTargetField();
-
-
     modalOverlay.classList.add(
+
         "active"
+
+    );
+
+
+    setTimeout(
+
+        () => {
+
+            updateTargetLabel();
+
+        },
+
+        50
+
     );
 
 }
@@ -1175,46 +1264,46 @@ function openOrderModal(
 // ==========================================
 
 function addCustomNominalInput(
-    custom
-) {
 
+    custom
+
+) {
 
     const oldBox =
 
         document.getElementById(
+
             "customNominalBox"
+
         );
 
 
-    if (
-        oldBox
-    ) {
+    if (oldBox)
 
         oldBox.remove();
 
-    }
 
-
-    if (
-        !custom
-    ) {
+    if (!custom)
 
         return;
 
-    }
-
 
     const paymentLabel =
+
         paymentMethod.parentElement;
 
 
     const nominalBox =
+
         document.createElement(
+
             "div"
+
         );
 
 
     nominalBox.id =
+
         "customNominalBox";
 
 
@@ -1222,7 +1311,8 @@ function addCustomNominalInput(
 
         <label>
 
-            Nominal Top Up
+            Nominal E-Wallet
+
 
             <input
 
@@ -1251,7 +1341,7 @@ function addCustomNominalInput(
 
         >
 
-            Masukkan nominal top up untuk menghitung harga jual.
+            Masukkan nominal untuk menghitung harga jual.
 
         </div>
 
@@ -1270,7 +1360,9 @@ function addCustomNominalInput(
     document
 
         .getElementById(
+
             "customNominal"
+
         )
 
         .addEventListener(
@@ -1290,42 +1382,43 @@ function addCustomNominalInput(
 
 function updateCustomPrice() {
 
-
     const input =
+
         document.getElementById(
+
             "customNominal"
+
         );
 
 
     const info =
+
         document.getElementById(
+
             "customPriceInfo"
+
         );
 
 
-    if (
-        !input ||
-        !info
-    ) {
+    if (!input || !info)
 
         return;
 
-    }
-
 
     const nominal =
+
         Number(
+
             input.value
+
         );
 
 
-    if (
-        !nominal
-    ) {
+    if (!nominal) {
 
         info.innerHTML =
 
-            "Masukkan nominal top up untuk menghitung harga jual.";
+            "Masukkan nominal untuk menghitung harga jual.";
 
         return;
 
@@ -1333,23 +1426,29 @@ function updateCustomPrice() {
 
 
     const admin =
+
         calculateAdmin(
+
             nominal
+
         );
 
 
     const total =
+
         nominal + admin;
 
 
     info.innerHTML = `
 
-        Nominal Top Up:
+        Nominal:
 
         <strong>
 
             ${formatRupiah(
+
                 nominal
+
             )}
 
         </strong>
@@ -1363,7 +1462,9 @@ function updateCustomPrice() {
         <strong>
 
             ${formatRupiah(
+
                 admin
+
             )}
 
         </strong>
@@ -1372,12 +1473,14 @@ function updateCustomPrice() {
         <br>
 
 
-        Total Harga:
+        Total:
 
         <strong>
 
             ${formatRupiah(
+
                 total
+
             )}
 
         </strong>
@@ -1391,9 +1494,7 @@ function updateCustomPrice() {
 // METODE PEMBAYARAN
 // ==========================================
 
-if (
-    paymentMethod
-) {
+if (paymentMethod) {
 
     paymentMethod.addEventListener(
 
@@ -1401,36 +1502,41 @@ if (
 
         () => {
 
-
             cashUploadBox.style.display =
+
                 "none";
 
 
             debtUploadBox.style.display =
+
                 "none";
 
 
             paymentProof.required =
+
                 false;
 
 
             selfieProof.required =
+
                 false;
 
 
             if (
 
                 paymentMethod.value ===
+
                 "cash"
 
             ) {
 
-
                 cashUploadBox.style.display =
+
                     "block";
 
 
                 paymentProof.required =
+
                     true;
 
 
@@ -1447,7 +1553,6 @@ if (
 
                     <br><br>
 
-
                     Upload bukti pembayaran.
 
                 `;
@@ -1458,16 +1563,18 @@ if (
             if (
 
                 paymentMethod.value ===
+
                 "debt"
 
             ) {
 
-
                 debtUploadBox.style.display =
+
                     "block";
 
 
                 selfieProof.required =
+
                     true;
 
 
@@ -1484,7 +1591,6 @@ if (
 
                     <br>
 
-
                     Biaya admin hutang:
 
                     <strong>
@@ -1496,7 +1602,6 @@ if (
 
                     <br>
 
-
                     Jatuh tempo:
 
                     <strong>
@@ -1507,7 +1612,6 @@ if (
 
 
                     <br>
-
 
                     Denda:
 
@@ -1542,23 +1646,16 @@ async function uploadFile(
 
 ) {
 
-
-    if (
-        !file
-    ) {
+    if (!file)
 
         return null;
-
-    }
 
 
     const extension =
 
         file.name
 
-            .split(
-                "."
-            )
+            .split(".")
 
             .pop()
 
@@ -1576,9 +1673,7 @@ async function uploadFile(
 
             .storage
 
-            .from(
-                bucket
-            )
+            .from(bucket)
 
             .upload(
 
@@ -1589,12 +1684,15 @@ async function uploadFile(
                 {
 
                     cacheControl:
+
                         "3600",
 
                     upsert:
+
                         false,
 
                     contentType:
+
                         file.type
 
                 }
@@ -1606,11 +1704,9 @@ async function uploadFile(
 
         uploadResult.error
 
-    ) {
+    )
 
         throw uploadResult.error;
-
-    }
 
 
     return uploadResult.data.path;
@@ -1640,25 +1736,17 @@ function createWhatsAppMessage(
 
 ) {
 
-
-    const isPLN =
-
-        productName
-
-            .toLowerCase()
-
-            .startsWith(
-                "token pln"
-            );
-
-
     const targetLabel =
 
-        isPLN
+        isPLNProduct(
 
-            ? "⚡ ID Pelanggan PLN"
+            selectedProduct
 
-            : "📱 Nomor Tujuan";
+        )
+
+            ? "ID Pelanggan"
+
+            : "Nomor Tujuan";
 
 
     return `📦 PESANAN BARU HOLOCELL
@@ -1673,7 +1761,7 @@ ${orderNumber}
 
 ${customerName}
 
-${targetLabel}:
+📍 ${targetLabel}:
 
 ${targetNumber}
 
@@ -1683,21 +1771,21 @@ ${productName}
 
 💰 Nominal:
 
-${formatRupiah(
-    nominal
-)}
+${formatRupiah(nominal)}
 
 💵 Total Harga:
 
-${formatRupiah(
-    totalPrice
-)}
+${formatRupiah(totalPrice)}
 
 💳 Pembayaran:
 
 ${method === "cash"
-    ? "Cash"
-    : "Hutang"}
+
+        ? "Cash"
+
+        : "Hutang"
+
+    }
 
 📌 Status:
 
@@ -1715,32 +1803,36 @@ Silakan cek pesanan di Dashboard Admin HOLOCELL.`;
 // ==========================================
 
 function showWhatsAppChoice(
+
     message
+
 ) {
 
-
     const oldModal =
+
         document.getElementById(
+
             "whatsappChoiceModal"
+
         );
 
 
-    if (
-        oldModal
-    ) {
+    if (oldModal)
 
         oldModal.remove();
 
-    }
-
 
     const modal =
+
         document.createElement(
+
             "div"
+
         );
 
 
     modal.id =
+
         "whatsappChoiceModal";
 
 
@@ -1910,14 +2002,17 @@ function showWhatsAppChoice(
 
 
     document.body.appendChild(
+
         modal
+
     );
 
 
     function openWhatsApp(
-        number
-    ) {
 
+        number
+
+    ) {
 
         const url =
 
@@ -1934,7 +2029,9 @@ function showWhatsAppChoice(
             +
 
             encodeURIComponent(
+
                 message
+
             );
 
 
@@ -1952,7 +2049,9 @@ function showWhatsAppChoice(
     document
 
         .getElementById(
+
             "waAdmin1Btn"
+
         )
 
         .addEventListener(
@@ -1975,7 +2074,9 @@ function showWhatsAppChoice(
     document
 
         .getElementById(
+
             "waAdmin2Btn"
+
         )
 
         .addEventListener(
@@ -1998,7 +2099,9 @@ function showWhatsAppChoice(
     document
 
         .getElementById(
+
             "closeWaChoice"
+
         )
 
         .addEventListener(
@@ -2020,9 +2123,7 @@ function showWhatsAppChoice(
 // KIRIM PESANAN
 // ==========================================
 
-if (
-    orderForm
-) {
+if (orderForm) {
 
     orderForm.addEventListener(
 
@@ -2030,16 +2131,15 @@ if (
 
         async event => {
 
-
             event.preventDefault();
 
 
-            if (
-                !selectedProduct
-            ) {
+            if (!selectedProduct) {
 
                 alert(
+
                     "Produk belum dipilih."
+
                 );
 
                 return;
@@ -2052,7 +2152,9 @@ if (
                 document
 
                     .getElementById(
+
                         "customerName"
+
                     )
 
                     .value
@@ -2065,7 +2167,9 @@ if (
                 document
 
                     .getElementById(
+
                         "targetNumber"
+
                     )
 
                     .value
@@ -2078,12 +2182,12 @@ if (
                 paymentMethod.value;
 
 
-            if (
-                !customerName
-            ) {
+            if (!customerName) {
 
                 alert(
+
                     "Nama pemesan wajib diisi."
+
                 );
 
                 return;
@@ -2091,18 +2195,17 @@ if (
             }
 
 
-            if (
-                !targetNumber
-            ) {
+            if (!targetNumber) {
 
                 alert(
 
-                    selectedProduct.code
-                        .startsWith(
-                            "PLN"
-                        )
+                    isPLNProduct(
 
-                        ? "ID Pelanggan PLN wajib diisi."
+                        selectedProduct
+
+                    )
+
+                        ? "ID Pelanggan wajib diisi."
 
                         : "Nomor tujuan wajib diisi."
 
@@ -2113,9 +2216,7 @@ if (
             }
 
 
-            if (
-                !method
-            ) {
+            if (!method) {
 
                 alert(
 
@@ -2129,39 +2230,46 @@ if (
 
 
             let nominal =
+
                 selectedProduct.price;
 
 
             let productPrice =
+
                 selectedProduct.price;
 
 
             let adminFee =
+
                 0;
 
 
             let debtFee =
+
                 0;
 
 
             if (
-                selectedProduct.custom
-            ) {
 
+                selectedProduct.custom
+
+            ) {
 
                 const customInput =
 
-                    document
+                    document.getElementById(
 
-                        .getElementById(
-                            "customNominal"
-                        );
+                        "customNominal"
+
+                    );
 
 
                 nominal =
 
                     Number(
+
                         customInput.value
+
                     );
 
 
@@ -2193,24 +2301,31 @@ if (
                 adminFee =
 
                     calculateAdmin(
+
                         nominal
+
                     );
 
 
                 productPrice =
 
-                    nominal + adminFee;
+                    nominal +
+
+                    adminFee;
 
             }
 
 
             if (
 
-                method === "debt"
+                method ===
+
+                "debt"
 
             ) {
 
                 debtFee =
+
                     5000;
 
             }
@@ -2219,26 +2334,29 @@ if (
             const totalPrice =
 
                 productPrice +
+
                 debtFee;
 
 
             let paymentProofPath =
+
                 null;
 
 
             let selfiePath =
+
                 null;
 
 
             try {
 
-
                 if (
 
-                    method === "cash"
+                    method ===
+
+                    "cash"
 
                 ) {
-
 
                     if (
 
@@ -2274,10 +2392,11 @@ if (
 
                 if (
 
-                    method === "debt"
+                    method ===
+
+                    "debt"
 
                 ) {
-
 
                     if (
 
@@ -2314,12 +2433,15 @@ if (
                 const orderNumber =
 
                     "HC-" +
+
                     Date.now();
 
 
                 const dueDate =
 
-                    method === "debt"
+                    method ===
+
+                    "debt"
 
                         ? new Date(
 
@@ -2345,62 +2467,83 @@ if (
                     await supabaseClient
 
                         .from(
+
                             "orders"
+
                         )
 
                         .insert({
 
                             order_number:
+
                                 orderNumber,
 
                             customer_name:
+
                                 customerName,
 
                             target_number:
+
                                 targetNumber,
 
                             product_name:
+
                                 selectedProduct.name,
 
                             product_code:
+
                                 selectedProduct.code,
 
                             category:
-                                selectedProduct.category ||
+
+                                selectedProduct.category
+
+                                ||
 
                                 currentCategory,
 
                             nominal:
+
                                 nominal,
 
                             product_price:
+
                                 productPrice,
 
                             admin_fee:
+
                                 adminFee,
 
                             debt_fee:
+
                                 debtFee,
 
                             late_fee:
+
                                 0,
 
                             total_price:
+
                                 totalPrice,
 
                             payment_method:
+
                                 method,
 
                             status:
+
                                 "menunggu_verifikasi",
 
                             payment_proof_url:
+
                                 paymentProofPath,
 
                             selfie_url:
+
                                 selfiePath,
 
                             due_date:
+
                                 dueDate
 
                         })
@@ -2411,12 +2554,12 @@ if (
 
 
                 if (
+
                     result.error
-                ) {
+
+                )
 
                     throw result.error;
-
-                }
 
 
                 const whatsappMessage =
@@ -2453,12 +2596,15 @@ if (
 
 
             catch (
+
                 error
+
             ) {
 
-
                 console.error(
+
                     error
+
                 );
 
 
@@ -2487,29 +2633,46 @@ if (
 
 function closeOrderModal() {
 
+    if (modalOverlay)
 
-    modalOverlay.classList.remove(
-        "active"
-    );
+        modalOverlay.classList.remove(
 
+            "active"
 
-    orderForm.reset();
-
-
-    cashUploadBox.style.display =
-        "none";
+        );
 
 
-    debtUploadBox.style.display =
-        "none";
+    if (orderForm)
+
+        orderForm.reset();
 
 
-    paymentProof.required =
-        false;
+    if (cashUploadBox)
+
+        cashUploadBox.style.display =
+
+            "none";
 
 
-    selfieProof.required =
-        false;
+    if (debtUploadBox)
+
+        debtUploadBox.style.display =
+
+            "none";
+
+
+    if (paymentProof)
+
+        paymentProof.required =
+
+            false;
+
+
+    if (selfieProof)
+
+        selfieProof.required =
+
+            false;
 
 
     const customBox =
@@ -2521,61 +2684,29 @@ function closeOrderModal() {
         );
 
 
-    if (
-        customBox
-    ) {
+    if (customBox)
 
         customBox.remove();
 
-    }
 
+    if (paymentInfo)
 
-    paymentInfo.innerHTML =
+        paymentInfo.innerHTML =
 
-        "Pilih metode pembayaran untuk melihat informasi.";
+            "Pilih metode pembayaran untuk melihat informasi.";
 
 
     selectedProduct =
+
         null;
 
 
-    const targetLabel =
-        document.querySelector(
-            'label[for="targetNumber"]'
-        );
-
-
-    const targetInput =
-        document.getElementById(
-            "targetNumber"
-        );
-
-
-    if (
-        targetLabel
-    ) {
-
-        targetLabel.textContent =
-            "Nomor Tujuan";
-
-    }
-
-
-    if (
-        targetInput
-    ) {
-
-        targetInput.placeholder =
-            "Contoh: 085xxxxxxxxx";
-
-    }
+    updateTargetLabel();
 
 }
 
 
-if (
-    closeModal
-) {
+if (closeModal) {
 
     closeModal.addEventListener(
 
@@ -2588,9 +2719,7 @@ if (
 }
 
 
-if (
-    modalOverlay
-) {
+if (modalOverlay) {
 
     modalOverlay.addEventListener(
 
@@ -2598,10 +2727,10 @@ if (
 
         event => {
 
-
             if (
 
                 event.target ===
+
                 modalOverlay
 
             ) {
@@ -2622,14 +2751,15 @@ if (
 // ==========================================
 
 const menuBtn =
+
     document.getElementById(
+
         "menuBtn"
+
     );
 
 
-if (
-    menuBtn
-) {
+if (menuBtn) {
 
     menuBtn.addEventListener(
 
@@ -2637,23 +2767,22 @@ if (
 
         () => {
 
-
             const nav =
 
                 document.querySelector(
+
                     ".nav"
+
                 );
 
 
-            if (
-                nav
-            ) {
+            if (nav)
 
                 nav.classList.toggle(
-                    "mobile-open"
-                );
 
-            }
+                    "mobile-open"
+
+                );
 
         }
 
@@ -2665,8 +2794,5 @@ if (
 // ==========================================
 // MULAI WEBSITE
 // ==========================================
-
-// Menampilkan produk populer campuran
-// saat halaman pertama dibuka.
 
 renderPopularProducts();
