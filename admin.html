@@ -100,7 +100,9 @@ select {
     font-weight: bold;
 }
 
-/* STATUS */
+/* =========================
+   STATUS
+========================= */
 
 .status {
     display: flex;
@@ -174,6 +176,10 @@ select {
     background: #dc2626;
 }
 
+/* =========================
+   INFORMASI ORDER
+========================= */
+
 .order-info {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -192,6 +198,10 @@ select {
     color: #6b7280;
     margin-bottom: 5px;
 }
+
+/* =========================
+   BUTTON
+========================= */
 
 .buttons {
     display: flex;
@@ -283,23 +293,35 @@ button:hover {
 <section class="stats">
 
 <div class="stat">
+
 <p>Total Pesanan</p>
+
 <strong id="totalOrders">0</strong>
+
 </div>
 
 <div class="stat">
+
 <p>Menunggu Verifikasi</p>
+
 <strong id="waitingOrders">0</strong>
+
 </div>
 
 <div class="stat">
+
 <p>Hutang Aktif</p>
+
 <strong id="debtOrders">0</strong>
+
 </div>
 
 <div class="stat">
+
 <p>Selesai</p>
+
 <strong id="paidOrders">0</strong>
+
 </div>
 
 </section>
@@ -354,7 +376,9 @@ onclick="loadOrders()"
 <section id="ordersContainer">
 
 <div class="empty">
+
 Memuat pesanan...
+
 </div>
 
 </section>
@@ -437,7 +461,7 @@ document.getElementById("errorBox")
 
 
 /* ==========================================
-   LOAD ORDER
+   LOAD PESANAN
 ========================================== */
 
 async function loadOrders() {
@@ -599,7 +623,7 @@ ${text}
 
 
 /* ==========================================
-   RENDER ORDER
+   RENDER PESANAN
 ========================================== */
 
 function renderOrders() {
@@ -673,7 +697,7 @@ filtered
 
 
 /* ==========================================
-   KARTU ORDER
+   KARTU PESANAN
 ========================================== */
 
 function orderHTML(order) {
@@ -681,7 +705,9 @@ function orderHTML(order) {
 let buttons = "";
 
 
-/* BUKTI PEMBAYARAN */
+/* ==========================================
+   BUKTI PEMBAYARAN CASH
+========================================== */
 
 if (order.payment_proof_url) {
 
@@ -712,7 +738,9 @@ order.payment_proof_url
 }
 
 
-/* FOTO SELFIE VERIFIKASI */
+/* ==========================================
+   FOTO / FILE VERIFIKASI HUTANG
+========================================== */
 
 if (order.selfie_url) {
 
@@ -734,7 +762,7 @@ order.selfie_url
 
 >
 
-🤳 Lihat Selfie Verifikasi
+📸 Foto/File Verifikasi
 
 </button>
 
@@ -743,7 +771,9 @@ order.selfie_url
 }
 
 
-/* SETUJUI / TOLAK */
+/* ==========================================
+   SETUJUI / TOLAK
+========================================== */
 
 if (
 order.status ===
@@ -791,7 +821,9 @@ onclick="rejectOrder(
 }
 
 
-/* SELESAI */
+/* ==========================================
+   SELESAI
+========================================== */
 
 if (
 order.status ===
@@ -821,7 +853,9 @@ onclick="completeOrder(
 }
 
 
-/* HUTANG */
+/* ==========================================
+   HUTANG AKTIF
+========================================== */
 
 if (
 order.status ===
@@ -969,22 +1003,18 @@ ${buttons}
 
 
 /* ==========================================
-   OPEN FILE
+   MEMBERSIHKAN PATH FILE
 ========================================== */
 
-async function openFile(path, bucket) {
+function cleanFilePath(path, bucket) {
 
-if (!path) {
-
-alert("File tidak ditemukan.");
-
-return;
-
-}
+if (!path) return null;
 
 let cleanPath =
-String(path)
-.trim();
+String(path).trim();
+
+
+/* Jika URL lengkap Supabase */
 
 cleanPath =
 cleanPath.replace(
@@ -992,14 +1022,62 @@ cleanPath.replace(
 ""
 );
 
+
+/* Hapus nama bucket jika ikut tersimpan */
+
 cleanPath =
 cleanPath.replace(
-new RegExp("^" + bucket + "/"),
+new RegExp(
+"^" + bucket + "/"
+),
 ""
 );
 
+
+/* Hapus slash di awal */
+
 cleanPath =
-cleanPath.replace(/^\/+/, "");
+cleanPath.replace(
+/^\/+/,
+""
+);
+
+return cleanPath;
+
+}
+
+
+/* ==========================================
+   BUKA FOTO / FILE
+========================================== */
+
+async function openFile(path, bucket) {
+
+if (!path) {
+
+alert(
+"File tidak ditemukan."
+);
+
+return;
+
+}
+
+const cleanPath =
+cleanFilePath(
+path,
+bucket
+);
+
+if (!cleanPath) {
+
+alert(
+"Path file tidak valid."
+);
+
+return;
+
+}
 
 const result =
 await supabaseClient
@@ -1039,8 +1117,14 @@ result.data.signedUrl,
 function escapeAttribute(value) {
 
 return String(value)
-.replace(/\\/g, "\\\\")
-.replace(/'/g, "\\'");
+.replace(
+/\\/g,
+"\\\\"
+)
+.replace(
+/'/g,
+"\\'"
+);
 
 }
 
@@ -1065,13 +1149,22 @@ const result =
 await supabaseClient
 .from("orders")
 .update({
+
 status: newStatus
+
 })
-.eq("id", id);
+.eq(
+"id",
+id
+);
 
 if (result.error) {
 
-alert(result.error.message);
+alert(
+"Gagal menyetujui pesanan:\n\n"
++
+result.error.message
+);
 
 return;
 
@@ -1081,7 +1174,7 @@ alert(
 "Pesanan berhasil disetujui."
 );
 
-loadOrders();
+await loadOrders();
 
 }
 
@@ -1092,6 +1185,13 @@ loadOrders();
 
 async function rejectOrder(id) {
 
+const confirmReject =
+confirm(
+"Yakin ingin menolak pesanan ini?"
+);
+
+if (!confirmReject) return;
+
 const result =
 await supabaseClient
 .from("orders")
@@ -1100,11 +1200,18 @@ await supabaseClient
 status: "ditolak"
 
 })
-.eq("id", id);
+.eq(
+"id",
+id
+);
 
 if (result.error) {
 
-alert(result.error.message);
+alert(
+"Gagal menolak pesanan:\n\n"
++
+result.error.message
+);
 
 return;
 
@@ -1114,7 +1221,7 @@ alert(
 "Pesanan ditolak."
 );
 
-loadOrders();
+await loadOrders();
 
 }
 
@@ -1133,11 +1240,18 @@ await supabaseClient
 status: "selesai"
 
 })
-.eq("id", id);
+.eq(
+"id",
+id
+);
 
 if (result.error) {
 
-alert(result.error.message);
+alert(
+"Gagal menyelesaikan pesanan:\n\n"
++
+result.error.message
+);
 
 return;
 
@@ -1147,13 +1261,13 @@ alert(
 "Pesanan berhasil diselesaikan."
 );
 
-loadOrders();
+await loadOrders();
 
 }
 
 
 /* ==========================================
-   LUNAS
+   LUNAS HUTANG
 ========================================== */
 
 async function markPaid(id) {
@@ -1168,11 +1282,18 @@ status: "selesai",
 late_fee: 0
 
 })
-.eq("id", id);
+.eq(
+"id",
+id
+);
 
 if (result.error) {
 
-alert(result.error.message);
+alert(
+"Gagal menandai lunas:\n\n"
++
+result.error.message
+);
 
 return;
 
@@ -1182,7 +1303,7 @@ alert(
 "Pesanan ditandai lunas."
 );
 
-loadOrders();
+await loadOrders();
 
 }
 
@@ -1192,7 +1313,9 @@ loadOrders();
 ========================================== */
 
 document
-.getElementById("searchInput")
+.getElementById(
+"searchInput"
+)
 .addEventListener(
 "input",
 renderOrders
@@ -1204,7 +1327,9 @@ renderOrders
 ========================================== */
 
 document
-.getElementById("statusFilter")
+.getElementById(
+"statusFilter"
+)
 .addEventListener(
 "change",
 renderOrders
@@ -1217,6 +1342,8 @@ renderOrders
 
 loadOrders();
 
+
+/* AUTO REFRESH 30 DETIK */
 
 setInterval(
 loadOrders,
