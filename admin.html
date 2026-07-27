@@ -236,8 +236,8 @@ button:hover {
     color: white;
 }
 
-.whatsapp {
-    background: #25D366;
+.selfie {
+    background: #0891b2;
     color: white;
 }
 
@@ -363,6 +363,10 @@ Memuat pesanan...
 
 <script>
 
+/* ==========================================
+   KONFIGURASI SUPABASE
+========================================== */
+
 const SUPABASE_URL =
 "https://wlitjnrhtusqndpicerk.supabase.co";
 
@@ -378,7 +382,9 @@ SUPABASE_KEY
 let orders = [];
 
 
-/* FORMAT RUPIAH */
+/* ==========================================
+   FORMAT RUPIAH
+========================================== */
 
 function rupiah(value) {
 
@@ -394,7 +400,9 @@ maximumFractionDigits: 0
 }
 
 
-/* FORMAT TANGGAL */
+/* ==========================================
+   FORMAT TANGGAL
+========================================== */
 
 function dateFormat(value) {
 
@@ -405,7 +413,9 @@ return new Date(value).toLocaleString("id-ID");
 }
 
 
-/* ERROR */
+/* ==========================================
+   ERROR
+========================================== */
 
 function showError(message) {
 
@@ -426,7 +436,9 @@ document.getElementById("errorBox")
 }
 
 
-/* LOAD ORDER */
+/* ==========================================
+   LOAD ORDER
+========================================== */
 
 async function loadOrders() {
 
@@ -436,9 +448,13 @@ const container =
 document.getElementById("ordersContainer");
 
 container.innerHTML = `
+
 <div class="empty">
+
 Memuat pesanan...
+
 </div>
+
 `;
 
 const result =
@@ -457,6 +473,16 @@ showError(
 result.error.message
 );
 
+container.innerHTML = `
+
+<div class="empty">
+
+Gagal memuat pesanan.
+
+</div>
+
+`;
+
 return;
 
 }
@@ -471,7 +497,9 @@ renderOrders();
 }
 
 
-/* STATISTIK */
+/* ==========================================
+   STATISTIK
+========================================== */
 
 function updateStats() {
 
@@ -505,17 +533,20 @@ order.status ===
 }
 
 
-/* STATUS */
+/* ==========================================
+   STATUS
+========================================== */
 
 function getStatusHTML(status) {
 
-let text = status;
+let text = status || "-";
 
 let className = "status-menunggu";
 
 if (status === "menunggu_verifikasi") {
 
 text = "Menunggu Verifikasi";
+
 className = "status-menunggu";
 
 }
@@ -523,6 +554,7 @@ className = "status-menunggu";
 else if (status === "hutang_aktif") {
 
 text = "Hutang Aktif";
+
 className = "status-hutang";
 
 }
@@ -530,6 +562,7 @@ className = "status-hutang";
 else if (status === "diproses") {
 
 text = "Diproses";
+
 className = "status-diproses";
 
 }
@@ -537,6 +570,7 @@ className = "status-diproses";
 else if (status === "selesai") {
 
 text = "Selesai";
+
 className = "status-selesai";
 
 }
@@ -544,6 +578,7 @@ className = "status-selesai";
 else if (status === "ditolak") {
 
 text = "Ditolak";
+
 className = "status-ditolak";
 
 }
@@ -563,7 +598,9 @@ ${text}
 }
 
 
-/* RENDER */
+/* ==========================================
+   RENDER ORDER
+========================================== */
 
 function renderOrders() {
 
@@ -635,49 +672,13 @@ filtered
 }
 
 
-/* KARTU ORDER */
+/* ==========================================
+   KARTU ORDER
+========================================== */
 
 function orderHTML(order) {
 
 let buttons = "";
-
-
-/* WHATSAPP ADMIN 1 */
-
-buttons += `
-
-<button
-class="whatsapp"
-onclick="sendWhatsApp(
-'6285719431469',
-'${order.id}'
-)"
->
-
-📱 WhatsApp Admin 1
-
-</button>
-
-`;
-
-
-/* WHATSAPP ADMIN 2 */
-
-buttons += `
-
-<button
-class="whatsapp"
-onclick="sendWhatsApp(
-'639651392132',
-'${order.id}'
-)"
->
-
-📱 WhatsApp Admin 2
-
-</button>
-
-`;
 
 
 /* BUKTI PEMBAYARAN */
@@ -687,16 +688,53 @@ if (order.payment_proof_url) {
 buttons += `
 
 <button
+
 class="file"
+
 onclick="openFile(
+
 '${escapeAttribute(
 order.payment_proof_url
 )}',
+
 'payment-proofs'
+
 )"
+
 >
 
 📄 Bukti Pembayaran
+
+</button>
+
+`;
+
+}
+
+
+/* FOTO SELFIE VERIFIKASI */
+
+if (order.selfie_url) {
+
+buttons += `
+
+<button
+
+class="selfie"
+
+onclick="openFile(
+
+'${escapeAttribute(
+order.selfie_url
+)}',
+
+'debt-selfies'
+
+)"
+
+>
+
+🤳 Lihat Selfie Verifikasi
 
 </button>
 
@@ -715,11 +753,17 @@ order.status ===
 buttons += `
 
 <button
+
 class="approve"
+
 onclick="approveOrder(
+
 '${order.id}',
+
 '${order.payment_method}'
+
 )"
+
 >
 
 ✅ Setujui
@@ -727,10 +771,15 @@ onclick="approveOrder(
 </button>
 
 <button
+
 class="reject"
+
 onclick="rejectOrder(
+
 '${order.id}'
+
 )"
+
 >
 
 ❌ Tolak
@@ -752,10 +801,15 @@ order.status ===
 buttons += `
 
 <button
+
 class="complete"
+
 onclick="completeOrder(
+
 '${order.id}'
+
 )"
+
 >
 
 ✅ Selesai
@@ -777,10 +831,15 @@ order.status ===
 buttons += `
 
 <button
+
 class="paid"
+
 onclick="markPaid(
+
 '${order.id}'
+
 )"
+
 >
 
 💰 Tandai Lunas
@@ -811,52 +870,87 @@ ${getStatusHTML(order.status)}
 <div class="order-info">
 
 <div class="info">
+
 <small>Nama Pemesan</small>
+
 <strong>
+
 ${order.customer_name || "-"}
+
 </strong>
+
 </div>
 
 <div class="info">
+
 <small>Nomor Tujuan</small>
+
 <strong>
+
 ${order.target_number || "-"}
+
 </strong>
+
 </div>
 
 <div class="info">
+
 <small>Produk</small>
+
 <strong>
+
 ${order.product_name || "-"}
+
 </strong>
+
 </div>
 
 <div class="info">
+
 <small>Total Harga</small>
+
 <strong>
+
 ${rupiah(order.total_price)}
+
 </strong>
+
 </div>
 
 <div class="info">
+
 <small>Metode Pembayaran</small>
+
 <strong>
+
 ${order.payment_method || "-"}
+
 </strong>
+
 </div>
 
 <div class="info">
+
 <small>Waktu Pesanan</small>
+
 <strong>
+
 ${dateFormat(order.created_at)}
+
 </strong>
+
 </div>
 
 <div class="info">
+
 <small>Jatuh Tempo</small>
+
 <strong>
+
 ${dateFormat(order.due_date)}
+
 </strong>
+
 </div>
 
 </div>
@@ -874,85 +968,19 @@ ${buttons}
 }
 
 
-/* WHATSAPP */
+/* ==========================================
+   OPEN FILE
+========================================== */
 
-function sendWhatsApp(
-adminNumber,
-orderId
-) {
+async function openFile(path, bucket) {
 
-const order =
-orders.find(
-item =>
-String(item.id)
-===
-String(orderId)
-);
+if (!path) {
 
-if (!order) {
-
-alert(
-"Data pesanan tidak ditemukan."
-);
+alert("File tidak ditemukan.");
 
 return;
 
 }
-
-const message =
-
-`📦 *PESANAN HOLOCELL*
-
-━━━━━━━━━━━━━━━
-
-🧾 Order:
-${order.order_number || "-"}
-
-👤 Nama:
-${order.customer_name || "-"}
-
-📱 Nomor Tujuan:
-${order.target_number || "-"}
-
-🛒 Produk:
-${order.product_name || "-"}
-
-💰 Total:
-${rupiah(order.total_price)}
-
-💳 Pembayaran:
-${order.payment_method || "-"}
-
-📌 Status:
-${order.status || "-"}
-
-━━━━━━━━━━━━━━━
-
-Silakan cek dashboard Admin HOLOCELL.`;
-
-const url =
-"https://wa.me/"
-+
-adminNumber
-+
-"?text="
-+
-encodeURIComponent(message);
-
-window.open(
-url,
-"_blank"
-);
-
-}
-
-
-/* OPEN FILE */
-
-async function openFile(
-path,
-bucket
-) {
 
 let cleanPath =
 String(path)
@@ -985,9 +1013,11 @@ cleanPath,
 if (result.error) {
 
 alert(
+
 "File tidak dapat dibuka:\n\n"
 +
 result.error.message
+
 );
 
 return;
@@ -1002,7 +1032,9 @@ result.data.signedUrl,
 }
 
 
-/* ESCAPE */
+/* ==========================================
+   ESCAPE
+========================================== */
 
 function escapeAttribute(value) {
 
@@ -1013,7 +1045,9 @@ return String(value)
 }
 
 
-/* SETUJUI */
+/* ==========================================
+   SETUJUI
+========================================== */
 
 async function approveOrder(
 id,
@@ -1052,7 +1086,9 @@ loadOrders();
 }
 
 
-/* TOLAK */
+/* ==========================================
+   TOLAK
+========================================== */
 
 async function rejectOrder(id) {
 
@@ -1060,7 +1096,9 @@ const result =
 await supabaseClient
 .from("orders")
 .update({
+
 status: "ditolak"
+
 })
 .eq("id", id);
 
@@ -1081,7 +1119,9 @@ loadOrders();
 }
 
 
-/* SELESAI */
+/* ==========================================
+   SELESAI
+========================================== */
 
 async function completeOrder(id) {
 
@@ -1089,7 +1129,9 @@ const result =
 await supabaseClient
 .from("orders")
 .update({
+
 status: "selesai"
+
 })
 .eq("id", id);
 
@@ -1110,7 +1152,9 @@ loadOrders();
 }
 
 
-/* LUNAS */
+/* ==========================================
+   LUNAS
+========================================== */
 
 async function markPaid(id) {
 
@@ -1143,7 +1187,9 @@ loadOrders();
 }
 
 
-/* SEARCH */
+/* ==========================================
+   SEARCH
+========================================== */
 
 document
 .getElementById("searchInput")
@@ -1153,7 +1199,9 @@ renderOrders
 );
 
 
-/* FILTER */
+/* ==========================================
+   FILTER
+========================================== */
 
 document
 .getElementById("statusFilter")
@@ -1163,7 +1211,9 @@ renderOrders
 );
 
 
-/* MULAI */
+/* ==========================================
+   MULAI
+========================================== */
 
 loadOrders();
 
