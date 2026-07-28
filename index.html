@@ -3,2639 +3,1184 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<title>HOLOCELL - PPOB Modern Indonesia</title>
 
-    <title>
-        HOLOCELL - Layanan Digital PPOB
-    </title>
+<meta name="description"
+content="Pulsa Nasional, Token PLN, Top Up E-Wallet, PPOB Modern Indonesia">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
 
+<link rel="stylesheet"
+href="style.css">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
-
-    <style>
-
-        /* ==========================================
-           AUTH USER
-        ========================================== */
-
-        .auth-area {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-        }
-
-
-        #userMenu {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-        }
-
-
-        #userName {
-
-            font-weight: 600;
-
-            font-size: 14px;
-
-            color: #111827;
-
-            max-width: 180px;
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-
-            white-space: nowrap;
-
-        }
-
-
-        #logoutButton {
-
-            border: none;
-
-            background: #ef4444;
-
-            color: white;
-
-            padding: 10px 14px;
-
-            border-radius: 8px;
-
-            cursor: pointer;
-
-            font-weight: 600;
-
-        }
-
-
-        #logoutButton:hover {
-
-            opacity: .9;
-
-        }
-
-
-        .auth-modal {
-
-            max-width: 450px;
-
-        }
-
-
-        .auth-message {
-
-            margin-top: 15px;
-
-            padding: 12px;
-
-            border-radius: 8px;
-
-            font-size: 14px;
-
-            line-height: 1.5;
-
-        }
-
-
-        .auth-message:empty {
-
-            display: none;
-
-        }
-
-
-        .auth-switch {
-
-            text-align: center;
-
-            margin-top: 18px;
-
-            font-size: 14px;
-
-        }
-
-
-        .auth-switch button {
-
-            border: none;
-
-            background: none;
-
-            color: #2563eb;
-
-            cursor: pointer;
-
-            font-weight: 700;
-
-        }
-
-
-        .auth-switch button:hover {
-
-            text-decoration: underline;
-
-        }
-
-
-        @media (max-width: 768px) {
-
-            .auth-area {
-
-                margin-right: 10px;
-
-            }
-
-
-            #userName {
-
-                max-width: 100px;
-
-            }
-
-
-            #logoutButton {
-
-                padding: 8px 10px;
-
-                font-size: 12px;
-
-            }
-
-        }
-
-    </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
 
-
 <body>
 
+<!-- ===========================
+PRELOADER
+=========================== -->
 
-<!-- ==========================================
-     HEADER
-========================================== -->
+<div id="preloader">
+
+<div class="loader">
+
+<div class="loader-logo">
+
+H
+
+</div>
+
+<p>
+
+HOLOCELL
+
+</p>
+
+</div>
+
+</div>
+
+<!-- ===========================
+HEADER
+=========================== -->
 
 <header class="header">
 
-    <div class="container nav-container">
+<div class="container">
 
+<a href="#"
 
-        <a
-            href="#beranda"
-            class="logo"
-        >
+class="logo">
 
-            <span class="logo-icon">
-                H
-            </span>
+<div class="logo-icon">
 
+H
 
-            <span class="logo-text">
+</div>
 
-                <strong>
-                    HOLOCELL
-                </strong>
+<div class="logo-text">
 
-                <small>
-                    Layanan Digital PPOB
-                </small>
+<h2>HOLOCELL</h2>
 
-            </span>
+<span>PPOB MODERN</span>
 
-        </a>
+</div>
 
+</a>
 
-        <nav class="nav">
+<nav class="desktop-menu">
 
-            <a
-                href="#beranda"
-                class="active"
-            >
-                Beranda
-            </a>
+<a href="#home">Beranda</a>
 
+<a href="#layanan">Layanan</a>
 
-            <a href="#kategori">
-                Kategori
-            </a>
+<a href="#promo">Promo</a>
 
+<a href="#bantuan">Bantuan</a>
 
-            <a href="#produk">
-                Produk
-            </a>
+</nav>
 
+<div class="header-right">
 
-            <a href="#keunggulan">
-                Harga
-            </a>
+<button
+id="loginButton"
+class="login-btn">
 
+Masuk
 
-            <a href="#bantuan">
-                Bantuan
-            </a>
+</button>
 
-        </nav>
+<button
+id="mobileMenuButton"
+class="mobile-menu">
 
+☰
 
-        <!-- AUTH AREA -->
+</button>
 
-        <div class="auth-area">
+</div>
 
-
-            <!-- TOMBOL LOGIN -->
-
-            <button
-                id="authButton"
-                class="admin-btn"
-                type="button"
-            >
-
-                👤 Login / Daftar
-
-            </button>
-
-
-            <!-- USER SETELAH LOGIN -->
-
-            <div
-                id="userMenu"
-                style="display:none;"
-            >
-
-                <span id="userName"></span>
-
-
-                <button
-                    id="logoutButton"
-                    type="button"
-                >
-
-                    Logout
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <button
-            id="menuBtn"
-            class="menu-btn"
-            type="button"
-        >
-
-            ☰
-
-        </button>
-
-    </div>
+</div>
 
 </header>
 
-
-<!-- ==========================================
-     MAIN
-========================================== -->
-
-<main>
-
-
-<!-- ==========================================
-     HERO
-========================================== -->
-
-<section
-    id="beranda"
-    class="hero"
->
-
-
-    <div class="container hero-grid">
-
-
-        <div class="hero-content">
-
-
-            <span class="hero-badge">
-
-                ⚡ Layanan Digital Lokal
-
-            </span>
-
-
-            <h1>
-
-                Semua Kebutuhan
-
-                <br>
-
-                Pembayaran Digital,
-
-                <span>
-
-                    Lebih Mudah.
-
-                </span>
-
-            </h1>
-
-
-            <p>
-
-                Pesan pulsa, e-wallet, token PLN, paket data,
-
-                voucher game, dan berbagai kebutuhan digital lainnya
-
-                dalam satu platform.
-
-            </p>
-
-
-            <div class="hero-features">
-
-
-                <div class="mini-feature">
-
-                    <span>
-                        🛡️
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            Aman
-                        </strong>
-
-                        <small>
-                            Transaksi aman dan terpercaya
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-                <div class="mini-feature">
-
-                    <span>
-                        ⚡
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            Cepat
-                        </strong>
-
-                        <small>
-                            Proses instan 24 jam
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-                <div class="mini-feature">
-
-                    <span>
-                        🏷️
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            Murah
-                        </strong>
-
-                        <small>
-                            Harga bersaing
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-                <div class="mini-feature">
-
-                    <span>
-                        🎧
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            Support
-                        </strong>
-
-                        <small>
-                            Layanan siap membantu
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <a
-                href="#kategori"
-                class="hero-btn"
-            >
-
-                Mulai Transaksi
-
-                <span>
-                    →
-                </span>
-
-            </a>
-
-        </div>
-
-
-        <div class="hero-visual">
-
-
-            <div class="floating-icon icon-ovo">
-                OVO
-            </div>
-
-
-            <div class="floating-icon icon-wallet">
-                💳
-            </div>
-
-
-            <div class="floating-icon icon-pln">
-                ⚡
-            </div>
-
-
-            <div class="floating-icon icon-telkomsel">
-                📱
-            </div>
-
-
-            <div class="phone-wrapper">
-
-
-                <div class="phone">
-
-
-                    <div class="phone-top">
-
-                        <span>
-                            9:41
-                        </span>
-
-                        <span>
-                            ● ●
-                        </span>
-
-                    </div>
-
-
-                    <div class="phone-header">
-
-
-                        <div class="phone-logo">
-                            H
-                        </div>
-
-
-                        <strong>
-                            HOLOCELL
-                        </strong>
-
-
-                        <span>
-                            ⌕
-                        </span>
-
-                    </div>
-
-
-                    <div class="balance-card">
-
-
-                        <small>
-                            Saldo Anda
-                        </small>
-
-
-                        <strong>
-                            Rp 125.000
-                        </strong>
-
-
-                        <button
-                            type="button"
-                        >
-                            Top Up
-                        </button>
-
-                    </div>
-
-
-                    <div class="phone-categories">
-
-
-                        <div>
-
-                            <span>
-                                📱
-                            </span>
-
-                            <small>
-                                Pulsa
-                            </small>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>
-                                💳
-                            </span>
-
-                            <small>
-                                E-Wallet
-                            </small>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>
-                                ⚡
-                            </span>
-
-                            <small>
-                                PLN
-                            </small>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>
-                                🌐
-                            </span>
-
-                            <small>
-                                Internet
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                    <h4>
-                        Transaksi Favorit
-                    </h4>
-
-
-                    <div class="favorite-products">
-
-                        <span>
-                            📱
-                        </span>
-
-                        <span>
-                            💳
-                        </span>
-
-                        <span>
-                            ⚡
-                        </span>
-
-                        <span>
-                            📶
-                        </span>
-
-                    </div>
-
-
-                    <div class="phone-promo">
-
-
-                        <strong>
-
-                            Bayar & Isi Ulang
-
-                            <br>
-
-                            Lebih Praktis
-
-                        </strong>
-
-
-                        <span>
-                            🎁
-                        </span>
-
-
-                        <small>
-
-                            Semua ada di HOLOCELL
-
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ==========================================
-     KATEGORI
-========================================== -->
-
-<section
-    id="kategori"
-    class="services-section"
->
-
-
-    <div class="container">
-
-
-        <div class="section-heading">
-
-
-            <span>
-                LAYANAN KAMI
-            </span>
-
-
-            <h2>
-                Pilih layanan yang Anda butuhkan
-            </h2>
-
-
-            <p>
-                Berbagai layanan pembayaran digital dalam satu genggaman.
-            </p>
-
-        </div>
-
-
-        <div class="services-grid">
-
-
-            <div
-                class="service-card active"
-                data-category="pulsa"
-            >
-
-                <div class="service-icon pulsa">
-                    📱
-                </div>
-
-
-                <h3>
-                    Pulsa
-                </h3>
-
-
-                <p>
-                    Pulsa all operator termurah
-                </p>
-
-
-                <span class="service-arrow">
-                    →
-                </span>
-
-            </div>
-
-
-            <div
-                class="service-card"
-                data-category="ewallet"
-            >
-
-                <div class="service-icon ewallet">
-                    💳
-                </div>
-
-
-                <h3>
-                    E-Wallet
-                </h3>
-
-
-                <p>
-                    Top up saldo e-wallet favorit Anda
-                </p>
-
-
-                <span class="service-arrow">
-                    →
-                </span>
-
-            </div>
-
-
-            <div
-                class="service-card"
-                data-category="pln"
-            >
-
-                <div class="service-icon pln">
-                    ⚡
-                </div>
-
-
-                <h3>
-                    Token PLN
-                </h3>
-
-
-                <p>
-                    Beli token listrik lebih mudah
-                </p>
-
-
-                <span class="service-arrow">
-                    →
-                </span>
-
-            </div>
-
-
-            <div class="service-card coming-soon">
-
-
-                <div class="service-icon internet">
-                    🌐
-                </div>
-
-
-                <h3>
-                    Internet
-                </h3>
-
-
-                <p>
-                    Paket data & internet
-                </p>
-
-
-                <span class="coming-label">
-                    Segera Hadir
-                </span>
-
-            </div>
-
-
-            <div class="service-card coming-soon">
-
-
-                <div class="service-icon voucher">
-                    🎮
-                </div>
-
-
-                <h3>
-                    Voucher
-                </h3>
-
-
-                <p>
-                    Voucher game & digital
-                </p>
-
-
-                <span class="coming-label">
-                    Segera Hadir
-                </span>
-
-            </div>
-
-
-            <div class="service-card coming-soon">
-
-
-                <div class="service-icon bills">
-                    🧾
-                </div>
-
-
-                <h3>
-                    Tagihan
-                </h3>
-
-
-                <p>
-                    Bayar tagihan bulanan
-                </p>
-
-
-                <span class="coming-label">
-                    Segera Hadir
-                </span>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ==========================================
-     PRODUK
-========================================== -->
-
-<section
-    id="produk"
-    class="products-section"
->
-
-
-    <div class="container">
-
-
-        <div class="products-header">
-
-
-            <div>
-
-
-                <span>
-                    PRODUK TERPOPULER
-                </span>
-
-
-                <h2>
-                    Produk yang sering dibeli
-                </h2>
-
-
-                <p>
-                    Produk favorit dengan harga terbaik.
-                </p>
-
-            </div>
-
-
-            <div class="search-box">
-
-
-                🔍
-
-
-                <input
-
-                    type="text"
-
-                    id="searchInput"
-
-                    placeholder="Cari produk..."
-
-                >
-
-            </div>
-
-        </div>
-
-
-        <div
-            id="productGrid"
-            class="product-grid"
-        ></div>
-
-
-        <div
-            id="emptyState"
-            class="empty-state"
-        >
-
-
-            <h3>
-                Produk tidak ditemukan
-            </h3>
-
-
-            <p>
-                Coba gunakan kata pencarian lain.
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ==========================================
-     KEUNGGULAN
-========================================== -->
-
-<section
-    id="keunggulan"
-    class="advantages-section"
->
-
-
-    <div class="container">
-
-
-        <div class="section-heading">
-
-
-            <span>
-                KENAPA PILIH HOLOCELL?
-            </span>
-
-
-            <h2>
-                Keunggulan layanan kami
-            </h2>
-
-        </div>
-
-
-        <div class="advantages-grid">
-
-
-            <div class="advantage">
-
-                <span>
-                    🏷️
-                </span>
-
-                <div>
-
-                    <strong>
-                        Harga Terbaik
-                    </strong>
-
-                    <small>
-                        Harga bersaing dan lebih hemat
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            <div class="advantage">
-
-                <span>
-                    ⚡
-                </span>
-
-                <div>
-
-                    <strong>
-                        Transaksi Cepat
-                    </strong>
-
-                    <small>
-                        Proses instan dalam hitungan detik
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            <div class="advantage">
-
-                <span>
-                    🛡️
-                </span>
-
-                <div>
-
-                    <strong>
-                        Aman & Terpercaya
-                    </strong>
-
-                    <small>
-                        Sistem aman dan terpercaya
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            <div class="advantage">
-
-                <span>
-                    🕘
-                </span>
-
-                <div>
-
-                    <strong>
-                        24 Jam Online
-                    </strong>
-
-                    <small>
-                        Layanan tersedia setiap saat
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            <div class="advantage">
-
-                <span>
-                    🎧
-                </span>
-
-                <div>
-
-                    <strong>
-                        CS Responsif
-                    </strong>
-
-                    <small>
-                        Customer service siap membantu
-                    </small>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="cta-box">
-
-
-            <div>
-
-
-                <h2>
-                    Siap melakukan transaksi?
-                </h2>
-
-
-                <p>
-                    Pilih layanan digital yang Anda butuhkan sekarang.
-                </p>
-
-            </div>
-
-
-            <a
-                href="#kategori"
-                class="cta-btn"
-            >
-
-                Mulai Transaksi →
-
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-</main>
-
-
-<!-- ==========================================
-     MODAL PESANAN
-========================================== -->
+<!-- ===========================
+MOBILE MENU
+=========================== -->
 
 <div
-    id="modalOverlay"
-    class="modal-overlay"
->
+id="mobileMenu"
+class="mobile-navigation">
 
+<a href="#home">
 
-    <div class="order-modal">
+Beranda
 
+</a>
 
-        <button
-            id="closeModal"
-            class="close-modal"
-            type="button"
-        >
-            ×
-        </button>
+<a href="#layanan">
 
+Layanan
 
-        <div class="modal-product">
+</a>
 
+<a href="#promo">
 
-            <div
-                id="modalIcon"
-                class="modal-icon"
-            >
-                📱
-            </div>
+Promo
 
+</a>
 
-            <div>
+<a href="#bantuan">
 
+Bantuan
 
-                <h2 id="modalProductName">
-                    Produk
-                </h2>
-
-
-                <p>
-
-                    Kode:
-
-                    <strong id="modalProductCode">
-                        -
-                    </strong>
-
-                </p>
-
-
-                <strong id="modalProductPrice">
-                    Rp0
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <form id="orderForm">
-
-
-            <div class="form-group">
-
-
-                <label>
-
-                    Nama Pemesan
-
-
-                    <input
-
-                        type="text"
-
-                        id="customerName"
-
-                        placeholder="Masukkan nama Anda"
-
-                        required
-
-                    >
-
-                </label>
-
-            </div>
-
-
-            <div class="form-group">
-
-
-                <label>
-
-                    Nomor Tujuan / ID Pelanggan
-
-
-                    <input
-
-                        type="tel"
-
-                        id="targetNumber"
-
-                        placeholder="Masukkan nomor tujuan atau ID Pelanggan"
-
-                        required
-
-                    >
-
-                </label>
-
-            </div>
-
-
-            <div
-                id="customNominalBox"
-            ></div>
-
-
-            <div class="form-group">
-
-
-                <label>
-
-                    Metode Pembayaran
-
-
-                    <select
-                        id="paymentMethod"
-                        required
-                    >
-
-
-                        <option value="">
-
-                            Pilih pembayaran
-
-                        </option>
-
-
-                        <option value="cash">
-
-                            Cash
-
-                        </option>
-
-
-                        <option value="debt">
-
-                            Hutang
-
-                        </option>
-
-                    </select>
-
-                </label>
-
-            </div>
-
-
-            <div
-                id="paymentInfo"
-                class="payment-info"
-            >
-
-                Pilih metode pembayaran untuk melihat informasi.
-
-            </div>
-
-
-            <div
-                id="cashUploadBox"
-                class="upload-box"
-            >
-
-
-                <label>
-
-                    📄 Upload Bukti Pembayaran
-
-
-                    <input
-
-                        type="file"
-
-                        id="paymentProof"
-
-                        accept="image/*"
-
-                    >
-
-                </label>
-
-            </div>
-
-
-            <div
-                id="debtUploadBox"
-                class="upload-box"
-            >
-
-
-                <label>
-
-                    🤳 Upload Foto Selfie
-
-
-                    <input
-
-                        type="file"
-
-                        id="selfieProof"
-
-                        accept="image/*"
-
-                    >
-
-                </label>
-
-            </div>
-
-
-            <button
-
-                type="submit"
-
-                class="submit-order-btn"
-
-            >
-
-                📦 Kirim Pesanan
-
-            </button>
-
-        </form>
-
-    </div>
+</a>
 
 </div>
 
+<!-- ===========================
+SLIDER
+=========================== -->
 
-<!-- ==========================================
-     AUTH MODAL
-========================================== -->
+<section
+id="home"
+class="slider-section">
 
-<div
-    id="authModal"
-    class="modal-overlay"
->
+<div class="slider">
 
+<div class="slide active">
 
-    <div class="order-modal auth-modal">
+<div class="slide-content">
 
+<div>
 
-        <button
-            id="closeAuthModal"
-            class="close-modal"
-            type="button"
-        >
-            ×
-        </button>
+<h1>
 
+Pulsa Nasional
 
-        <!-- LOGIN -->
+Lebih Mudah
 
-        <div
-            id="loginFormBox"
-        >
+</h1>
 
+<p>
 
-            <div class="modal-product">
+Semua operator langsung terdeteksi otomatis.
 
+</p>
 
-                <div class="modal-icon">
-                    👤
-                </div>
+<a href="#layanan"
 
+class="slider-button">
 
-                <div>
+Beli Sekarang
 
-
-                    <h2>
-                        Login
-                    </h2>
-
-
-                    <p>
-                        Masuk ke akun HOLOCELL Anda
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <form
-                id="loginForm"
-            >
-
-
-                <div class="form-group">
-
-
-                    <label>
-
-                        Email
-
-
-                        <input
-
-                            type="email"
-
-                            id="loginEmail"
-
-                            placeholder="Masukkan email"
-
-                            required
-
-                        >
-
-                    </label>
-
-                </div>
-
-
-                <div class="form-group">
-
-
-                    <label>
-
-                        Password
-
-
-                        <input
-
-                            type="password"
-
-                            id="loginPassword"
-
-                            placeholder="Masukkan password"
-
-                            required
-
-                        >
-
-                    </label>
-
-                </div>
-
-
-                <button
-
-                    type="submit"
-
-                    class="submit-order-btn"
-
-                >
-
-                    🔐 Login
-
-                </button>
-
-
-                <div
-                    id="loginMessage"
-                    class="auth-message"
-                ></div>
-
-
-                <p class="auth-switch">
-
-
-                    Belum punya akun?
-
-
-                    <button
-
-                        type="button"
-
-                        id="showRegister"
-
-                    >
-
-                        Daftar sekarang
-
-                    </button>
-
-                </p>
-
-            </form>
-
-        </div>
-
-
-        <!-- REGISTER -->
-
-        <div
-            id="registerFormBox"
-            style="display:none;"
-        >
-
-
-            <div class="modal-product">
-
-
-                <div class="modal-icon">
-                    📝
-                </div>
-
-
-                <div>
-
-
-                    <h2>
-                        Daftar Akun
-                    </h2>
-
-
-                    <p>
-                        Buat akun HOLOCELL baru
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <form
-                id="registerForm"
-            >
-
-
-                <div class="form-group">
-
-
-                    <label>
-
-                        Nama Lengkap
-
-
-                        <input
-
-                            type="text"
-
-                            id="registerName"
-
-                            placeholder="Masukkan nama lengkap"
-
-                            required
-
-                        >
-
-                    </label>
-
-                </div>
-
-
-                <div class="form-group">
-
-
-                    <label>
-
-                        Email
-
-
-                        <input
-
-                            type="email"
-
-                            id="registerEmail"
-
-                            placeholder="Masukkan email"
-
-                            required
-
-                        >
-
-                    </label>
-
-                </div>
-
-
-                <div class="form-group">
-
-
-                    <label>
-
-                        Password
-
-
-                        <input
-
-                            type="password"
-
-                            id="registerPassword"
-
-                            placeholder="Minimal 6 karakter"
-
-                            minlength="6"
-
-                            required
-
-                        >
-
-                    </label>
-
-                </div>
-
-
-                <div class="form-group">
-
-
-                    <label>
-
-                        Konfirmasi Password
-
-
-                        <input
-
-                            type="password"
-
-                            id="registerPasswordConfirm"
-
-                            placeholder="Ulangi password"
-
-                            minlength="6"
-
-                            required
-
-                        >
-
-                    </label>
-
-                </div>
-
-
-                <button
-
-                    type="submit"
-
-                    class="submit-order-btn"
-
-                >
-
-                    📝 Daftar
-
-                </button>
-
-
-                <div
-                    id="registerMessage"
-                    class="auth-message"
-                ></div>
-
-
-                <p class="auth-switch">
-
-
-                    Sudah punya akun?
-
-
-                    <button
-
-                        type="button"
-
-                        id="showLogin"
-
-                    >
-
-                        Login
-
-                    </button>
-
-                </p>
-
-            </form>
-
-        </div>
-
-    </div>
+</a>
 
 </div>
 
+<div>
+
+<img
+
+src="assets/banner1.png"
+
+alt="banner">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="slide">
+
+<div class="slide-content">
+
+<div>
+
+<h1>
+
+Top Up
+
+E-Wallet
+
+</h1>
+
+<p>
+
+DANA
+
+OVO
+
+GoPay
+
+ShopeePay
+
+LinkAja
+
+</p>
+
+<a href="#layanan"
+
+class="slider-button">
+
+Top Up
+
+</a>
+
+</div>
+
+<div>
+
+<img
+
+src="assets/banner2.png"
+
+alt="banner">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="slide">
+
+<div class="slide-content">
+
+<div>
+
+<h1>
+
+Token PLN
+
+24 Jam
+
+</h1>
+
+<p>
+
+Beli Token PLN kapan saja.
+
+</p>
+
+<a href="#layanan"
+
+class="slider-button">
+
+Beli Token
+
+</a>
+
+</div>
+
+<div>
+
+<img
+
+src="assets/banner3.png"
+
+alt="banner">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="slider-dot">
+
+<span class="active"></span>
+
+<span></span>
+
+<span></span>
+
+</div>
+
+</section>
+
+<!-- ===========================
+MENU LAYANAN
+=========================== -->
+
+<section
+id="layanan"
+class="menu-section">
+
+<div class="container">
+
+<h2>
+
+Semua Layanan
+
+</h2>
+
+<div class="menu-grid">
+
+<div
+class="menu-card active"
+data-page="pulsa">
+
+<img src="assets/pulsa.png">
+
+<h3>
+
+Pulsa Nasional
+
+</h3>
+
+<p>
+
+Deteksi provider otomatis
+
+</p>
+
+</div>
+
+<div
+class="menu-card"
+data-page="ewallet">
+
+<img src="assets/ewallet.png">
+
+<h3>
+
+E-Wallet
+
+</h3>
+
+<p>
+
+Top Up semua dompet digital
+
+</p>
+
+</div>
+
+<div
+class="menu-card"
+data-page="pln">
+
+<img src="assets/pln.png">
+
+<h3>
+
+Token PLN
+
+</h3>
+
+<p>
+
+Listrik Prabayar
+
+</p>
+
+</div>
+
+<div class="menu-card disabled">
+
+<img src="assets/data.png">
+
+<h3>
+
+Paket Data
+
+</h3>
+
+<span>
+
+COMING SOON
+
+</span>
+
+</div>
+
+<div class="menu-card disabled">
+
+<img src="assets/game.png">
+
+<h3>
+
+Voucher Game
+
+</h3>
+
+<span>
+
+COMING SOON
+
+</span>
+
+</div>
+
+<div class="menu-card disabled">
+
+<img src="assets/tagihan.png">
+
+<h3>
+
+Tagihan
+
+</h3>
+
+<span>
+
+COMING SOON
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =======================================
+PULSA NASIONAL
+======================================= -->
+
+<section id="pulsaSection" class="ppob-section active">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>Pulsa Nasional</h2>
+
+<p>
+Masukkan nomor HP, sistem akan mendeteksi operator secara otomatis.
+</p>
+
+</div>
+
+<div class="ppob-card">
+
+<div class="input-group">
+
+<label>Nomor Handphone</label>
+
+<input
+type="tel"
+id="phoneNumber"
+placeholder="Contoh : 085712345678"
+maxlength="15">
+
+</div>
+
+<div class="provider-box">
+
+<div class="provider-left">
+
+<img
+id="providerLogo"
+src="assets/provider/default.png"
+alt="provider">
+
+<div>
+
+<h3 id="providerName">
+
+Belum Terdeteksi
+
+</h3>
+
+<small>
+
+Masukkan nomor HP
+
+</small>
+
+</div>
+
+</div>
+
+<div id="providerStatus"
+class="provider-status">
+
+-
+
+</div>
+
+</div>
+
+<div id="pulsaList"
+class="nominal-grid">
+
+<!-- otomatis -->
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =======================================
+E-WALLET
+======================================= -->
+
+<section
+id="ewalletSection"
+class="ppob-section">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>Top Up E-Wallet</h2>
+
+<p>
+
+Pilih dompet digital lalu masukkan nomor tujuan.
+
+</p>
+
+</div>
+
+<div class="ppob-card">
+
+<div class="input-group">
+
+<label>
+
+Pilih E-Wallet
+
+</label>
+
+<select id="walletProvider">
+
+<option value="">
+
+Pilih E-Wallet
+
+</option>
+
+<option value="DANA">
+
+DANA
+
+</option>
+
+<option value="OVO">
+
+OVO
+
+</option>
+
+<option value="GoPay">
+
+GoPay
+
+</option>
+
+<option value="ShopeePay">
+
+ShopeePay
+
+</option>
+
+<option value="LinkAja">
+
+LinkAja
+
+</option>
+
+</select>
+
+</div>
+
+<div class="input-group">
+
+<label>
+
+Nomor Tujuan
+
+</label>
+
+<input
+type="tel"
+id="walletNumber"
+placeholder="08xxxxxxxxxx">
+
+</div>
+
+<div class="input-group">
+
+<label>
+
+Nominal
+
+</label>
+
+<select id="walletNominal">
+
+<option>
+
+Rp20.000
+
+</option>
+
+<option>
+
+Rp50.000
+
+</option>
+
+<option>
+
+Rp100.000
+
+</option>
+
+<option>
+
+Rp200.000
+
+</option>
+
+<option>
+
+Rp500.000
+
+</option>
+
+<option>
+
+Rp1.000.000
+
+</option>
+
+</select>
+
+</div>
+
+<button
+id="walletOrder"
+class="primary-button">
+
+Lanjutkan
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =======================================
+TOKEN PLN
+======================================= -->
+
+<section
+id="plnSection"
+class="ppob-section">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>
+
+Token PLN
+
+</h2>
+
+<p>
+
+Masukkan ID Pelanggan kemudian pilih nominal token.
+
+</p>
+
+</div>
+
+<div class="ppob-card">
+
+<div class="input-group">
+
+<label>
+
+ID Pelanggan
+
+</label>
+
+<input
+type="text"
+id="plnNumber"
+placeholder="Masukkan ID Pelanggan">
+
+</div>
+
+<div class="input-group">
+
+<label>
+
+Nominal
+
+</label>
+
+<select id="plnNominal">
+
+<option>
+
+20.000
+
+</option>
+
+<option>
+
+50.000
+
+</option>
+
+<option>
+
+100.000
+
+</option>
+
+<option>
+
+200.000
+
+</option>
+
+<option>
+
+500.000
+
+</option>
+
+<option>
+
+1.000.000
+
+</option>
+
+</select>
+
+</div>
+
+<button
+id="plnOrder"
+class="primary-button">
+
+Lanjutkan
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =======================================
+KEUNGGULAN
+======================================= -->
+
+<section class="feature-section">
+
+<div class="container">
+
+<div class="feature-grid">
+
+<div class="feature-card">
+
+<div>⚡</div>
+
+<h3>
+
+Transaksi Cepat
+
+</h3>
+
+<p>
+
+Proses instan dalam hitungan detik.
+
+</p>
+
+</div>
+
+<div class="feature-card">
+
+<div>🛡️</div>
+
+<h3>
+
+Aman
+
+</h3>
+
+<p>
+
+Data pelanggan terenkripsi.
+
+</p>
+
+</div>
+
+<div class="feature-card">
+
+<div>💰</div>
+
+<h3>
+
+Harga Murah
+
+</h3>
+
+<p>
+
+Harga kompetitif setiap hari.
+
+</p>
+
+</div>
+
+<div class="feature-card">
+
+<div>🕐</div>
+
+<h3>
+
+24 Jam
+
+</h3>
+
+<p>
+
+Layanan online setiap saat.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
 
 <!-- ==========================================
-     FOOTER
+COMING SOON
 ========================================== -->
 
-<footer
-    id="bantuan"
-    class="footer"
->
+<section class="coming-section">
 
+<div class="container">
 
-    <div class="container footer-grid">
+<div class="section-title">
 
+<h2>Layanan Lainnya</h2>
 
-        <div class="footer-brand">
+<p>
+Segera hadir untuk melengkapi kebutuhan digital Anda.
+</p>
 
+</div>
 
-            <div class="footer-logo">
+<div class="coming-grid">
 
+<div class="coming-card">
 
-                <span>
-                    H
-                </span>
+<div class="coming-icon">📶</div>
 
+<h3>Paket Data</h3>
 
-                <div>
+<span>COMING SOON</span>
 
+</div>
 
-                    <strong>
-                        HOLOCELL
-                    </strong>
+<div class="coming-card">
 
+<div class="coming-icon">🎮</div>
 
-                    <small>
-                        Layanan Digital PPOB
-                    </small>
+<h3>Voucher Game</h3>
 
-                </div>
+<span>COMING SOON</span>
 
-            </div>
+</div>
 
+<div class="coming-card">
 
-            <p>
+<div class="coming-icon">🧾</div>
 
-                Solusi semua kebutuhan pembayaran digital
+<h3>Tagihan</h3>
 
-                dalam satu platform.
+<span>COMING SOON</span>
 
-            </p>
+</div>
 
+</div>
 
-            <div class="socials">
+</div>
 
+</section>
 
-                <span>
-                    ◉
-                </span>
 
 
-                <span>
-                    ◎
-                </span>
+<!-- ==========================================
+FOOTER
+========================================== -->
 
+<footer class="footer">
 
-                <span>
-                    ➤
-                </span>
+<div class="container">
 
+<div class="footer-logo">
 
-                <span>
-                    f
-                </span>
+<div class="logo-circle">
 
-            </div>
+H
 
-        </div>
+</div>
 
+<div>
 
-        <div class="footer-column">
+<h2>HOLOCELL</h2>
 
+<p>
 
-            <h4>
-                Layanan
-            </h4>
+Layanan PPOB Digital Indonesia
 
+</p>
 
-            <a href="#kategori">
-                Pulsa
-            </a>
+</div>
 
+</div>
 
-            <a href="#kategori">
-                E-Wallet
-            </a>
+<div class="footer-menu">
 
+<a href="#home">
 
-            <a href="#kategori">
-                Token PLN
-            </a>
+Beranda
 
+</a>
 
-            <a href="#kategori">
-                Internet
-            </a>
+<a href="#pulsaSection">
 
+Pulsa
 
-            <a href="#kategori">
-                Voucher
-            </a>
+</a>
 
+<a href="#ewalletSection">
 
-            <a href="#kategori">
-                Tagihan
-            </a>
+E-Wallet
 
-        </div>
+</a>
 
+<a href="#plnSection">
 
-        <div class="footer-column">
+Token PLN
 
+</a>
 
-            <h4>
-                Informasi
-            </h4>
+</div>
 
+<div class="footer-copy">
 
-            <a href="#">
-                Tentang Kami
-            </a>
+© 2026 HOLOCELL.
 
+All Rights Reserved.
 
-            <a href="#">
-                Cara Transaksi
-            </a>
+</div>
 
-
-            <a href="#">
-                Syarat & Ketentuan
-            </a>
-
-
-            <a href="#">
-                Kebijakan Privasi
-            </a>
-
-
-            <a href="#bantuan">
-                Bantuan
-            </a>
-
-        </div>
-
-
-        <div class="footer-column">
-
-
-            <h4>
-                Kontak
-            </h4>
-
-
-            <p>
-                📱 0857-1943-1469
-            </p>
-
-
-            <p>
-                ✉️ holocell.official@gmail.com
-            </p>
-
-
-            <p>
-                📍 Indonesia
-            </p>
-
-        </div>
-
-
-        <div class="footer-column">
-
-
-            <h4>
-                Metode Pembayaran
-            </h4>
-
-
-            <div class="payment-methods">
-
-
-                <span>
-                    DANA
-                </span>
-
-
-                <span>
-                    OVO
-                </span>
-
-
-                <span>
-                    GoPay
-                </span>
-
-
-                <span>
-                    LinkAja
-                </span>
-
-
-                <span>
-                    ShopeePay
-                </span>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="footer-bottom">
-
-
-        © 2026 HOLOCELL. All rights reserved.
-
-
-        <span>
-            Made with ❤️ for Indonesia
-        </span>
-
-    </div>
+</div>
 
 </footer>
 
 
+
 <!-- ==========================================
-     SUPABASE
+MODAL LOGIN
+========================================== -->
+
+<div
+id="loginModal"
+class="modal">
+
+<div class="modal-content">
+
+<span
+class="closeLogin">
+
+×
+
+</span>
+
+<h2>
+
+Login
+
+</h2>
+
+<input
+type="email"
+placeholder="Email">
+
+<input
+type="password"
+placeholder="Password">
+
+<button
+id="loginButton">
+
+Masuk
+
+</button>
+
+<p>
+
+Belum punya akun?
+
+<a
+href="#"
+id="showRegister">
+
+Daftar
+
+</a>
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- ==========================================
+MODAL REGISTER
+========================================== -->
+
+<div
+id="registerModal"
+class="modal">
+
+<div class="modal-content">
+
+<span
+class="closeRegister">
+
+×
+
+</span>
+
+<h2>
+
+Daftar
+
+</h2>
+
+<input
+type="text"
+placeholder="Nama Lengkap">
+
+<input
+type="email"
+placeholder="Email">
+
+<input
+type="password"
+placeholder="Password">
+
+<button
+id="registerButton">
+
+Daftar
+
+</button>
+
+<p>
+
+Sudah punya akun?
+
+<a
+href="#"
+id="showLogin">
+
+Login
+
+</a>
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- ==========================================
+MODAL ORDER
+========================================== -->
+
+<div
+id="orderModal"
+class="modal">
+
+<div class="modal-content">
+
+<span
+class="closeOrder">
+
+×
+
+</span>
+
+<h2>
+
+Konfirmasi Pesanan
+
+</h2>
+
+<div id="orderPreview">
+
+</div>
+
+<button
+id="continueOrder">
+
+Lanjutkan
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<!-- ==========================================
+SUPABASE
 ========================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-<!-- ==========================================
-     AUTH SYSTEM
-========================================== -->
-
-<script>
-
-const AUTH_SUPABASE_URL =
-
-    "https://wlitjnrhtusqndpicerk.supabase.co";
-
-
-const AUTH_SUPABASE_KEY =
-
-    "sb_publishable_NMY1WdcdPq6_GgrDv2nxEw_PIYsCyaF";
-
-
-const authClient =
-
-    window.supabase.createClient(
-
-        AUTH_SUPABASE_URL,
-
-        AUTH_SUPABASE_KEY
-
-    );
-
-
-// ==========================================
-// ELEMENT AUTH
-// ==========================================
-
-const authButton =
-
-    document.getElementById(
-        "authButton"
-    );
-
-
-const authModal =
-
-    document.getElementById(
-        "authModal"
-    );
-
-
-const closeAuthModal =
-
-    document.getElementById(
-        "closeAuthModal"
-    );
-
-
-const loginFormBox =
-
-    document.getElementById(
-        "loginFormBox"
-    );
-
-
-const registerFormBox =
-
-    document.getElementById(
-        "registerFormBox"
-    );
-
-
-const loginForm =
-
-    document.getElementById(
-        "loginForm"
-    );
-
-
-const registerForm =
-
-    document.getElementById(
-        "registerForm"
-    );
-
-
-const userMenu =
-
-    document.getElementById(
-        "userMenu"
-    );
-
-
-const userName =
-
-    document.getElementById(
-        "userName"
-    );
-
-
-const logoutButton =
-
-    document.getElementById(
-        "logoutButton"
-    );
-
-
-// ==========================================
-// BUKA AUTH
-// ==========================================
-
-authButton.addEventListener(
-
-    "click",
-
-    () => {
-
-        authModal.classList.add(
-            "active"
-        );
-
-    }
-
-);
-
-
-// ==========================================
-// TUTUP AUTH
-// ==========================================
-
-closeAuthModal.addEventListener(
-
-    "click",
-
-    () => {
-
-        authModal.classList.remove(
-            "active"
-        );
-
-    }
-
-);
-
-
-authModal.addEventListener(
-
-    "click",
-
-    event => {
-
-        if (
-
-            event.target ===
-            authModal
-
-        ) {
-
-            authModal.classList.remove(
-                "active"
-            );
-
-        }
-
-    }
-
-);
-
-
-// ==========================================
-// PINDAH KE REGISTER
-// ==========================================
-
-document
-
-    .getElementById(
-        "showRegister"
-    )
-
-    .addEventListener(
-
-        "click",
-
-        () => {
-
-            loginFormBox.style.display =
-                "none";
-
-
-            registerFormBox.style.display =
-                "block";
-
-        }
-
-    );
-
-
-// ==========================================
-// PINDAH KE LOGIN
-// ==========================================
-
-document
-
-    .getElementById(
-        "showLogin"
-    )
-
-    .addEventListener(
-
-        "click",
-
-        () => {
-
-            registerFormBox.style.display =
-                "none";
-
-
-            loginFormBox.style.display =
-                "block";
-
-        }
-
-    );
-
-
-// ==========================================
-// DAFTAR AKUN
-// ==========================================
-
-registerForm.addEventListener(
-
-    "submit",
-
-    async event => {
-
-        event.preventDefault();
-
-
-        const name =
-
-            document
-
-                .getElementById(
-                    "registerName"
-                )
-
-                .value
-                .trim();
-
-
-        const email =
-
-            document
-
-                .getElementById(
-                    "registerEmail"
-                )
-
-                .value
-                .trim();
-
-
-        const password =
-
-            document
-
-                .getElementById(
-                    "registerPassword"
-                )
-
-                .value;
-
-
-        const confirmPassword =
-
-            document
-
-                .getElementById(
-                    "registerPasswordConfirm"
-                )
-
-                .value;
-
-
-        const message =
-
-            document
-
-                .getElementById(
-                    "registerMessage"
-                );
-
-
-        if (
-
-            password !==
-            confirmPassword
-
-        ) {
-
-            message.innerHTML =
-
-                "❌ Password dan konfirmasi password tidak sama.";
-
-            return;
-
-        }
-
-
-        message.innerHTML =
-
-            "⏳ Membuat akun...";
-
-
-        const {
-
-            error
-
-        } =
-
-            await authClient.auth.signUp({
-
-                email,
-
-                password,
-
-                options: {
-
-                    data: {
-
-                        full_name:
-                            name
-
-                    },
-
-                    emailRedirectTo:
-
-                        window.location.origin
-
-                        +
-
-                        window.location.pathname
-
-                }
-
-            });
-
-
-        if (error) {
-
-            message.innerHTML =
-
-                "❌ "
-
-                +
-
-                error.message;
-
-            return;
-
-        }
-
-
-        message.innerHTML = `
-
-            ✅ Akun berhasil dibuat!
-
-            <br><br>
-
-            📧 Silakan cek email Anda.
-
-            <br>
-
-            Klik link verifikasi yang dikirim ke email Anda.
-
-        `;
-
-
-        registerForm.reset();
-
-    }
-
-);
-
-
-// ==========================================
-// LOGIN
-// ==========================================
-
-loginForm.addEventListener(
-
-    "submit",
-
-    async event => {
-
-        event.preventDefault();
-
-
-        const email =
-
-            document
-
-                .getElementById(
-                    "loginEmail"
-                )
-
-                .value
-
-                .trim();
-
-
-        const password =
-
-            document
-
-                .getElementById(
-                    "loginPassword"
-                )
-
-                .value;
-
-
-        const message =
-
-            document
-
-                .getElementById(
-                    "loginMessage"
-                );
-
-
-        message.innerHTML =
-
-            "⏳ Memproses login...";
-
-
-        const {
-
-            data,
-
-            error
-
-        } =
-
-            await authClient.auth.signInWithPassword({
-
-                email,
-
-                password
-
-            });
-
-
-        if (error) {
-
-            message.innerHTML =
-
-                "❌ "
-
-                +
-
-                error.message;
-
-            return;
-
-        }
-
-
-        if (
-
-            !data.user.email_confirmed_at
-
-        ) {
-
-            message.innerHTML =
-
-                `
-
-                ⚠️ Email belum diverifikasi.
-
-                <br><br>
-
-                Silakan cek email Anda terlebih dahulu.
-
-                `;
-
-            return;
-
-        }
-
-
-        authModal.classList.remove(
-            "active"
-        );
-
-
-        updateUserUI(
-
-            data.user
-
-        );
-
-    }
-
-);
-
-
-// ==========================================
-// UPDATE USER UI
-// ==========================================
-
-function updateUserUI(user) {
-
-
-    if (!user) {
-
-
-        authButton.style.display =
-            "block";
-
-
-        userMenu.style.display =
-            "none";
-
-
-        return;
-
-    }
-
-
-    const name =
-
-        user.user_metadata
-
-            ?.full_name
-
-        ||
-
-        user.email;
-
-
-    authButton.style.display =
-        "none";
-
-
-    userMenu.style.display =
-        "flex";
-
-
-    userName.textContent =
-
-        "👋 "
-
-        +
-
-        name;
-
-}
-
-
-// ==========================================
-// LOGOUT
-// ==========================================
-
-logoutButton.addEventListener(
-
-    "click",
-
-    async () => {
-
-
-        await authClient.auth.signOut();
-
-
-        updateUserUI(
-            null
-        );
-
-    }
-
-);
-
-
-// ==========================================
-// CEK SESSION
-// ==========================================
-
-async function checkAuthSession() {
-
-
-    const {
-
-        data
-
-    } =
-
-        await authClient.auth.getSession();
-
-
-    updateUserUI(
-
-        data.session
-
-            ?
-
-            data.session.user
-
-            :
-
-            null
-
-    );
-
-}
-
-
-checkAuthSession();
-
-
-// ==========================================
-// PERUBAHAN AUTH
-// ==========================================
-
-authClient.auth.onAuthStateChange(
-
-    (
-
-        event,
-
-        session
-
-    ) => {
-
-
-        updateUserUI(
-
-            session
-
-                ?
-
-                session.user
-
-                :
-
-                null
-
-        );
-
-    }
-
-);
-
-</script>
-
-
-<!-- ==========================================
-     SCRIPT PPOB UTAMA
-========================================== -->
 
 <script src="script.js"></script>
-
 
 </body>
 
